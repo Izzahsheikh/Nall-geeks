@@ -12,19 +12,34 @@ const initialForm = {
 export default function Contact() {
   const [form, setForm] = useState(initialForm);
   const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState('idle'); // idle | sending | error
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Hook your email/CRM/webhook call up here.
-    console.log('Contact form submitted:', form);
-    setSubmitted(true);
-    setForm(initialForm);
-    setTimeout(() => setSubmitted(false), 4000);
+    setStatus('sending');
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+
+      if (!res.ok) throw new Error('Request failed');
+
+      setSubmitted(true);
+      setForm(initialForm);
+      setStatus('idle');
+      setTimeout(() => setSubmitted(false), 4000);
+    } catch (err) {
+      console.error('Contact form error:', err);
+      setStatus('error');
+    }
   };
 
   return (
@@ -102,8 +117,14 @@ export default function Contact() {
                 value={form.message}
                 onChange={handleChange}
               />
-              <button type="submit" className="contact-submit">
-                {submitted ? "Thanks — we'll be in touch! ✓" : 'Book a Call →'}
+              <button type="submit" className="contact-submit" disabled={status === 'sending'}>
+                {submitted
+                  ? "Thanks — we'll be in touch! ✓"
+                  : status === 'sending'
+                  ? 'Sending...'
+                  : status === 'error'
+                  ? 'Something went wrong — try again'
+                  : 'Book a Call →'}
               </button>
             </form>
           </div>
