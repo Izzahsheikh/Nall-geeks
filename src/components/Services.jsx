@@ -60,7 +60,7 @@ export default function Services() {
     pathRefs.current.forEach((p, i) => {
       if (!p) return;
       if (i === idx) {
-        p.style.stroke = 'rgba(255,107,53,0.9)';
+        p.style.stroke = 'rgba(242,154,74,0.75)';
         p.style.strokeWidth = '2';
       } else {
         p.style.opacity = '0.25';
@@ -71,7 +71,7 @@ export default function Services() {
   const handleLeave = () => {
     pathRefs.current.forEach((p) => {
       if (!p) return;
-      p.style.stroke = 'rgba(192,132,252,0.5)';
+      p.style.stroke = 'rgba(242,154,74,0.75)';
       p.style.strokeWidth = '1.2';
       p.style.opacity = '1';
     });
@@ -110,7 +110,7 @@ export default function Services() {
                 ref={(el) => (pathRefs.current[i] = el)}
                 d={`M 550,20 C 550,110 ${x},110 ${x},195`}
                 fill="none"
-                stroke="rgba(192,132,252,0.5)"
+                stroke="rgba(242,154,74,0.45)"
                 strokeWidth="1.2"
                 strokeLinecap="round"
               />

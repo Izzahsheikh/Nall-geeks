@@ -1,14 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #080B14;
-  --surface: #0F1420;
-  --border: #1A2035;
-  --accent: #FF6B35;
-  --violet: #C084FC;
-  --text: #F8F4EF;
-  --muted: #6B7280;
-  --light-bg: #F5F1EC;
+  --bg: #FFFCF8;
+--warm-bg: #FFF9F2;
+--alt-bg: #F1F6F7;
+--primary: #0A2233;
+--secondary: #12364A;
+--accent: #F29A4A;
+--cta: #B85A1B;
+--muted: #6B828C;
+--border: #E8E2DA;
+--footer: #061B29;
+--footer-text: #E5ECEF;
 }
 
 *, *::before, *::after {
@@ -23,7 +26,7 @@ html {
 
 body {
   background: var(--bg);
-  color: var(--text);
+  color: var(--primary);
   font-family: 'Outfit', sans-serif;
   overflow-x: hidden;
 }
@@ -53,7 +56,7 @@ button {
 }
 
 button:focus, a:focus {
-  outline: 2px solid #FF6B35;
+  outline: 2px solid var(--cta);
   outline-offset: 3px;
 }
 
