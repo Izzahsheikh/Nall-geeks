@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import logo from '../assets/nallgeeks-logo-ng-only.png';
 
 const SERVICES = [
   { num: '01', icon: '</>', title: 'Web Development', desc: 'We write lean, fast code. No plugin bloat — just clean builds that load instantly.' },
@@ -14,6 +15,8 @@ const PATH_X = [90, 275, 457, 643, 825, 1010];
 export default function Services() {
   const sectionRef = useRef(null);
   const pathRefs = useRef([]);
+  const [isVisible, setIsVisible] = useState(false);
+  const [activeIdx, setActiveIdx] = useState(null);
 
   useEffect(() => {
     const paths = pathRefs.current;
@@ -35,18 +38,13 @@ export default function Services() {
     const obs = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
+          setIsVisible(true);
           paths.forEach((p, i) => {
             if (!p) return;
-            setTimeout(() => {
-              p.style.transition = 'stroke-dashoffset 1s ease';
-              p.style.strokeDashoffset = '0';
-            }, i * 120);
+            p.style.transition = 'stroke-dashoffset 0.9s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease, stroke 0.35s ease, stroke-width 0.35s ease';
+            p.style.strokeDashoffset = '0';
+            p.style.animation = 'pathPulse 3.8s ease-in-out infinite';
           });
-          setTimeout(() => {
-            paths.forEach((p) => {
-              if (p) p.style.animation = 'pathPulse 3s ease-in-out infinite';
-            });
-          }, paths.length * 120 + 1100);
           obs.disconnect();
         }
       },
@@ -57,24 +55,11 @@ export default function Services() {
   }, []);
 
   const handleEnter = (idx) => {
-    pathRefs.current.forEach((p, i) => {
-      if (!p) return;
-      if (i === idx) {
-        p.style.stroke = 'rgba(242,154,74,0.75)';
-        p.style.strokeWidth = '2';
-      } else {
-        p.style.opacity = '0.25';
-      }
-    });
+    setActiveIdx(idx);
   };
 
   const handleLeave = () => {
-    pathRefs.current.forEach((p) => {
-      if (!p) return;
-      p.style.stroke = 'rgba(242,154,74,0.75)';
-      p.style.strokeWidth = '1.2';
-      p.style.opacity = '1';
-    });
+    setActiveIdx(null);
   };
 
   return (
@@ -89,39 +74,54 @@ export default function Services() {
           </h2>
         </div>
 
-        <div className="services-hub">
-          <div className="services-badge-wrap reveal visible">
+        <div className={`services-hub${isVisible ? ' is-visible' : ''}`}>
+          <div className="services-badge-wrap">
             <div className="services-badge">
               <img
-                src="/uploads/PHOTO-2026-08-03-21-23-52.jpg"
-                alt="NG"
-                onError={(e) => {
-                  e.currentTarget.outerHTML =
-                    '<span style="font-family:Cormorant Garamond,serif;font-weight:800;font-size:1.1rem;color:#F8F4EF">NG</span>';
-                }}
+                src={logo}
+                alt="NallGeeks logo"
               />
             </div>
           </div>
 
           <svg className="services-svg" viewBox="0 0 1100 210" preserveAspectRatio="xMidYMid meet">
-            {PATH_X.map((x, i) => (
-              <path
-                key={i}
-                ref={(el) => (pathRefs.current[i] = el)}
-                d={`M 550,20 C 550,110 ${x},110 ${x},195`}
-                fill="none"
-                stroke="rgba(242,154,74,0.45)"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-              />
-            ))}
+            {PATH_X.map((x, i) => {
+              const pathState = activeIdx === i ? ' active' : activeIdx !== null ? ' muted' : '';
+              const d = `M 550,20 C 550,110 ${x},110 ${x},195`;
+
+              return (
+                <g key={i}>
+                  <path
+                    className={`service-path-glow${pathState}`}
+                    d={d}
+                    fill="none"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    ref={(el) => (pathRefs.current[i] = el)}
+                    className={`service-path${pathState}`}
+                    d={d}
+                    fill="none"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    className={`service-path-flow${pathState}`}
+                    d={d}
+                    fill="none"
+                    strokeLinecap="round"
+                    style={{ '--path-index': i, '--path-delay': `${i * 0.28}s` }}
+                  />
+                </g>
+              );
+            })}
           </svg>
 
           <div className="svc-row">
             {SERVICES.map((s, i) => (
               <div
                 key={s.num}
-                className="svc-card reveal visible"
+                className={`svc-card${isVisible ? ' is-visible' : ''}${activeIdx === i ? ' active' : ''}`}
+                style={{ '--svc-index': i }}
                 onMouseEnter={() => handleEnter(i)}
                 onMouseLeave={handleLeave}
               >

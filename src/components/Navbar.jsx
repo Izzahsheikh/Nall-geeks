@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import logo from '../assets/nallgeeks-logo-ng-only.png';
 
 const LINKS = [
   { href: '#hero', label: 'Home' },
@@ -12,6 +13,10 @@ const LINKS = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeHref, setActiveHref] = useState('#hero');
+  const [spotlight, setSpotlight] = useState({ left: 0, width: 0 });
+  const linksWrapRef = useRef(null);
+  const linkRefs = useRef({});
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 80);
@@ -19,24 +24,61 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  useLayoutEffect(() => {
+    const updateSpotlight = () => {
+      const wrap = linksWrapRef.current;
+      const activeLink = linkRefs.current[activeHref];
+
+      if (!wrap || !activeLink) return;
+
+      const wrapRect = wrap.getBoundingClientRect();
+      const linkRect = activeLink.getBoundingClientRect();
+
+      setSpotlight({
+        left: linkRect.left - wrapRect.left,
+        width: linkRect.width,
+      });
+    };
+
+    updateSpotlight();
+    window.addEventListener('resize', updateSpotlight);
+
+    return () => window.removeEventListener('resize', updateSpotlight);
+  }, [activeHref]);
+
   return (
     <>
       <nav className={`navbar${scrolled ? ' scrolled' : ''}`}>
         <div className="navbar-inner">
           <a href="#hero" className="navbar-logo">
-            <img src="/uploads/PHOTO-2026-08-03-21-23-52.jpg" alt="NallGeeks" onError={(e) => (e.currentTarget.style.display = 'none')} />
+            <img src={logo} alt="NallGeeks logo" />
             <span>NallGeeks</span>
           </a>
-          <div className="nav-links-wrap">
+          <div className="nav-links-wrap" ref={linksWrapRef}>
+            <span
+              className="nav-spotlight"
+              style={{
+                transform: `translateX(${spotlight.left}px)`,
+                width: `${spotlight.width}px`,
+              }}
+            />
             {LINKS.map((l) => (
-              <a key={l.href} href={l.href} className="nav-link hover-accent">
+              <a
+                key={l.href}
+                href={l.href}
+                ref={(el) => {
+                  linkRefs.current[l.href] = el;
+                }}
+                className={`nav-link hover-accent${activeHref === l.href ? ' active' : ''}`}
+                onClick={() => setActiveHref(l.href)}
+              >
                 {l.label}
               </a>
             ))}
-            <a href="#contact" className="btn-primary" style={{ fontSize: '0.875rem', padding: '10px 22px' }}>
-              Book a Call
-            </a>
           </div>
+          <a href="#contact" className="btn-primary navbar-cta" onClick={() => setActiveHref('#contact')}>
+            Book a Call
+          </a>
           <button className="hamburger" onClick={() => setMobileOpen((v) => !v)} aria-label="Toggle menu">
             <span></span>
             <span></span>
@@ -48,7 +90,15 @@ export default function Navbar() {
       {mobileOpen && (
         <div className="mob-menu">
           {LINKS.map((l) => (
-            <a key={l.href} href={l.href} onClick={() => setMobileOpen(false)}>
+            <a
+              key={l.href}
+              href={l.href}
+              className={activeHref === l.href ? 'active' : ''}
+              onClick={() => {
+                setActiveHref(l.href);
+                setMobileOpen(false);
+              }}
+            >
               {l.label}
             </a>
           ))}
