@@ -10,6 +10,8 @@ const LINKS = [
   { href: '#contact', label: 'Contact' },
 ];
 
+const BRAND_TEXT = 'NallGeeks';
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -52,7 +54,18 @@ export default function Navbar() {
         <div className="navbar-inner">
           <a href="#hero" className="navbar-logo">
             <img src={logo} alt="NallGeeks logo" />
-            <span>NallGeeks</span>
+            <span className="navbar-wordmark" aria-label={BRAND_TEXT}>
+              {BRAND_TEXT.split('').map((letter, index) => (
+                <span
+                  key={`${letter}-${index}`}
+                  className="brand-letter"
+                  aria-hidden="true"
+                  style={{ '--letter-index': index }}
+                >
+                  {letter}
+                </span>
+              ))}
+            </span>
           </a>
           <div className="nav-links-wrap" ref={linksWrapRef}>
             <span
