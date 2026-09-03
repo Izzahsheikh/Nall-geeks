@@ -82,7 +82,7 @@ export default function Hero() {
             We are a software engineering company building web, mobile, and custom platforms for startups and funded founders.
           </p>
           <div className="hero-ctas reveal visible">
-            <a href="#contact" className="btn-primary">
+            <a href="/contact" className="btn-primary">
               Start a Project →
             </a>
             <a href="#services" className="btn-outline">

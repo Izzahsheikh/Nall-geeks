@@ -3,19 +3,19 @@ const TESTIMONIALS = [
     text: "We'd worked with three agencies before NallGeeks. None of them shipped. NallGeeks delivered a production-ready platform in 7 weeks — and the code was actually clean.",
     name: 'Hamza R.',
     role: 'Founder @ OrganicFields',
-    gradient: 'linear-gradient(135deg,#B85A1B,#F29A4A)'
+    gradient: 'linear-gradient(135deg,#E46822,#F28A45)'
   },
   {
     text: 'Our app went from Figma file to App Store in 11 weeks. The team communicated daily, never disappeared, and never missed a deadline. That\'s rare.',
     name: 'Sara M.',
     role: 'Co-Founder @ Vayora',
-    gradient: 'linear-gradient(135deg,#12364A,#F29A4A)',
+    gradient: 'linear-gradient(135deg,#2D3235,#F28A45)',
   },
   {
     text: 'They rebuilt our entire frontend. Core Web Vitals jumped from 41 to 97. Bounce rate dropped 34% in the first month. Numbers don\'t lie.',
     name: 'Usman K.',
     role: 'CTO @ RankGrad',
-   gradient: 'linear-gradient(135deg,#0A2233,#B85A1B)',
+   gradient: 'linear-gradient(135deg,#25292C,#E46822)',
   },
 ];
 

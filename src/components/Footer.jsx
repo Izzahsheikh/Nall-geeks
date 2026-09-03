@@ -55,12 +55,12 @@ export default function Footer() {
 
           <div className="footer-col">
             <div className="footer-col-title">Services</div>
-            <a href="#services" className="hover-accent">Web Development</a>
-            <a href="#services" className="hover-accent">Backend &amp; API</a>
-            <a href="#services" className="hover-accent">Mobile App Development</a>
-            <a href="#services" className="hover-accent">UI/UX Design</a>
-            <a href="#services" className="hover-accent">Brand &amp; Product Strategy</a>
-            <a href="#services" className="hover-accent">Cloud Infrastructure</a>
+            <a href="/#services" className="hover-accent">Web Development</a>
+            <a href="/#services" className="hover-accent">Backend &amp; API</a>
+            <a href="/#services" className="hover-accent">Mobile App Development</a>
+            <a href="/#services" className="hover-accent">UI/UX Design</a>
+            <a href="/#services" className="hover-accent">Brand &amp; Product Strategy</a>
+            <a href="/#services" className="hover-accent">Cloud Infrastructure</a>
           </div>
 
           <div className="footer-col">
@@ -75,10 +75,10 @@ export default function Footer() {
 
           <div className="footer-col">
             <div className="footer-col-title">Company</div>
-            <a href="#about" className="hover-accent">About</a>
-            <a href="#work" className="hover-accent">Projects</a>
-            <a href="#contact" className="hover-accent">Contact</a>
-            <a href="#career" className="hover-accent">Career</a>
+            <a href="/about" className="hover-accent">About</a>
+            <a href="/#work" className="hover-accent">Projects</a>
+            <a href="/contact" className="hover-accent">Contact</a>
+            <a href="/#career" className="hover-accent">Career</a>
           </div>
 
           <div className="footer-col">

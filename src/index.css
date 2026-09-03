@@ -1,17 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #FFFCF8;
---warm-bg: #FFF9F2;
---alt-bg: #F1F6F7;
---primary: #0A2233;
---secondary: #12364A;
---accent: #F29A4A;
---cta: #B85A1B;
---muted: #6B828C;
---border: #E8E2DA;
---footer: #061B29;
---footer-text: #E5ECEF;
+  --bg: #FFFFFF;
+--warm-bg: #F7F7F7;
+--alt-bg: #F3F4F4;
+--primary: #25292C;
+--secondary: #2D3235;
+--accent: #F28A45;
+--cta: #E46822;
+--cta-hover: #C95418;
+--muted: #62676A;
+--border: #D9DCDD;
+--footer: #25292C;
+--footer-text: #E7E8E8;
 --font-body: 'Urbanist', Arial, Helvetica, sans-serif;
 --font-display: 'Fraunces', var(--font-body);
 --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
@@ -25,6 +26,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 72px;
 }
 
 body {
@@ -35,8 +37,8 @@ body {
 }
 
 ::selection {
-  background: rgba(255, 107, 53, 0.3);
-  color: #F8F4EF;
+  background: rgba(228, 104, 34, 0.3);
+  color: var(--footer-text);
 }
 
 h1, h2, h3, h4 {
@@ -58,7 +60,7 @@ button {
   font-family: inherit;
 }
 
-button:focus, a:focus {
+button:focus-visible, a:focus-visible {
   outline: 2px solid var(--cta);
   outline-offset: 3px;
 }

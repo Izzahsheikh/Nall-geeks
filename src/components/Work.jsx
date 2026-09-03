@@ -32,7 +32,7 @@ export default function Work() {
           {/* Zylo */}
           <div className="proj-card offset">
             <div className="proj-frame">
-              <div className="proj-screen" style={{ background: '#080B14' }}>
+              <div className="proj-screen" style={{ background: 'var(--footer)' }}>
                 <div className="zylo-topbar">
                   <span className="zylo-topbar-title">
                     Zylo <span className="zylo-ai-badge">AI</span>
@@ -110,7 +110,7 @@ export default function Work() {
         </div>
 
         <div className="work-cta reveal visible">
-          <a href="#contact" className="btn-ghost light">
+          <a href="/contact" className="btn-ghost light">
             See all projects →
           </a>
         </div>

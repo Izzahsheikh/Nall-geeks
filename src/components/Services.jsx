@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import logo from '../assets/nallgeeks-logo-ng-only.png';
+import logo from '../assets/nallgeeks-logo-mark.png';
 
 const SERVICES = [
   { num: '01', icon: '</>', title: 'Web Development', desc: 'We write lean, fast code. No plugin bloat — just clean builds that load instantly.' },

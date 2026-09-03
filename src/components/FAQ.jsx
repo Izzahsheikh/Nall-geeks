@@ -33,7 +33,7 @@ export default function FAQ() {
   const toggle = (i) => setOpenIdx((cur) => (cur === i ? null : i));
 
   return (
-    <section id="about" className="faq-section">
+    <section id="faq" className="faq-section">
       <div className="faq-inner">
         <div className="section-head reveal visible">
           <div className="section-eyebrow">Common Questions</div>
