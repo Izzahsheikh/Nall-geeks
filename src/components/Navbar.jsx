@@ -4,9 +4,9 @@ import logo from '../assets/nallgeeks-logo-mark.png';
 const LINKS = [
   { href: '/', label: 'Home' },
   { href: '/#services', label: 'Services' },
-  { href: '/#work', label: 'Projects' },
+  { href: '/projects', label: 'Projects' },
   { href: '/about', label: 'About' },
-  { href: '/#career', label: 'Career' },
+  { href: '/careers', label: 'Career' },
   { href: '/contact', label: 'Contact' },
 ];
 
@@ -18,6 +18,8 @@ export default function Navbar() {
   const [activeHref, setActiveHref] = useState(() => {
     if (window.location.pathname === '/about') return '/about';
     if (window.location.pathname === '/contact') return '/contact';
+    if (window.location.pathname === '/projects') return '/projects';
+    if (window.location.pathname === '/careers') return '/careers';
     return window.location.hash ? `/${window.location.hash}` : '/';
   });
   const [spotlight, setSpotlight] = useState({ left: 0, width: 0 });
@@ -58,7 +60,7 @@ export default function Navbar() {
 
     if (closeMobile) setMobileOpen(false);
 
-    if (href === '/about' || href === '/contact') {
+    if (href === '/about' || href === '/contact' || href === '/projects' || href === '/careers') {
       if (window.location.pathname === href) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return;

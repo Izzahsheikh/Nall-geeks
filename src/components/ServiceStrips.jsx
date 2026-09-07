@@ -14,7 +14,7 @@ export default function ServiceStrips() {
               Most agencies stack plugins until your site crawls. We write lean code that loads fast — no shortcuts, no
               caching band-aids.
             </p>
-            <a href="#work" className="btn-ghost">
+            <a href="/projects" className="btn-ghost">
               See our projects →
             </a>
           </div>
@@ -58,7 +58,7 @@ export default function ServiceStrips() {
               No lag. No glitches. No moments where it feels like a website in a wrapper. Just something that works the
               way people expect.
             </p>
-            <a href="#work" className="btn-ghost">
+            <a href="/projects" className="btn-ghost">
               See our projects →
             </a>
           </div>
@@ -106,7 +106,7 @@ export default function ServiceStrips() {
               Pretty is table stakes. We design for the moment a user figures something out without being told —
               that's what retention looks like.
             </p>
-            <a href="#work" className="btn-ghost">
+            <a href="/projects" className="btn-ghost">
               See our projects →
             </a>
           </div>
@@ -143,7 +143,7 @@ export default function ServiceStrips() {
               Most teams find out their infrastructure is fragile during an outage. We set up monitoring,
               auto-scaling, and rollback before that happens.
             </p>
-            <a href="#work" className="btn-ghost">
+            <a href="/projects" className="btn-ghost">
               See our projects →
             </a>
           </div>

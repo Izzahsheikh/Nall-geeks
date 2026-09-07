@@ -76,9 +76,9 @@ export default function Footer() {
           <div className="footer-col">
             <div className="footer-col-title">Company</div>
             <a href="/about" className="hover-accent">About</a>
-            <a href="/#work" className="hover-accent">Projects</a>
+            <a href="/projects" className="hover-accent">Projects</a>
             <a href="/contact" className="hover-accent">Contact</a>
-            <a href="/#career" className="hover-accent">Career</a>
+            <a href="/careers" className="hover-accent">Career</a>
           </div>
 
           <div className="footer-col">

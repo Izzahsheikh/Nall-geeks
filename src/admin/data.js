@@ -1,0 +1,103 @@
+export const projects = [
+  {
+    id: 1,
+    name: 'OrganicFields.pk',
+    category: 'E-Commerce App',
+    status: 'Live',
+    url: 'https://organicfields.pk',
+    initials: 'OF',
+  },
+  {
+    id: 2,
+    name: 'Zylo',
+    category: 'Productivity App',
+    status: 'Active',
+    url: 'https://zylo.app',
+    initials: 'ZY',
+  },
+  {
+    id: 3,
+    name: 'RankGrad',
+    category: 'Hiring Platform',
+    status: 'Live',
+    url: 'https://rankgrad.com',
+    initials: 'RG',
+  },
+  {
+    id: 4,
+    name: 'NallGeeks Website',
+    category: 'Brand Website',
+    status: 'In Review',
+    url: 'https://nallgeeks.com',
+    initials: 'NG',
+  },
+];
+
+export const messages = [
+  {
+    id: 1,
+    sender: 'Ayesha Khan',
+    email: 'ayesha@atelierco.com',
+    subject: 'Need a premium company website',
+    date: 'Sep 7, 2026',
+    status: 'Unread',
+    body: 'We are preparing to relaunch our brand and need a fast, premium website with strong portfolio presentation and an easy way to collect leads.',
+  },
+  {
+    id: 2,
+    sender: 'Bilal Ahmed',
+    email: 'bilal@northline.pk',
+    subject: 'Custom dashboard inquiry',
+    date: 'Sep 6, 2026',
+    status: 'Read',
+    body: 'Our operations team needs a private dashboard to manage projects, messages, and internal requests. We want something clean and simple.',
+  },
+  {
+    id: 3,
+    sender: 'Mariam R.',
+    email: 'mariam@foundrylab.io',
+    subject: 'Mobile app estimate',
+    date: 'Sep 5, 2026',
+    status: 'Unread',
+    body: 'We have an MVP planned for iOS and Android. I would like to understand your process, timeline, and ongoing support options.',
+  },
+];
+
+export const applications = [
+  {
+    id: 1,
+    name: 'Hassan Ali',
+    position: 'Frontend Developer',
+    email: 'hassan.dev@example.com',
+    date: 'Sep 7, 2026',
+    status: 'New',
+    details: 'React developer with two years of experience building dashboards, landing pages, and responsive web apps.',
+  },
+  {
+    id: 2,
+    name: 'Zara Sheikh',
+    position: 'UI/UX Designer',
+    email: 'zara.design@example.com',
+    date: 'Sep 6, 2026',
+    status: 'Reviewing',
+    details: 'Product designer focused on clean interfaces, wireframes, user flows, and brand-led digital experiences.',
+  },
+  {
+    id: 3,
+    name: 'Omar Farooq',
+    position: 'Full Stack Engineer',
+    email: 'omar.fullstack@example.com',
+    date: 'Sep 4, 2026',
+    status: 'Shortlisted',
+    details: 'Full stack engineer familiar with React, Node.js, APIs, and production deployment workflows.',
+  },
+  {
+    id: 4,
+    name: 'Nimra Q.',
+    position: 'Marketing Intern',
+    email: 'nimra.marketing@example.com',
+    date: 'Sep 2, 2026',
+    status: 'Rejected',
+    details: 'Entry level applicant interested in social media, content support, and growth research.',
+  },
+];

@@ -39,7 +39,7 @@ export default function Services() {
       (entries) => {
         if (entries[0].isIntersecting) {
           setIsVisible(true);
-          paths.forEach((p, i) => {
+          paths.forEach((p) => {
             if (!p) return;
             p.style.transition = 'stroke-dashoffset 0.9s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease, stroke 0.35s ease, stroke-width 0.35s ease';
             p.style.strokeDashoffset = '0';

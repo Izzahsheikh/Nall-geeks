@@ -1,4 +1,26 @@
+import { useEffect, useState } from 'react';
+
 export default function Work() {
+  const [projects, setProjects] = useState([]);
+  const [status, setStatus] = useState('loading');
+
+  useEffect(() => {
+    const loadProjects = async () => {
+      try {
+        const response = await fetch('/api/projects');
+        if (!response.ok) throw new Error('Could not load projects');
+        const data = await response.json();
+        setProjects(data.projects || []);
+        setStatus('ready');
+      } catch (error) {
+        console.error('Projects load error:', error);
+        setStatus('error');
+      }
+    };
+
+    loadProjects();
+  }, []);
+
   return (
     <section id="work" className="work-section">
       <div className="section-inner">
@@ -8,109 +30,53 @@ export default function Work() {
           <p>Real products, shipped and running — not concepts.</p>
         </div>
 
+        {status === 'loading' ? (
+          <p className="work-state">Loading projects...</p>
+        ) : null}
+
+        {status === 'error' ? (
+          <p className="work-state">Projects are unavailable right now.</p>
+        ) : null}
+
+        {status === 'ready' && projects.length === 0 ? (
+          <p className="work-state">No projects have been published yet.</p>
+        ) : null}
+
         <div className="proj-row reveal visible">
-          {/* OrganicFields */}
-          <div className="proj-card">
-            <div className="proj-frame">
-              <div className="proj-screen" style={{ background: '#1A2E1A' }}>
-                <div className="of-topbar">
-                  <span>OrganicFields.pk</span>
-                </div>
-                <div className="of-promo">🌿 LYCHEE SEASON — ORDER NOW →</div>
-                <div className="of-body">
-                  <div className="of-headline">Fresh from the Farm to Your Home</div>
-                  <div className="of-line w70"></div>
-                  <div className="of-line w50"></div>
-                  <div className="of-cta">Order Now →</div>
-                </div>
-              </div>
-            </div>
-            <div className="proj-name">OrganicFields.pk</div>
-            <div className="proj-type">E-Commerce App</div>
-          </div>
-
-          {/* Zylo */}
-          <div className="proj-card offset">
-            <div className="proj-frame">
-              <div className="proj-screen" style={{ background: 'var(--footer)' }}>
-                <div className="zylo-topbar">
-                  <span className="zylo-topbar-title">
-                    Zylo <span className="zylo-ai-badge">AI</span>
-                  </span>
-                  <span className="zylo-topbar-meta">This Week</span>
-                </div>
-                <div className="zylo-body">
-                  <div className="zylo-focus-label">DAILY FOCUS</div>
-                  <div className="zylo-task">
-                    <div className="zylo-task-dot"></div>
-                    <div style={{ flex: 1 }}>
-                      <div className="zylo-task-title">Let AI handle everything</div>
-                      <div className="zylo-tags">
-                        <span className="zylo-tag orange">Create Task</span>
-                        <span className="zylo-tag violet">Draft</span>
+          {projects.slice(0, 3).map((project, index) => (
+            <article key={project.id} className={`proj-card${index % 2 === 1 ? ' offset' : ''}`}>
+              <div className="proj-phone-frame">
+                <div className="proj-phone-speaker"></div>
+                <div className="proj-phone-screen project-preview">
+                  <div className="proj-phone-status">
+                    <span>{project.name}</span>
+                    <span>{project.status}</span>
+                  </div>
+                  <div className="proj-phone-content">
+                    {project.imageUrl ? (
+                      <img src={project.imageUrl} alt={`${project.name} project preview`} />
+                    ) : (
+                      <div className="project-preview-fallback">
+                        <span>{project.category}</span>
+                        <strong>{project.name.slice(0, 2).toUpperCase()}</strong>
                       </div>
-                    </div>
-                  </div>
-                  <div className="zylo-block">
-                    <div className="phone-line" style={{ width: '80%' }}></div>
-                    <div className="phone-line sm" style={{ width: '60%' }}></div>
-                  </div>
-                  <div className="zylo-block">
-                    <div className="phone-line" style={{ width: '70%' }}></div>
-                    <div className="phone-line sm" style={{ width: '45%' }}></div>
-                  </div>
-                  <div className="zylo-add">+ Add Task</div>
-                </div>
-              </div>
-            </div>
-            <div className="proj-name">Zylo</div>
-            <div className="proj-type">Productivity App</div>
-          </div>
-
-          {/* RankGrad */}
-          <div className="proj-card">
-            <div className="proj-frame">
-              <div className="proj-screen" style={{ background: '#fff' }}>
-                <div className="rg-topbar">
-                  <span className="rg-brand">
-                    <span>▪</span>RankGrad
-                  </span>
-                  <div className="rg-nav">
-                    <span>Sign In</span>
-                    <span>Get Started</span>
-                  </div>
-                </div>
-                <div className="rg-body">
-                  <div className="rg-tagline">Pakistan's #1 Merit-Based Platform</div>
-                  <div className="rg-headline">Screened Jobs &amp; Internships for Top Graduates</div>
-                  <div className="rg-listings">
-                    <div className="rg-listing">
-                      <div className="rg-listing-icon"></div>
-                      <div className="rg-listing-lines">
-                        <div className="rg-listing-line" style={{ width: '80%' }}></div>
-                        <div className="rg-listing-line sm" style={{ width: '50%' }}></div>
-                      </div>
-                      <span className="rg-apply">Apply</span>
-                    </div>
-                    <div className="rg-listing">
-                      <div className="rg-listing-icon"></div>
-                      <div className="rg-listing-lines">
-                        <div className="rg-listing-line" style={{ width: '65%' }}></div>
-                        <div className="rg-listing-line sm" style={{ width: '40%' }}></div>
-                      </div>
-                      <span className="rg-apply">Apply</span>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="proj-name">RankGrad</div>
-            <div className="proj-type">Hiring Platform</div>
-          </div>
+              <div className="proj-name">{project.name}</div>
+              <div className="proj-type">{project.category}</div>
+              {project.projectUrl ? (
+                <a href={project.projectUrl} className="proj-link" target="_blank" rel="noreferrer">
+                  View Project
+                </a>
+              ) : null}
+            </article>
+          ))}
         </div>
 
         <div className="work-cta reveal visible">
-          <a href="/contact" className="btn-ghost light">
+          <a href="/projects" className="btn-ghost light">
             See all projects →
           </a>
         </div>
