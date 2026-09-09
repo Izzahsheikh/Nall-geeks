@@ -29,12 +29,39 @@ const videoShowcases = [
     stat2: { value: '7 days', label: 'Walk-ins Welcome' },
     theme: 'dark',
   },
+  {
+    id: 'trip2airport',
+    videoSrc: '/uploads/projects/trip2Airport.mp4',
+    client: 'Trip2Airport',
+    category: 'Transport / Web',
+    title: 'Airport Transfers, Simplified',
+    description:
+      'A sleek, conversion-focused website for Trip2Airport — a professional airport transfer service built to make booking fast and friction-free. Clean layout, clear pricing, and a mobile-first experience that gets passengers from search to booked in seconds.',
+    url: 'https://www.trip2airport.co.uk/',
+    tags: ['React', 'Booking', 'Transport', 'Mobile-First'],
+    stat1: { value: '24/7', label: 'Available' },
+    stat2: { value: '100%', label: 'On-Time Focus' },
+    theme: 'light',
+  },
+  {
+    id: 'motnorwich',
+    videoSrc: '/uploads/projects/MotNorwich.mp4',
+    client: 'MOT Norwich',
+    category: 'Automotive / Web',
+    title: 'Trusted MOT & Car Servicing',
+    description:
+      'A straightforward, trust-first website for MOT Norwich — a local garage offering MOT testing, servicing, and repairs. Built to rank in local search, convert mobile visitors, and clearly communicate the garage\'s reliability and no-fuss approach to car care.',
+    url: 'https://mot-norwich.co.uk/',
+    tags: ['React', 'SEO', 'Local Business', 'Automotive'],
+    stat1: { value: 'Local', label: 'Norwich-Based' },
+    stat2: { value: 'Fast', label: 'Turnaround' },
+    theme: 'dark',
+  },
 ];
 
 export default function Projects() {
   const [projects, setProjects] = useState([]);
   const [status, setStatus] = useState('loading');
-  const [mutedMap, setMutedMap] = useState({ ngpartitions: true, gogotyre: true });
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -60,10 +87,6 @@ export default function Projects() {
   const leadProject = featuredProjects[0] || projects[0];
   const remainingProjects = projects.filter((project) => project.id !== leadProject?.id);
 
-  const toggleMute = (id) => {
-    setMutedMap((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
-
   return (
     <section className="projects-page">
       <div className="section-inner">
@@ -77,7 +100,7 @@ export default function Projects() {
           </p>
         </div>
 
-        {/* Video Showcases */}
+        {/* Video Showcases — 4 projects */}
         <div className="video-showcases">
           {videoShowcases.map((project) => (
             <div
@@ -90,29 +113,10 @@ export default function Projects() {
                   src={project.videoSrc}
                   autoPlay
                   loop
-                  muted={mutedMap[project.id]}
+                  muted
                   playsInline
                   className="showcase-video"
                 />
-                <button
-                  className="mute-toggle"
-                  onClick={() => toggleMute(project.id)}
-                  aria-label={mutedMap[project.id] ? 'Unmute video' : 'Mute video'}
-                >
-                  {mutedMap[project.id] ? (
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-                      <line x1="23" y1="9" x2="17" y2="15" />
-                      <line x1="17" y1="9" x2="23" y2="15" />
-                    </svg>
-                  ) : (
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-                      <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
-                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-                    </svg>
-                  )}
-                </button>
               </div>
 
               {/* Copy Side */}
