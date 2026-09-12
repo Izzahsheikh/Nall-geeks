@@ -5,8 +5,8 @@ const SERVICES = [
   { num: '01', icon: '</>', title: 'Web Development', desc: 'We write lean, fast code. No plugin bloat — just clean builds that load instantly.' },
   { num: '02', icon: '📱', title: 'Mobile Apps', desc: 'One codebase, two platforms. No lag, no glitches — just apps that work.' },
   { num: '03', icon: '🎨', title: 'UI/UX Design', desc: 'Design that earns trust before a single word is read.' },
-  { num: '04', icon: '⊞', title: 'Custom Software', desc: 'Tools shaped around your workflow — not the other way around.' },
-  { num: '05', icon: '☁', title: 'Cloud & DevOps', desc: 'Monitoring, auto-scaling, rollback before an outage — not after.' },
+  { num: '04', icon: '⊞', title: 'Management Software', desc: 'Tools shaped around your workflow — not the other way around.' },
+  { num: '05', icon: '🔍', title: 'Search Engine Optimization', desc: 'Rank higher, get found faster — we optimize your site for search engines that matter.' },
   { num: '06', icon: '🤖', title: 'AI & Automation', desc: 'Eliminate the repetitive. Build AI into your product or process.' },
 ];
 

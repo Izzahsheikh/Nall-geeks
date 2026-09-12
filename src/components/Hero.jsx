@@ -1,37 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
+import heroBg from '../assets/services/heroForHomePage.jpeg';
 
 const WORDS = ['Yours.', 'Fast.', 'Scalable.', 'Profitable.'];
 const TICKER_ITEMS = ['NEXORA', 'HELIX', 'FORMA', 'PULSE', 'ORGANICFIELDS', 'RANKGRAD', 'CDS', 'ZYLO'];
-
-function useCountUp(target, format, duration = 1500, delay = 600) {
-  const [value, setValue] = useState(0);
-  useEffect(() => {
-    const easeOut = (t) => 1 - Math.pow(1 - t, 3);
-    let raf;
-    const timer = setTimeout(() => {
-      const start = performance.now();
-      const tick = (now) => {
-        const p = Math.min((now - start) / duration, 1);
-        setValue(Math.round(easeOut(p) * target));
-        if (p < 1) raf = requestAnimationFrame(tick);
-      };
-      raf = requestAnimationFrame(tick);
-    }, delay);
-    return () => {
-      clearTimeout(timer);
-      if (raf) cancelAnimationFrame(raf);
-    };
-  }, [target, duration, delay]);
-  return format(value);
-}
 
 function TickerGroup() {
   return (
     <span className="ticker-group">
       {TICKER_ITEMS.map((item, i) => (
         <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: '3rem' }}>
-          <span className="ticker-item">{item}</span>
-          <span className="ticker-dot">·</span>
+          <span className="ticker-item" style={{ color: 'rgba(247,245,240,0.55)' }}>{item}</span>
+          <span className="ticker-dot" style={{ color: 'rgba(247,245,240,0.3)' }}>·</span>
         </span>
       ))}
     </span>
@@ -54,101 +33,105 @@ export default function Hero() {
     return () => clearInterval(intervalRef.current);
   }, []);
 
-  const revenue = useCountUp(124, (v) => `$${v}K`);
-  const users = useCountUp(8420, (v) => v.toLocaleString());
-  const orders = useCountUp(1893, (v) => v.toLocaleString());
-  const uptime = useCountUp(999, (v) => (v / 10).toFixed(1) + '%');
-
   return (
-    <section id="hero" className="hero">
-      <div className="hero-grid">
-        <div className="hero-left">
-          <div className="hero-eyebrow reveal visible">Software Engineering Studio</div>
-          <h1 className="hero-title reveal visible">
-            We build software
-            <br />
-            that's{' '}
-            <span
-              className="hero-word"
-              style={{
-                opacity: fading ? 0 : 1,
-                transform: fading ? 'translateY(-12px)' : 'translateY(0)',
-              }}
-            >
-              {WORDS[wordIdx]}
-            </span>
-          </h1>
-          <p className="hero-desc reveal visible">
-            We are a software engineering company building web, mobile, and custom platforms for startups and funded founders.
-          </p>
-          <div className="hero-ctas reveal visible">
-            <a href="/contact" className="btn-primary">
-              Start a Project →
-            </a>
-            <a href="#services" className="btn-outline">
-              Learn More
-            </a>
-          </div>
-        </div>
+    <>
+      <section
+        id="hero"
+        className="hero"
+        style={{
+          position: 'relative',
+          overflow: 'hidden',
+          background: '#171717',
+          paddingBottom: '5rem',
+        }}
+      >
+        {/* Background image */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundImage: `url(${heroBg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center 30%',
+            zIndex: 0,
+          }}
+        />
 
-        <div className="hero-right reveal visible">
-          <div className="dash-card">
-            <div className="dash-header">
-              <span className="dash-title">Analytics Dashboard</span>
-              <span className="dash-live">● LIVE</span>
+        {/* Directional overlay: dark on left for text, resolving fully to solid charcoal at the bottom edge (no fade-to-light here — that happens in the strip below instead) */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: `
+              linear-gradient(180deg, rgba(23,23,23,0.55) 0%, rgba(23,23,23,0.4) 35%, rgba(23,23,23,0.85) 100%),
+              linear-gradient(90deg, rgba(23,23,23,0.92) 0%, rgba(23,23,23,0.7) 35%, rgba(23,23,23,0.25) 65%, rgba(23,23,23,0.1) 100%)
+            `,
+            zIndex: 1,
+          }}
+        />
+
+        <div className="hero-grid" style={{ position: 'relative', zIndex: 2 }}>
+          <div className="hero-left">
+            <div className="hero-eyebrow reveal visible" style={{ color: '#F36B21' }}>
+              Software Engineering Studio
             </div>
-            <div className="dash-stats">
-              <div className="dash-stat">
-                <div className="dash-stat-label">Revenue</div>
-                <div className="dash-stat-value">{revenue}</div>
-                <div className="dash-stat-delta">
-                  <span className="pulse-dot"></span>12.4% this month
-                </div>
-              </div>
-              <div className="dash-stat">
-                <div className="dash-stat-label">Active Users</div>
-                <div className="dash-stat-value">{users}</div>
-                <div className="dash-stat-delta">
-                  <span className="pulse-dot"></span>8.1% this week
-                </div>
-              </div>
-              <div className="dash-stat">
-                <div className="dash-stat-label">Orders</div>
-                <div className="dash-stat-value">{orders}</div>
-                <div className="dash-stat-delta orange">
-                  <span className="pulse-dot orange"></span>23.7% this week
-                </div>
-              </div>
-              <div className="dash-stat">
-                <div className="dash-stat-label">Uptime</div>
-                <div className="dash-stat-value">{uptime}</div>
-                <div className="dash-stat-delta">
-                  <span className="pulse-dot"></span>All systems online
-                </div>
-              </div>
+            <h1 className="hero-title reveal visible" style={{ color: '#F7F5F0' }}>
+              We build software
+              <br />
+              that's{' '}
+              <span
+                className="hero-word"
+                style={{
+                  opacity: fading ? 0 : 1,
+                  transform: fading ? 'translateY(-12px)' : 'translateY(0)',
+                  color: '#F36B21',
+                }}
+              >
+                {WORDS[wordIdx]}
+              </span>
+            </h1>
+            <p className="hero-desc reveal visible" style={{ color: 'rgba(247,245,240,0.72)' }}>
+              We are a software engineering company building web, mobile, and custom platforms for startups and funded founders.
+            </p>
+            <div className="hero-ctas reveal visible">
+              <a href="/contact" className="btn-primary">
+                Start a Project →
+              </a>
+              <a
+                href="#services"
+                className="btn-outline"
+                style={{ color: '#F7F5F0', borderColor: 'rgba(247,245,240,0.35)' }}
+              >
+                Learn More
+              </a>
             </div>
-            <div className="dash-chart">
-              <div className="dash-chart-label">Weekly Growth</div>
-              <div className="dash-bars">
-                {[35, 50, 65, 55, 80, 100, 88].map((h, i) => (
-                  <div key={i} className="dash-bar" style={{ height: `${h}%`, opacity: i === 5 ? 1 : 0.3 + i * 0.08 }}></div>
-                ))}
-              </div>
+          </div>
+
+          <div className="hero-right reveal visible" />
+        </div>
+      </section>
+
+      {/* Ticker lives in its own solid section — guaranteed contrast, real breathing room */}
+      <div
+        style={{
+          background: '#171717',
+          borderTop: '1px solid rgba(247,245,240,0.08)',
+          padding: '2.75rem 0',
+        }}
+      >
+        <div className="ticker-section" style={{ position: 'relative' }}>
+          <div className="ticker-eyebrow" style={{ color: '#F36B21' }}>
+            Selected Work
+          </div>
+          <div className="ticker-rule" style={{ background: 'rgba(247,245,240,0.18)' }}></div>
+          <div className="ticker-wrap">
+            <div className="ticker-track">
+              <TickerGroup />
+              <TickerGroup />
             </div>
           </div>
         </div>
       </div>
-
-      <div className="ticker-section">
-        <div className="ticker-eyebrow">Selected Work</div>
-        <div className="ticker-rule"></div>
-        <div className="ticker-wrap">
-          <div className="ticker-track">
-            <TickerGroup />
-            <TickerGroup />
-          </div>
-        </div>
-      </div>
-    </section>
+    </>
   );
 }

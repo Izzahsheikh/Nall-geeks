@@ -1,7 +1,7 @@
 import webImg from '../assets/services/website.jpeg';
-import mobileImg from '../assets/services/mobileApp.jpeg';
+import mobileImg from '../assets/services/mobileApp.png';
 import uiImg from '../assets/services/UI.png';
-import cloudImg from '../assets/services/cloud.png';
+import cloudImg from '../assets/services/cloud.jpeg';
 
 export default function ServiceStrips() {
   return (
