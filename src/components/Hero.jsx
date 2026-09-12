@@ -2,16 +2,51 @@ import { useEffect, useRef, useState } from 'react';
 import heroBg from '../assets/services/heroForHomePage.jpeg';
 
 const WORDS = ['High Performance.', 'Pixel Perfect.', 'Production Ready.', 'Scalable.'];
-const TICKER_ITEMS = ['NEXORA', 'HELIX', 'FORMA', 'PULSE', 'ORGANICFIELDS', 'RANKGRAD', 'CDS', 'ZYLO'];
+const TICKER_ITEMS = [
+  { label: 'NgPartitions', url: 'https://ngpartitions.co.uk/' },
+  { label: 'GogoTyres',    url: 'https://www.gogotyre.co.uk/' },
+  { label: 'Trip2Airport', url: 'https://www.trip2airport.co.uk/' },
+  { label: 'DanMoT',       url: 'https://mot-norwich.co.uk/' },
+];
+
+function TickerItem({ label, url }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2.5rem' }}>
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        style={{
+          fontFamily: "'Inter', sans-serif",
+          fontSize: '0.95rem',
+          fontWeight: 500,
+          letterSpacing: '0.02em',
+          color: hovered ? '#F36B21' : 'rgba(247,245,240,0.9)',
+          textShadow: hovered ? '0 0 16px rgba(243,107,33,0.55)' : 'none',
+          transition: 'color 0.35s ease, text-shadow 0.35s ease',
+          textDecoration: 'none',
+          cursor: 'pointer',
+        }}
+      >
+        {label}
+      </a>
+      <span style={{ color: 'rgba(247,245,240,0.18)', fontSize: '1rem' }}>
+        {'·'}
+      </span>
+    </span>
+  );
+}
+
+const REPEATED_ITEMS = [...TICKER_ITEMS, ...TICKER_ITEMS, ...TICKER_ITEMS];
 
 function TickerGroup() {
   return (
     <span className="ticker-group">
-      {TICKER_ITEMS.map((item, i) => (
-        <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: '3rem' }}>
-          <span className="ticker-item" style={{ color: 'rgba(247,245,240,0.55)' }}>{item}</span>
-          <span className="ticker-dot" style={{ color: 'rgba(247,245,240,0.3)' }}>{'·'}</span>
-        </span>
+      {REPEATED_ITEMS.map((item, i) => (
+        <TickerItem key={i} label={item.label} url={item.url} />
       ))}
     </span>
   );
@@ -42,7 +77,11 @@ export default function Hero() {
           position: 'relative',
           overflow: 'hidden',
           background: '#171717',
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
           paddingBottom: '5rem',
+          paddingTop: '5rem',
         }}
       >
         {/* Background image */}
@@ -70,7 +109,7 @@ export default function Hero() {
           }}
         />
 
-        <div className="hero-grid" style={{ position: 'relative', zIndex: 2 }}>
+        <div className="hero-grid" style={{ position: 'relative', zIndex: 2, width: '100%' }}>
           <div className="hero-left">
 
             {/* Eyebrow */}
@@ -182,27 +221,56 @@ export default function Hero() {
         style={{
           background: '#171717',
           borderTop: '1px solid rgba(247,245,240,0.08)',
-          padding: '2.75rem 0',
+          padding: '2.25rem 0',
         }}
       >
         <div className="ticker-section" style={{ position: 'relative' }}>
           <div
-            className="ticker-eyebrow"
             style={{
+              textAlign: 'center',
               fontFamily: "'Inter', sans-serif",
               color: '#F36B21',
-              fontSize: '0.75rem',
-              fontWeight: 500,
-              letterSpacing: '0.04em',
+              fontSize: '0.65rem',
+              fontWeight: 600,
+              letterSpacing: '0.2em',
+              textTransform: 'uppercase',
+              marginBottom: '1.25rem',
+              opacity: 0.8,
             }}
           >
             Selected Work
           </div>
-          <div className="ticker-rule" style={{ background: 'rgba(247,245,240,0.18)' }} />
-          <div className="ticker-wrap">
-            <div className="ticker-track">
-              <TickerGroup />
-              <TickerGroup />
+
+          <div style={{ position: 'relative' }}>
+            <div
+              style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                bottom: 0,
+                width: '8rem',
+                background: 'linear-gradient(90deg, #171717 0%, transparent 100%)',
+                zIndex: 2,
+                pointerEvents: 'none',
+              }}
+            />
+            <div
+              style={{
+                position: 'absolute',
+                right: 0,
+                top: 0,
+                bottom: 0,
+                width: '8rem',
+                background: 'linear-gradient(270deg, #171717 0%, transparent 100%)',
+                zIndex: 2,
+                pointerEvents: 'none',
+              }}
+            />
+            <div className="ticker-wrap">
+              <div className="ticker-track">
+                <TickerGroup />
+                <TickerGroup />
+              </div>
             </div>
           </div>
         </div>
