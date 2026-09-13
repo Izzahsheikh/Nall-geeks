@@ -15,12 +15,13 @@ export default function ServiceStrips() {
               <div className="strip-tag-icon">{'</>'}</div>
               <span className="strip-tag-label">Web Development</span>
             </div>
-            <h3>Sub-second web apps that hit 100 on Core Web Vitals.</h3>
+            <h3>Fast, resilient web platforms built to scale.</h3>
             <p>
-              Most agencies stack plugins until your site crawls. We write lean code that loads fast — no shortcuts, no
-              caching band-aids.
+              We engineer performant web applications using clean architecture and modern technology stacks. From
+              initial build to production launch, we focus on responsive execution, lean codebases, and long-term
+              maintainability.
             </p>
-            <a href="/projects" className="btn-ghost">See our projects →</a>
+            <a href="/projects" className="btn-ghost">View projects →</a>
           </div>
           <div className="strip-visual">
             <img src={webImg} alt="Web Development" className="strip-img" />
@@ -34,12 +35,13 @@ export default function ServiceStrips() {
               <div className="strip-tag-icon">📱</div>
               <span className="strip-tag-label">Mobile Apps</span>
             </div>
-            <h3>One app, built once. Works great on iPhone and Android.</h3>
+            <h3>Native-grade mobile applications for iOS and Android.</h3>
             <p>
-              No lag. No glitches. No moments where it feels like a website in a wrapper. Just something that works the
-              way people expect.
+              We build fluid, reliable mobile products optimized for real-world performance. By combining responsive
+              UI design with solid system architecture, we deliver apps that launch fast, run smoothly, and adapt to
+              every screen size.
             </p>
-            <a href="/projects" className="btn-ghost">See our projects →</a>
+            <a href="/projects" className="btn-ghost">View projects →</a>
           </div>
           <div className="strip-visual">
             <img src={mobileImg} alt="Mobile Apps" className="strip-img" />
@@ -53,34 +55,36 @@ export default function ServiceStrips() {
               <div className="strip-tag-icon">🎨</div>
               <span className="strip-tag-label">UI/UX Design</span>
             </div>
-            <h3>Designs that are easy to use, not just easy to look at.</h3>
+            <h3>Thoughtful interface design centered on user clarity and function.</h3>
             <p>
-              Pretty is table stakes. We design for the moment a user figures something out without being told —
-              that's what retention looks like.
+              Visual design sets expectations, but workflow structure determines retention. We map complex systems
+              into intuitive user journeys, building unified design systems that reduce user friction and elevate
+              product usability.
             </p>
-            <a href="/projects" className="btn-ghost">See our projects →</a>
+            <a href="/projects" className="btn-ghost">View projects →</a>
           </div>
           <div className="strip-visual">
             <img src={uiImg} alt="UI/UX Design" className="strip-img" />
           </div>
         </div>
 
-        {/* Cloud/DevOps */}
+        {/* Software Management */}
         <div className="strip-row flip reveal visible" style={{ borderBottom: 'none' }}>
           <div className="strip-text">
             <div className="strip-tag">
-              <div className="strip-tag-icon">☁</div>
-              <span className="strip-tag-label">Cloud & DevOps</span>
+              <div className="strip-tag-icon">⊞</div>
+              <span className="strip-tag-label">Software Management</span>
             </div>
-            <h3>Deployments that don't wake you up at 3am.</h3>
+            <h3>End-to-end platform care, proactive maintenance, and infrastructure stability.</h3>
             <p>
-              Most teams find out their infrastructure is fragile during an outage. We set up monitoring,
-              auto-scaling, and rollback before that happens.
+              Long-term software health demands continuous oversight. We manage performance monitoring, routine
+              security patches, infrastructure updates, and system scaling so your platform stays secure, reliable,
+              and online around the clock.
             </p>
-            <a href="/projects" className="btn-ghost">See our projects →</a>
+            <a href="/projects" className="btn-ghost">View projects →</a>
           </div>
           <div className="strip-visual">
-            <img src={cloudImg} alt="Cloud & DevOps" className="strip-img" />
+            <img src={cloudImg} alt="Software Management" className="strip-img" />
           </div>
         </div>
 

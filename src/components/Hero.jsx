@@ -33,9 +33,7 @@ function TickerItem({ label, url }) {
       >
         {label}
       </a>
-      <span style={{ color: 'rgba(247,245,240,0.18)', fontSize: '1rem' }}>
-        {'·'}
-      </span>
+      <span style={{ color: 'rgba(247,245,240,0.18)', fontSize: '1rem' }}>{'·'}</span>
     </span>
   );
 }
@@ -80,8 +78,8 @@ export default function Hero() {
           minHeight: '100vh',
           display: 'flex',
           alignItems: 'center',
-          paddingBottom: '5rem',
-          paddingTop: '5rem',
+          paddingTop: '8rem',
+          paddingBottom: '8rem',
         }}
       >
         {/* Background image */}
@@ -112,7 +110,7 @@ export default function Hero() {
         <div className="hero-grid" style={{ position: 'relative', zIndex: 2, width: '100%' }}>
           <div className="hero-left">
 
-            {/* Eyebrow */}
+            {/* Eyebrow — now neutral white, not orange */}
             <div
               className="hero-eyebrow reveal visible"
               style={{
@@ -120,10 +118,9 @@ export default function Hero() {
                 fontSize: '0.7rem',
                 fontWeight: 600,
                 letterSpacing: '0.18em',
-                color: '#F36B21',
+                color: 'rgba(247,245,240,0.5)',  // ← was #F36B21, now muted white
                 textTransform: 'uppercase',
                 marginBottom: '1.4rem',
-                textShadow: '0 0 18px rgba(243,107,33,0.45)',
               }}
             >
               Software Studio for Ambitious Brands
@@ -147,6 +144,7 @@ export default function Hero() {
               <br />
               software that is
               <br />
+              {/* Orange is now reserved ONLY for this rotating word — maximum impact */}
               <span
                 style={{
                   display: 'inline-block',
@@ -163,7 +161,7 @@ export default function Hero() {
               </span>
             </h1>
 
-            {/* Description */}
+            {/* Body copy */}
             <p
               className="hero-desc reveal visible"
               style={{
@@ -172,13 +170,13 @@ export default function Hero() {
                 fontWeight: 400,
                 lineHeight: 1.7,
                 color: 'rgba(247,245,240,0.62)',
-                maxWidth: '42ch',
+                maxWidth: '46ch',   // ← slightly wider than before (was 42ch)
                 marginBottom: '2.5rem',
               }}
             >
-              From initial architecture to global deployment, NallGeeks builds
-              high-performance web applications, mobile platforms, and cloud
-              systems for visionaries.
+              NallGeeks takes your product from architecture to deployment —
+              web, mobile, and cloud. Built for founders who can't afford
+              to ship twice.
             </p>
 
             {/* CTAs */}
@@ -186,6 +184,7 @@ export default function Hero() {
               className="hero-ctas reveal visible"
               style={{ display: 'flex', gap: '0.875rem', flexWrap: 'wrap' }}
             >
+              {/* Primary — orange fill, unchanged */}
               <a
                 href="/contact"
                 className="btn-primary"
@@ -197,17 +196,20 @@ export default function Hero() {
               >
                 {'Start a Project \u2192'}
               </a>
+
+              {/* Secondary — now visually clear: solid white border + legible text */}
               <a
-                href="#services"
+                href="#projects"
                 className="btn-outline"
                 style={{
                   fontFamily: "'Inter', sans-serif",
-                  fontWeight: 400,
-                  color: 'rgba(247,245,240,0.75)',
-                  borderColor: 'rgba(247,245,240,0.22)',
+                  fontWeight: 500,
+                  color: 'rgba(247,245,240,0.92)',           // ← was 0.75, now more visible
+                  borderColor: 'rgba(247,245,240,0.45)',     // ← was 0.22, now clearly visible border
+                  background: 'rgba(247,245,240,0.06)',      // ← subtle fill so it reads as a button
                 }}
               >
-                Learn More
+                View Projects
               </a>
             </div>
           </div>
@@ -229,13 +231,12 @@ export default function Hero() {
             style={{
               textAlign: 'center',
               fontFamily: "'Inter', sans-serif",
-              color: '#F36B21',
+              color: 'rgba(247,245,240,0.4)',   // ← was orange, now subtle white label
               fontSize: '0.65rem',
               fontWeight: 600,
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
               marginBottom: '1.25rem',
-              opacity: 0.8,
             }}
           >
             Selected Work
@@ -244,26 +245,18 @@ export default function Hero() {
           <div style={{ position: 'relative' }}>
             <div
               style={{
-                position: 'absolute',
-                left: 0,
-                top: 0,
-                bottom: 0,
+                position: 'absolute', left: 0, top: 0, bottom: 0,
                 width: '8rem',
                 background: 'linear-gradient(90deg, #171717 0%, transparent 100%)',
-                zIndex: 2,
-                pointerEvents: 'none',
+                zIndex: 2, pointerEvents: 'none',
               }}
             />
             <div
               style={{
-                position: 'absolute',
-                right: 0,
-                top: 0,
-                bottom: 0,
+                position: 'absolute', right: 0, top: 0, bottom: 0,
                 width: '8rem',
                 background: 'linear-gradient(270deg, #171717 0%, transparent 100%)',
-                zIndex: 2,
-                pointerEvents: 'none',
+                zIndex: 2, pointerEvents: 'none',
               }}
             />
             <div className="ticker-wrap">

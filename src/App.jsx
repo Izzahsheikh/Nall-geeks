@@ -5,7 +5,6 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Services from './components/Services';
 import ServiceStrips from './components/ServiceStrips';
-import Work from './components/Work';
 import Projects from './components/Projects';
 import About from './components/About';
 import Testimonials from './components/Testimonials';
@@ -44,7 +43,6 @@ export default function App() {
           <Hero />
           <Services />
           <ServiceStrips />
-          <Work />
           <Testimonials />
           <FAQ />
         </>

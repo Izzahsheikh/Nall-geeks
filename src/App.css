@@ -139,11 +139,11 @@
 .strip-row.flip { flex-direction: row-reverse; }
 .strip-row.last { border-bottom: none; }
 .strip-text { flex: 1; min-width: 0; }
-.strip-tag { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; }
-.strip-tag-icon { width: 28px; height: 28px; border-radius: 6px; background: var(--footer); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color:  var(--accent); font-weight: 700; }
-.strip-tag-label { font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; }
-.strip-text h3 { font-size: clamp(28px, 3.5vw, 44px); line-height: 1.15; color: var(--primary); margin-bottom: 1rem; }
-.strip-text p { font-family: var(--font-body); color: var(--muted); font-size: 0.95rem; line-height: 1.75; margin-bottom: 1.75rem; }
+.strip-tag { display: flex; align-items: center; gap: 0.65rem; margin-bottom: 1.1rem; }
+.strip-tag-icon { width: 30px; height: 30px; border-radius: 7px; background: var(--footer); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: var(--accent); font-weight: 700; }
+.strip-tag-label { font-family: var(--font-mono); font-size: 13px; font-weight: 700; letter-spacing: 0.14em; color: var(--cta-hover); text-transform: uppercase; }
+.strip-text h3 { font-family: var(--font-display); font-weight: 800; font-size: clamp(30px, 3.6vw, 46px); line-height: 1.14; letter-spacing: -0.015em; color: var(--primary); margin-bottom: 1.1rem; }
+.strip-text p { font-family: var(--font-body); color: var(--secondary); font-weight: 400; font-size: 1.02rem; line-height: 1.75; margin-bottom: 1.85rem; }
 .strip-visual { flex: 1; min-width: 0; }
 
 /* ===== Strip Image ===== */
