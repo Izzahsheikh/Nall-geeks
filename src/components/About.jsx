@@ -325,22 +325,18 @@ const css = `
 /* ── vision ── */
 .ng-about .abx-vision{ background: var(--ax-bg); }
 
-/* clean plate — just the mark on a quiet surface */
+/* bare mark — no card */
 .ng-about .abx-plate{
   position: relative;
   aspect-ratio: 5 / 4;
-  border-radius: 16px;
   display: grid;
   place-items: center;
-  background: linear-gradient(168deg, #FCFAF5 0%, #F1ECE1 100%);
-  border: 1px solid rgba(33,30,25,.08);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.8),
-    0 2px 6px -2px rgba(33,30,25,.12),
-    0 40px 78px -44px rgba(33,30,25,.38);
 }
-.ng-about .abx-plate__mark{ width: min(52%, 230px); }
-.ng-about .abx-plate__mark img{ width: 100%; height: auto; display: block; }
+.ng-about .abx-plate__mark{ width: min(66%, 300px); }
+.ng-about .abx-plate__mark img{
+  width: 100%; height: auto; display: block;
+  filter: drop-shadow(0 16px 28px rgba(33,30,25,.12));
+}
 
 /* ── commitment (dark) ── */
 .ng-about .abx-commitment{
