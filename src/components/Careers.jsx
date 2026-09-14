@@ -264,36 +264,36 @@ const css = `
     line-height: 1.25;
     letter-spacing: -0.01em;
     color: #0d0d0d;
-    margin-bottom: 18px;
+    margin-bottom: 26px;
   }
   .ngc-job-meta {
     display: flex; align-items: center; gap: 14px;
     flex-wrap: wrap;
-    margin-bottom: 22px;
+    margin-bottom: 26px;
   }
   .ngc-meta-pill {
-    font-size: 12px; color: rgba(0,0,0,0.45);
-    background: rgba(0,0,0,0.055);
+    font-size: 12.5px; font-weight: 500; color: rgba(0,0,0,0.62);
+    background: rgba(0,0,0,0.06);
     border-radius: 20px;
     padding: 5px 16px;
   }
   .ngc-meta-dot { display: none; }
   .ngc-meta-loc {
-    font-size: 12px; color: rgba(0,0,0,0.45);
-    background: rgba(0,0,0,0.055);
+    font-size: 12.5px; font-weight: 500; color: rgba(0,0,0,0.62);
+    background: rgba(0,0,0,0.06);
     border-radius: 20px;
     padding: 5px 16px;
   }
   .ngc-job-summary {
     font-size: 14.5px; line-height: 1.8;
-    color: rgba(0,0,0,0.52);
+    color: rgba(0,0,0,0.68);
     max-width: 520px;
     margin-bottom: 22px;
   }
   .ngc-tags { display: flex; flex-wrap: wrap; gap: 8px; }
   .ngc-tag-chip {
-    font-size: 12px; color: rgba(0,0,0,0.4);
-    border: 1px solid rgba(0,0,0,0.1);
+    font-size: 12px; font-weight: 500; color: rgba(0,0,0,0.58);
+    border: 1px solid rgba(0,0,0,0.14);
     border-radius: var(--radius-sm);
     padding: 4px 12px;
   }
