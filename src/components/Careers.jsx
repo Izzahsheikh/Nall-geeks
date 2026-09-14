@@ -264,7 +264,7 @@ const css = `
     line-height: 1.25;
     letter-spacing: -0.01em;
     color: #0d0d0d;
-    margin-bottom: 8px;
+    margin-bottom: 18px;
   }
   .ngc-job-meta {
     display: flex; align-items: center; gap: 14px;
