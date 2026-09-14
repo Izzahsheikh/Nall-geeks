@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;450;500;600&display=swap');
+
 /* ===== Keyframes ===== */
 @keyframes tickerScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @keyframes pulseDot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.65); } }
@@ -355,32 +357,36 @@
   margin-top: 1rem;
 }
 
-/* ===== Careers Page ===== */
-.careers-page { background: var(--bg); padding: calc(72px + 5rem) 5% 7rem; overflow: hidden; }
-.careers-hero { max-width: 880px; margin-bottom: clamp(3rem, 6vw, 5rem); }
-.careers-hero h2 { font-size: clamp(46px, 7vw, 86px); line-height: 1.03; color: var(--primary); margin-bottom: 1.3rem; }
-.careers-hero p { max-width: 680px; color: var(--muted); font-family: var(--font-body); font-size: clamp(1rem, 1.4vw, 1.16rem); line-height: 1.75; }
-.careers-openings { display: grid; gap: 1rem; margin-bottom: clamp(3rem, 6vw, 5rem); }
-.career-opening { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.5rem; align-items: center; padding: clamp(1.25rem, 3vw, 2rem); background: #fff; border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 16px 38px rgba(37,41,44,0.06); transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; }
-.career-opening:hover { transform: translateY(-4px); border-color: rgba(242,138,69,0.46); box-shadow: 0 20px 48px rgba(228,104,34,0.1); }
-.career-opening span { display: block; margin-bottom: 0.65rem; color: var(--accent); font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
-.career-opening h3 { font-size: clamp(1.7rem, 3vw, 2.55rem); line-height: 1.08; color: var(--primary); margin-bottom: 0.65rem; }
-.career-opening p { max-width: 650px; color: var(--muted); font-family: var(--font-body); font-size: 0.96rem; line-height: 1.65; }
-.career-opening-meta { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; justify-content: flex-end; }
-.career-opening-meta strong { color: var(--primary); font-family: var(--font-body); font-size: 0.9rem; }
-.career-opening-meta button { border: 1px solid var(--cta); background: var(--cta); color: #fff; border-radius: 8px; padding: 0.72rem 1.15rem; font-family: var(--font-body); font-weight: 700; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
-.career-opening-meta button:hover { background: var(--cta-hover); transform: translateY(-2px); }
-.career-application-section { display: grid; grid-template-columns: minmax(0, 0.78fr) minmax(320px, 1fr); gap: clamp(2rem, 6vw, 5rem); align-items: start; background: var(--warm-bg); border: 1px solid var(--border); border-radius: 8px; padding: clamp(1.5rem, 5vw, 3rem); box-shadow: 0 22px 54px rgba(37,41,44,0.08); }
-.career-application-copy h3 { font-size: clamp(34px, 5vw, 62px); line-height: 1.05; color: var(--primary); margin-bottom: 1rem; }
-.career-application-copy p { color: var(--muted); font-family: var(--font-body); font-size: 1rem; line-height: 1.75; }
-.career-form { display: flex; flex-direction: column; gap: 1rem; }
-.career-form input,
-.career-form select,
-.career-form textarea { width: 100%; border: 1.5px solid var(--border); border-radius: 8px; padding: 14px 16px; font-family: var(--font-body); font-size: 0.92rem; outline: none; color: var(--primary); background: #fff; display: block; }
-.career-form input:focus,
-.career-form select:focus,
-.career-form textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(242,138,69,0.12); }
-.career-form textarea { resize: vertical; min-height: 140px; }
+/* ===== Testimonials ===== */
+.testi-section { background: var(--alt-bg); background-image: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(228,104,34,0.06) 0%, transparent 60%); padding: 5rem 5%; }
+.testi-section .section-head h2 { color: var(--primary); }
+.testi-row { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.testi-card { flex: 1; min-width: 280px; border-radius: 1rem; padding: 2rem; position: relative; overflow: hidden; transition: transform 0.3s ease; background: #fff; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--border); box-shadow: 0 16px 38px rgba(37, 41, 44, 0.08); }
+.testi-card:hover { transform: translateY(-4px); }
+.testi-quote-mark { font-family: var(--font-display); font-size: 120px; font-weight: 800; color: var(--accent); opacity: 0.1; line-height: 1; position: absolute; top: -20px; left: 16px; pointer-events: none; }
+.testi-text { font-family: var(--font-body); font-size: 0.95rem; line-height: 1.75; color: var(--primary); margin-bottom: 1.5rem; position: relative; }
+.testi-person { display: flex; align-items: center; gap: 0.875rem; position: relative; }
+.testi-avatar { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; }
+.testi-name { font-family: var(--font-display); font-weight: 700; font-size: 0.9rem; color: var(--primary); }
+.testi-role { font-family: var(--font-body); font-size: 0.8rem; color: var(--muted); }
+
+/* ===== Contact ===== */
+.contact-section { background: var(--warm-bg); padding: 7rem 5%; }
+.contact-row { display: flex; gap: 5rem; align-items: flex-start; flex-wrap: wrap; }
+.contact-left { flex: 0 0 42%; min-width: 300px; }
+.contact-left h2 { font-size: clamp(36px, 5vw, 56px); line-height: 1.1; color: var(--primary); margin-bottom: 1.75rem; }
+.contact-points { display: flex; flex-direction: column; gap: 0.875rem; margin-bottom: 2rem; }
+.contact-point { display: flex; align-items: flex-start; gap: 0.75rem; }
+.contact-point-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-top: 8px; }
+.contact-point span { font-family: var(--font-body); font-size: 0.95rem; color:var(--muted); }
+.contact-right { flex: 1; min-width: 300px; }
+.contact-form { background: #fff; border: 1px solid var(--border); border-radius: 1.5rem; padding: 2.5rem; box-shadow: 0 24px 64px rgba(0,0,0,0.15); }
+.form-row { display: flex; gap: 1rem; margin-bottom: 1rem; }
+.contact-form input, .contact-form textarea { width: 100%; border: 1.5px solid  var(--border); border-radius: 0.75rem; padding: 14px 16px; font-family: var(--font-body); font-size: 0.9rem; outline: none; color: var(--primary); background: #fff; margin-bottom: 1rem; display: block; }
+.contact-form textarea { resize: none; margin-bottom: 1.25rem; }
+.form-row input { margin-bottom: 0; flex: 1; min-width: 0; }
+.contact-submit { width: 100%; background: var(--cta); color: #fff; font-family: var(--font-body); font-weight: 600; font-size: 1rem; padding: 16px; border-radius: 8px; cursor: pointer; text-align: center; border: none; transition: background 0.2s, transform 0.2s; }
+.contact-submit:hover { background: var(--cta-hover); transform: scale(1.03); }
 
 /* OrganicFields mockup */
 .of-topbar { background: #2D5A1B; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
@@ -427,37 +433,6 @@
 .rg-listing-line { height: 5px; background: var(--border); border-radius: 3px; margin-bottom: 3px; }
 .rg-listing-line.sm { height: 4px; background: var(--alt-bg); margin-bottom: 0; }
 .rg-apply { font-family: var(--font-body); font-size: 0.55rem; background: var(--footer); color: #fff; padding: 2px 6px; border-radius: 4px; }
-
-/* ===== Testimonials ===== */
-.testi-section { background: var(--alt-bg); background-image: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(228,104,34,0.06) 0%, transparent 60%); padding: 5rem 5%; }
-.testi-section .section-head h2 { color: var(--primary); }
-.testi-row { display: flex; gap: 1.5rem; flex-wrap: wrap; }
-.testi-card { flex: 1; min-width: 280px; border-radius: 1rem; padding: 2rem; position: relative; overflow: hidden; transition: transform 0.3s ease; background: #fff; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--border); box-shadow: 0 16px 38px rgba(37, 41, 44, 0.08); }
-.testi-card:hover { transform: translateY(-4px); }
-.testi-quote-mark { font-family: var(--font-display); font-size: 120px; font-weight: 800; color: var(--accent); opacity: 0.1; line-height: 1; position: absolute; top: -20px; left: 16px; pointer-events: none; }
-.testi-text { font-family: var(--font-body); font-size: 0.95rem; line-height: 1.75; color: var(--primary); margin-bottom: 1.5rem; position: relative; }
-.testi-person { display: flex; align-items: center; gap: 0.875rem; position: relative; }
-.testi-avatar { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; }
-.testi-name { font-family: var(--font-display); font-weight: 700; font-size: 0.9rem; color: var(--primary); }
-.testi-role { font-family: var(--font-body); font-size: 0.8rem; color: var(--muted); }
-
-/* ===== Contact ===== */
-.contact-section { background: var(--warm-bg); padding: 7rem 5%; }
-.contact-row { display: flex; gap: 5rem; align-items: flex-start; flex-wrap: wrap; }
-.contact-left { flex: 0 0 42%; min-width: 300px; }
-.contact-left h2 { font-size: clamp(36px, 5vw, 56px); line-height: 1.1; color: var(--primary); margin-bottom: 1.75rem; }
-.contact-points { display: flex; flex-direction: column; gap: 0.875rem; margin-bottom: 2rem; }
-.contact-point { display: flex; align-items: flex-start; gap: 0.75rem; }
-.contact-point-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-top: 8px; }
-.contact-point span { font-family: var(--font-body); font-size: 0.95rem; color:var(--muted); }
-.contact-right { flex: 1; min-width: 300px; }
-.contact-form { background: #fff; border: 1px solid var(--border); border-radius: 1.5rem; padding: 2.5rem; box-shadow: 0 24px 64px rgba(0,0,0,0.15); }
-.form-row { display: flex; gap: 1rem; margin-bottom: 1rem; }
-.contact-form input, .contact-form textarea { width: 100%; border: 1.5px solid  var(--border); border-radius: 0.75rem; padding: 14px 16px; font-family: var(--font-body); font-size: 0.9rem; outline: none; color: var(--primary); background: #fff; margin-bottom: 1rem; display: block; }
-.contact-form textarea { resize: none; margin-bottom: 1.25rem; }
-.form-row input { margin-bottom: 0; flex: 1; }
-.contact-submit { width: 100%; background: var(--cta); color: #fff; font-family: var(--font-body); font-weight: 600; font-size: 1rem; padding: 16px; border-radius: 8px; cursor: pointer; text-align: center; border: none; transition: background 0.2s, transform 0.2s; }
-.contact-submit:hover { background: var(--cta-hover); transform: scale(1.03); }
 
 /* ===== FAQ ===== */
 .faq-section { background: var(--bg); border-radius: 2.5rem 2.5rem 0 0; padding: 7rem 5%; }
@@ -767,10 +742,6 @@ button.danger,
   .projects-featured-copy { padding: 1rem 0.3rem 0.5rem; }
   .projects-featured-media { min-height: 320px; }
   .projects-card-media { height: 230px; }
-  .careers-page { padding: calc(72px + 3rem) 5% 4rem; }
-  .career-opening,
-  .career-application-section { grid-template-columns: 1fr; }
-  .career-opening-meta { justify-content: flex-start; }
   .admin-shell { display: block; }
   .admin-sidebar { position: relative; height: auto; padding: 1rem 5%; }
   .admin-brand { padding-bottom: 1rem; }
@@ -801,4 +772,633 @@ button.danger,
 @media (min-width: 769px) {
   .hamburger { display: none; }
   .mob-menu { display: none; }
+}
+/* ============================================================================
+   NallGeeks — Careers
+   Everything is scoped under .ng-careers, so this file cannot leak into the
+   navbar, footer, admin or any other page. Safe to add alongside App.css.
+   ============================================================================ */
+
+
+.ng-careers {
+  /* Brand colours inherit from your existing :root when present */
+  --ng-accent: var(--accent, #e46822);
+  --ng-accent-hi: var(--cta-hover, #c95418);
+  --ng-charcoal: #25292c;
+  --ng-nav: #3a4043;
+
+  --ng-ink: #181c1e;
+  --ng-ink-2: #3a4043;
+  --ng-body: #61696d;
+  --ng-line: #e7e5e1;
+  --ng-line-2: #d5d3ce;
+  --ng-paper: #ffffff;
+  --ng-canvas: #faf8f5;
+
+  /* Type */
+  --ng-display: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --ng-text: 'Inter', 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --ng-mono: var(--font-mono, ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace);
+
+  /* Rhythm */
+  --ng-section: clamp(72px, 9vw, 128px);
+  --ng-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  background: var(--ng-paper);
+  color: var(--ng-ink);
+  font-family: var(--ng-text);
+  padding-top: 72px;              /* fixed navbar */
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+.ng-careers *,
+.ng-careers *::before,
+.ng-careers *::after { box-sizing: border-box; }
+
+.ng-wrap { width: min(1240px, calc(100% - 10vw)); margin-inline: auto; }
+
+.ng-careers h1,
+.ng-careers h2,
+.ng-careers h3,
+.ng-careers h4 {
+  margin: 0;
+  font-family: var(--ng-display);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -0.032em;
+  color: var(--ng-ink);
+}
+.ng-careers p { margin: 0; }
+.ng-careers button { font: inherit; }
+
+.ng-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: var(--ng-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ng-accent);
+}
+.ng-eyebrow::before {
+  content: '';
+  width: 22px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+/* ===== Reveal ===================================================== */
+.ng-careers [data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s var(--ng-ease), transform 0.7s var(--ng-ease);
+  transition-delay: var(--d, 0ms);
+}
+.ng-careers [data-reveal].is-in { opacity: 1; transform: none; }
+
+/* ===== Buttons ==================================================== */
+.ng-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 50px;
+  padding: 0 1.6rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-family: var(--ng-text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s var(--ng-ease);
+}
+.ng-btn-solid { background: var(--ng-charcoal); color: #fff; }
+.ng-btn-solid:hover { background: var(--ng-accent); transform: translateY(-2px); }
+.ng-btn-line { background: transparent; color: var(--ng-ink); border-color: var(--ng-line-2); }
+.ng-btn-line:hover { border-color: var(--ng-accent); color: var(--ng-accent); transform: translateY(-2px); }
+
+.ng-arrow { display: inline-block; transition: transform 0.3s var(--ng-ease); }
+.ng-btn:hover .ng-arrow.down { transform: translateY(3px); }
+.ng-btn:hover .ng-arrow.right { transform: translateX(4px); }
+
+.ng-careers :focus-visible {
+  outline: 2px solid var(--ng-accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ===== Hero ======================================================= */
+.ng-hero {
+  position: relative;
+  background: var(--ng-canvas);
+  border-bottom: 1px solid var(--ng-line);
+  padding: clamp(88px, 13vw, 148px) 0 clamp(72px, 9vw, 108px);
+  overflow: hidden;
+}
+/* Sophisticated brand watermark: large, faded, partially cropped off the
+   top-right edge. Reads as texture, not as a logo placed behind text. */
+.ng-hero-mark {
+  position: absolute;
+  top: clamp(-13vw, -9vw, -60px);
+  right: clamp(-6vw, -3vw, -20px);
+  z-index: 0;
+  font-family: var(--ng-display);
+  font-weight: 800;
+  font-size: clamp(280px, 34vw, 620px);
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(24, 28, 30, 0.07);
+  pointer-events: none;
+  user-select: none;
+}
+.ng-hero-inner { position: relative; z-index: 1; max-width: 720px; }
+.ng-hero h1 {
+  margin: 1.4rem 0 0;
+  font-size: clamp(40px, 5.6vw, 78px);
+  line-height: 1.01;
+  letter-spacing: -0.04em;
+  max-width: 16ch;
+}
+.ng-hero-lead {
+  margin-top: 1.5rem;
+  max-width: 54ch;
+  font-size: clamp(1rem, 1.15vw, 1.12rem);
+  line-height: 1.75;
+  color: var(--ng-body);
+}
+.ng-hero-ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2.4rem; }
+
+/* ===== Section heads ============================================== */
+.ng-sec { padding: var(--ng-section) 0; }
+.ng-sec-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.7fr);
+  gap: 1.5rem clamp(2rem, 5vw, 4.5rem);
+  align-items: end;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+.ng-sec-head h2 {
+  margin-top: 1.1rem;
+  font-size: clamp(31px, 3.8vw, 52px);
+}
+.ng-sec-head p {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--ng-body);
+  max-width: 42ch;
+  padding-bottom: 0.4rem;
+}
+
+/* ===== Why NallGeeks — editorial rows, not a card grid ============ */
+.ng-values { background: var(--ng-paper); }
+.ng-value-rows { border-top: 1px solid var(--ng-line); }
+.ng-value-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: clamp(64px, 7vw, 96px) minmax(0, 0.62fr) minmax(0, 1fr);
+  gap: 0.5rem clamp(1.5rem, 4vw, 3.5rem);
+  align-items: baseline;
+  padding: clamp(1.5rem, 2.8vw, 2.1rem) 0;
+  border-bottom: 1px solid var(--ng-line);
+  transition: background 0.3s ease;
+}
+.ng-value-row:hover { background: linear-gradient(90deg, var(--ng-canvas), transparent 82%); }
+.ng-value-num {
+  font-family: var(--ng-display);
+  font-weight: 700;
+  font-size: clamp(1.15rem, 1.8vw, 1.55rem);
+  letter-spacing: -0.02em;
+  color: var(--ng-line-2);
+  transition: color 0.3s ease;
+}
+.ng-value-row:hover .ng-value-num { color: var(--ng-accent); }
+.ng-value-row h3 { font-size: clamp(1.2rem, 1.9vw, 1.6rem); letter-spacing: -0.024em; }
+.ng-value-row p { font-size: 0.98rem; line-height: 1.72; color: var(--ng-body); max-width: 52ch; }
+.ng-value-row.is-lead { border-bottom-color: var(--ng-ink); }
+.ng-value-row.is-lead h3 { color: var(--ng-accent); }
+
+/* ===== Open positions ============================================= */
+.ng-roles { background: var(--ng-paper); border-top: 1px solid var(--ng-line); scroll-margin-top: 96px; }
+.ng-role-list { display: grid; gap: 14px; }
+
+.ng-role {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1.5rem clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  padding: clamp(1.4rem, 2.6vw, 2.15rem);
+  background: var(--ng-paper);
+  border: 1px solid var(--ng-line);
+  border-radius: 18px;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.28s var(--ng-ease), border-color 0.28s ease,
+    box-shadow 0.28s ease, background 0.28s ease;
+}
+/* Keyboard focus lands on the action button but should frame the whole card */
+.ng-role:has(.ng-role-action:focus-visible) {
+  border-color: var(--ng-accent);
+  box-shadow: 0 0 0 3px rgba(242, 138, 69, 0.2);
+}
+.ng-role:hover {
+  transform: translateY(-3px);
+  background: #fffdfb;
+  border-color: rgba(228, 104, 34, 0.45);
+  box-shadow: 0 18px 40px rgba(37, 41, 44, 0.09);
+}
+.ng-role-dept {
+  font-family: var(--ng-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ng-accent);
+}
+.ng-role h3 {
+  margin: 0.7rem 0 0.55rem;
+  font-size: clamp(1.35rem, 2.1vw, 1.85rem);
+  letter-spacing: -0.028em;
+}
+.ng-role-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--ng-ink-2);
+}
+.ng-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--ng-line-2); }
+.ng-role-summary {
+  margin: 0.95rem 0 1.2rem;
+  max-width: 62ch;
+  font-size: 0.95rem;
+  line-height: 1.72;
+  color: var(--ng-body);
+}
+.ng-tags { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.ng-tag {
+  padding: 0.36rem 0.72rem;
+  border: 1px solid var(--ng-line);
+  border-radius: 999px;
+  background: var(--ng-canvas);
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--ng-ink-2);
+  transition: border-color 0.28s ease, color 0.28s ease;
+}
+.ng-role:hover .ng-tag { border-color: rgba(228, 104, 34, 0.26); }
+.ng-role-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  border: none;
+  background: none;
+  white-space: nowrap;
+  font-family: var(--ng-text);
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ng-ink);
+  cursor: pointer;
+  transition: color 0.25s ease;
+}
+.ng-role-action::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
+.ng-role-action:focus-visible { outline: none; }
+.ng-role:hover .ng-role-action { color: var(--ng-accent); }
+.ng-role:hover .ng-role-action .ng-arrow { transform: translateX(5px); }
+
+/* Loading + empty states */
+.ng-skeleton {
+  height: 190px;
+  border-radius: 18px;
+  border: 1px solid var(--ng-line);
+  background: linear-gradient(100deg, var(--ng-canvas) 30%, #f3f0ec 50%, var(--ng-canvas) 70%);
+  background-size: 220% 100%;
+  animation: ngShimmer 1.5s linear infinite;
+}
+@keyframes ngShimmer { from { background-position: 180% 0; } to { background-position: -40% 0; } }
+.ng-empty {
+  padding: 2.5rem;
+  border: 1px dashed var(--ng-line-2);
+  border-radius: 18px;
+  text-align: center;
+  color: var(--ng-body);
+  font-size: 0.95rem;
+}
+
+/* Internship — compact and visually secondary to the single job card above */
+.ng-intern-strip {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 1.5rem clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+  margin-top: 1.5rem;
+  padding: clamp(1.4rem, 2.6vw, 1.9rem) clamp(1.4rem, 2.6vw, 2rem);
+  background: var(--ng-canvas);
+  border: 1px solid var(--ng-line);
+  border-radius: 16px;
+}
+.ng-intern-strip-copy h3 { margin: 0.55rem 0 0.4rem; font-size: 1.25rem; letter-spacing: -0.024em; }
+.ng-intern-strip-copy p { font-size: 0.9rem; line-height: 1.6; color: var(--ng-body); max-width: 40ch; }
+.ng-intern-tracks { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: flex-start; }
+.ng-intern-track {
+  min-height: 40px;
+  padding: 0 1rem;
+  border: 1px solid var(--ng-line-2);
+  border-radius: 999px;
+  background: var(--ng-paper);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ng-ink-2);
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+.ng-intern-track:hover { border-color: var(--ng-accent); color: var(--ng-accent); background: var(--ng-paper); }
+
+/* ===== How we work — calm sidebar layout with one active principle === */
+.ng-how { background: var(--ng-canvas); border-top: 1px solid var(--ng-line); }
+.ng-how-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.62fr) minmax(0, 1.38fr);
+  gap: clamp(2.5rem, 6vw, 5rem);
+  align-items: start;
+}
+.ng-how-head { position: sticky; top: 96px; }
+.ng-how-head h2 { margin: 1.1rem 0 0.9rem; font-size: clamp(31px, 3.6vw, 46px); }
+.ng-how-head p { font-size: 1rem; line-height: 1.72; color: var(--ng-body); max-width: 32ch; }
+
+.ng-how-list { display: flex; flex-direction: column; border-top: 1px solid var(--ng-line); }
+.ng-principle {
+  display: grid;
+  grid-template-columns: clamp(44px, 5vw, 64px) minmax(0, 1fr);
+  gap: 0 clamp(1.25rem, 3vw, 2.25rem);
+  align-items: start;
+  width: 100%;
+  padding: clamp(1.3rem, 2.4vw, 1.75rem) clamp(1rem, 2vw, 1.5rem);
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--ng-line);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.ng-principle:hover,
+.ng-principle.is-active { background: var(--ng-paper); }
+.ng-principle-num {
+  padding-top: 0.2rem;
+  font-family: var(--ng-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--ng-line-2);
+  transition: color 0.3s ease;
+}
+.ng-principle:hover .ng-principle-num,
+.ng-principle.is-active .ng-principle-num { color: var(--ng-accent); }
+.ng-principle-body { display: block; }
+.ng-principle-body strong {
+  display: block;
+  font-family: var(--ng-display);
+  font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  color: var(--ng-ink);
+}
+.ng-principle-copy {
+  display: block;
+  margin-top: 0;
+  max-height: 0;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--ng-body);
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s var(--ng-ease), opacity 0.3s ease, margin-top 0.4s var(--ng-ease);
+}
+.ng-principle:hover .ng-principle-copy,
+.ng-principle.is-active .ng-principle-copy {
+  max-height: 120px;
+  opacity: 1;
+  margin-top: 0.5rem;
+}
+
+/* ===== Application ================================================ */
+.ng-apply {
+  background: var(--ng-canvas);
+  border-top: 1px solid var(--ng-line);
+  padding: var(--ng-section) 0 calc(var(--ng-section) + 1rem);
+  scroll-margin-top: 96px;
+}
+.ng-apply-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  gap: clamp(2.5rem, 6vw, 5rem);
+  align-items: start;
+}
+.ng-apply-copy h2 { margin: 1.1rem 0 1.1rem; font-size: clamp(30px, 3.6vw, 48px); }
+.ng-apply-copy p { max-width: 44ch; font-size: 1rem; line-height: 1.75; color: var(--ng-body); }
+.ng-next {
+  margin: 2.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--ng-line);
+}
+.ng-next li {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr);
+  gap: 0.9rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--ng-line);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--ng-body);
+}
+.ng-next li b {
+  font-family: var(--ng-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--ng-accent);
+  padding-top: 0.15rem;
+}
+
+.ng-form {
+  display: grid;
+  gap: 1.15rem;
+  padding: clamp(1.4rem, 3vw, 2.4rem);
+  background: var(--ng-paper);
+  border: 1px solid var(--ng-line);
+  border-radius: 22px;
+  box-shadow: 0 24px 60px rgba(37, 41, 44, 0.07);
+}
+.ng-form-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.15rem; }
+.ng-field { display: grid; gap: 0.5rem; min-width: 0; }
+.ng-field label {
+  font-family: var(--ng-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ng-ink-2);
+}
+.ng-field label em { font-style: normal; color: var(--ng-body); opacity: 0.7; }
+.ng-field input,
+.ng-field select,
+.ng-field textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 13px 15px;
+  border: 1px solid var(--ng-line-2);
+  border-radius: 11px;
+  background: var(--ng-paper);
+  font-family: var(--ng-text);
+  font-size: 0.95rem;
+  color: var(--ng-ink);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.ng-field input::placeholder,
+.ng-field textarea::placeholder { color: #a4a9ac; }
+.ng-field input:hover,
+.ng-field select:hover,
+.ng-field textarea:hover { border-color: #bfbdb8; }
+.ng-field input:focus,
+.ng-field select:focus,
+.ng-field textarea:focus {
+  border-color: var(--ng-accent);
+  box-shadow: 0 0 0 3px rgba(242, 138, 69, 0.16);
+}
+.ng-field textarea { min-height: 150px; resize: vertical; line-height: 1.65; }
+.ng-field select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 44px;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1.5 6 6.5l5-5' stroke='%2361696d' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  cursor: pointer;
+}
+.ng-hint { font-size: 0.8rem; color: var(--ng-body); }
+
+.ng-form-tracks {
+  display: grid;
+  gap: 0.65rem;
+  padding: 1.1rem;
+  background: var(--ng-canvas);
+  border: 1px solid var(--ng-line);
+  border-radius: 14px;
+}
+.ng-form-tracks > span {
+  font-family: var(--ng-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ng-ink-2);
+}
+.ng-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.ng-pill {
+  min-height: 40px;
+  padding: 0 0.95rem;
+  border: 1px solid var(--ng-line-2);
+  border-radius: 999px;
+  background: var(--ng-paper);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ng-ink-2);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+.ng-pill:hover { border-color: var(--ng-accent); color: var(--ng-accent); }
+.ng-pill[aria-pressed='true'] {
+  background: var(--ng-accent);
+  border-color: var(--ng-accent);
+  color: #fff;
+}
+
+.ng-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+  min-height: 56px;
+  border: none;
+  border-radius: 12px;
+  background: var(--ng-accent);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.25s var(--ng-ease), opacity 0.25s ease;
+}
+.ng-submit:hover:not(:disabled) { background: var(--ng-accent-hi); transform: translateY(-2px); }
+.ng-submit:hover:not(:disabled) .ng-arrow { transform: translateX(4px); }
+.ng-submit:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.ng-note {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--ng-line);
+  border-radius: 11px;
+  background: var(--ng-canvas);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--ng-body);
+}
+.ng-note.is-ok { background: rgba(34, 197, 94, 0.09); border-color: rgba(34, 197, 94, 0.26); color: #16803a; }
+.ng-note.is-error { background: rgba(201, 84, 24, 0.08); border-color: rgba(201, 84, 24, 0.26); color: var(--ng-accent-hi); }
+
+/* ===== Responsive ================================================= */
+@media (max-width: 1080px) {
+  .ng-hero h1 { max-width: 18ch; }
+  .ng-hero-mark { font-size: clamp(220px, 40vw, 420px); }
+  .ng-value-row { grid-template-columns: 48px minmax(0, 1fr); }
+  .ng-value-row p { grid-column: 2; margin-top: 0.35rem; }
+  .ng-apply-grid { grid-template-columns: 1fr; }
+  .ng-sec-head { grid-template-columns: 1fr; align-items: start; }
+  .ng-sec-head p { padding-bottom: 0; }
+  .ng-how-grid { grid-template-columns: 1fr; }
+  .ng-how-head { position: static; margin-bottom: 1.5rem; }
+  .ng-intern-strip { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 720px) {
+  .ng-careers { --ng-section: clamp(56px, 12vw, 80px); }
+  .ng-wrap { width: calc(100% - 2.5rem); }
+  .ng-hero { padding-top: clamp(64px, 18vw, 88px); overflow: clip; }
+  .ng-hero-mark { font-size: clamp(160px, 62vw, 260px); top: -10vw; right: -6vw; }
+  .ng-hero h1 { font-size: clamp(34px, 9.5vw, 46px); max-width: none; }
+  .ng-hero-ctas .ng-btn { width: 100%; justify-content: center; }
+  .ng-value-row { grid-template-columns: 1fr; gap: 0.4rem; }
+  .ng-value-row p { grid-column: 1; }
+  .ng-role { grid-template-columns: 1fr; gap: 1.25rem; padding: 1.35rem; }
+  .ng-role-action {
+    padding-top: 1.15rem;
+    border-top: 1px solid var(--ng-line);
+    width: 100%;
+    justify-content: space-between;
+  }
+  .ng-intern-strip { padding: 1.25rem; }
+  .ng-form-row { grid-template-columns: 1fr; }
+  .ng-form { padding: 1.25rem; border-radius: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ng-careers [data-reveal] { opacity: 1; transform: none; transition: none; }
+  .ng-careers *,
+  .ng-careers *::before,
+  .ng-careers *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
 }
