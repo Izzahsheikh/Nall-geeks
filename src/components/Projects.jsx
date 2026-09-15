@@ -321,7 +321,7 @@ function Hero() {
           color: '#F36B21',
           marginBottom: '1.5rem',
         }}>
-          NailGeeks Projects
+          NallGeeks Projects
         </div>
 
         {/* FIX 2: Headline — tightened clamp so it doesn't overpower */}
