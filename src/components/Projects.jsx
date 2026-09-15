@@ -349,7 +349,7 @@ function Hero() {
           marginBottom: '2.5rem',
           fontWeight: 400,
         }}>
-          A closer look at the websites, apps and digital systems shaped by NailGeeks.
+          A closer look at the websites, apps and digital systems shaped by NallGeeks.
         </p>
       </div>
     </section>
