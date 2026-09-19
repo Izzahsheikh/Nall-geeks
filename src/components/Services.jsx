@@ -71,13 +71,19 @@ export default function Services() {
       const scale = Math.min(img.offsetWidth / img.naturalWidth, img.offsetHeight / img.naturalHeight);
       const drawnW = img.naturalWidth * scale;
       const drawnH = img.naturalHeight * scale;
+      /*
+       * x comes from getBoundingClientRect (sub-pixel exact). The logo's entrance scales it about its centre and the cards'
+       * entrance only slides them vertically, so neither moves x. y comes from layout offsets, which ignore transforms,
+       * so a measurement taken mid-entrance is still correct.
+       */
+      const hubLeft = hub.getBoundingClientRect().left;
+      const imgRect = img.getBoundingClientRect();
+      const kx = imgRect.width / img.offsetWidth;
       const start = {
-        x: at.x + (img.offsetWidth - drawnW) / 2 + LOGO_ANCHOR.x * drawnW,
+        x: imgRect.left - hubLeft + kx * ((img.offsetWidth - drawnW) / 2 + LOGO_ANCHOR.x * drawnW),
         y: at.y + (img.offsetHeight - drawnH) / 2 + LOGO_ANCHOR.y * drawnH,
       };
 
-      /* x from sub-pixel rects (cards only ever move vertically, so it's unaffected by their transforms); y from offsets. */
-      const hubLeft = hub.getBoundingClientRect().left;
       const ends = cardRefs.current.map((card) => {
         const rect = card.getBoundingClientRect();
         return { x: rect.left - hubLeft + rect.width / 2, y: offsetWithin(card, hub).y };
