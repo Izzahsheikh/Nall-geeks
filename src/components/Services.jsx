@@ -28,22 +28,10 @@ const offsetWithin = (el, ancestor) => {
   return { x, y };
 };
 
-/*
- * Org-chart tree: one trunk down from the logo to a horizontal bar, then a vertical drop from the bar to the
- * top-centre of every card. The bar sits halfway between the logo and the cards. The outer drops are drawn as
- * one continuous path with the bar so their corners join cleanly.
- */
-const treePath = ({ start, ends }) => {
-  const barY = start.y + (Math.min(...ends.map((e) => e.y)) - start.y) / 2;
-  const first = ends[0];
-  const last = ends[ends.length - 1];
-  const inner = ends.slice(1, -1).map((e) => `M ${e.x},${barY} V ${e.y}`);
-  return [
-    `M ${start.x},${start.y} V ${barY}`,
-    `M ${first.x},${first.y} V ${barY} H ${last.x} V ${last.y}`,
-    ...inner,
-  ].join(' ');
-};
+/* One branch: leaves the logo straight down, curves outward, and arrives straight down onto the card's top-centre. */
+const CURVE = 100;
+const branchPath = (start, end) =>
+  `M ${start.x},${start.y} C ${start.x},${start.y + CURVE} ${end.x},${end.y - CURVE} ${end.x},${end.y}`;
 
 export default function Services() {
   const sectionRef = useRef(null);
@@ -95,7 +83,7 @@ export default function Services() {
         return { x: rect.left - hubLeft + rect.width / 2, y: offsetWithin(card, hub).y };
       });
 
-      setTree({ width: hub.offsetWidth, height: hub.offsetHeight, start, ends });
+      setTree({ start, ends });
     };
 
     measure();
@@ -133,14 +121,10 @@ export default function Services() {
           </div>
 
           {tree && (
-            <svg
-              className="services-tree"
-              width={tree.width}
-              height={tree.height}
-              viewBox={`0 0 ${tree.width} ${tree.height}`}
-              aria-hidden="true"
-            >
-              <path d={treePath(tree)} />
+            <svg className="services-tree" aria-hidden="true">
+              {tree.ends.map((end, i) => (
+                <path key={i} d={branchPath(tree.start, end)} />
+              ))}
             </svg>
           )}
 
