@@ -9,3 +9,4 @@ dist-ssr
 .env*
 data/db.json
 public/uploads/projects/*
+data/applications/

@@ -14,6 +14,24 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const DB_PATH = path.join(__dirname, 'data', 'db.json');
 const PROJECT_UPLOAD_DIR = path.join(__dirname, 'public', 'uploads', 'projects');
+// Application attachments are private (résumés): they live under data/, which is never served statically.
+const APPLICATION_FILE_DIR = path.join(__dirname, 'data', 'applications');
+const MAX_APPLICATION_FILE_BYTES = 4 * 1024 * 1024;
+const APPLICATION_FILE_KINDS = {
+  resume: { label: 'Resume', extensions: ['pdf', 'doc', 'docx'] },
+  portfolioFile: { label: 'Portfolio', extensions: ['pdf', 'zip', 'jpg', 'jpeg', 'png'] },
+};
+const APPLICATION_AVAILABILITY = ['Immediately', '2 Weeks Notice', '1 Month Notice', 'Other'];
+// Leading bytes for each extension, so a renamed executable can't pass as a PDF.
+const FILE_SIGNATURES = {
+  pdf: [[0x25, 0x50, 0x44, 0x46]],
+  doc: [[0xd0, 0xcf, 0x11, 0xe0]],
+  docx: [[0x50, 0x4b, 0x03, 0x04]],
+  zip: [[0x50, 0x4b, 0x03, 0x04], [0x50, 0x4b, 0x05, 0x06]],
+  jpg: [[0xff, 0xd8, 0xff]],
+  jpeg: [[0xff, 0xd8, 0xff]],
+  png: [[0x89, 0x50, 0x4e, 0x47]],
+};
 const SESSION_COOKIE = 'ng_admin';
 const SESSION_MAX_AGE_SECONDS = 60 * 60 * 8;
 const sessionSecret = process.env.ADMIN_SESSION_SECRET || crypto.randomBytes(32).toString('hex');
@@ -593,28 +611,94 @@ app.get('/api/admin/applications', requireAdmin, async (_req, res) => {
   });
 });
 
+// Decodes and validates one attached file; returns { name, extension, size, buffer }, null if none was sent.
+const readApplicationFile = (kind, file) => {
+  if (!file) return null;
+  const { label, extensions } = APPLICATION_FILE_KINDS[kind];
+  const fail = (message) => Object.assign(new Error(message), { status: 400 });
+
+  const name = path.basename(String(file.name || '')).replace(/[^\w.\- ]/g, '_').slice(-120);
+  const extension = path.extname(name).slice(1).toLowerCase();
+  if (!extensions.includes(extension)) {
+    throw fail(`${label} must be a ${extensions.join(', ').toUpperCase()} file`);
+  }
+
+  const match = String(file.data || '').match(/^data:[^;,]*;base64,(.+)$/s);
+  if (!match) throw fail(`${label} file could not be read`);
+
+  const buffer = Buffer.from(match[1], 'base64');
+  if (!buffer.length) throw fail(`${label} file is empty`);
+  if (buffer.length > MAX_APPLICATION_FILE_BYTES) throw fail(`${label} file must be 4 MB or smaller`);
+  if (!FILE_SIGNATURES[extension].some((sig) => sig.every((byte, k) => buffer[k] === byte))) {
+    throw fail(`${label} file does not look like a valid ${extension.toUpperCase()}`);
+  }
+
+  return { name, extension, size: buffer.length, buffer };
+};
+
 app.post('/api/careers/applications', async (req, res) => {
-  const { name, position, email, phone, portfolio, details } = req.body || {};
+  const { name, position, email, phone, portfolio, linkedin, availability, availabilityNote, details } = req.body || {};
   if (!name || !position || !email) {
     return res.status(400).json({ error: 'Name, position, and email are required' });
   }
+  if (availability && !APPLICATION_AVAILABILITY.includes(availability)) {
+    return res.status(400).json({ error: 'Choose one of the listed availability options' });
+  }
+  if (!req.body.resume) {
+    return res.status(400).json({ error: 'Please attach your resume' });
+  }
 
-  const db = await readDb();
+  let files;
+  try {
+    files = {
+      resume: readApplicationFile('resume', req.body.resume),
+      portfolioFile: readApplicationFile('portfolioFile', req.body.portfolioFile),
+    };
+  } catch (error) {
+    return res.status(error.status || 400).json({ error: error.message });
+  }
+
+  const id = crypto.randomUUID();
   const application = {
-    id: crypto.randomUUID(),
+    id,
     name: String(name).trim(),
     position: String(position).trim(),
     email: String(email).trim(),
     phone: String(phone || '').trim(),
     portfolio: String(portfolio || '').trim(),
+    linkedin: String(linkedin || '').trim(),
+    availability: String(availability || '').trim(),
+    availabilityNote: availability === 'Other' ? String(availabilityNote || '').trim().slice(0, 300) : '',
     details: String(details || '').trim(),
     status: 'New',
     date: new Date().toISOString(),
   };
 
+  // Files are stored under an id-named folder with a generated name, so nothing user-supplied ends up in a path.
+  for (const [kind, file] of Object.entries(files)) {
+    if (!file) continue;
+    await fs.mkdir(path.join(APPLICATION_FILE_DIR, id), { recursive: true });
+    await fs.writeFile(path.join(APPLICATION_FILE_DIR, id, `${kind}.${file.extension}`), file.buffer);
+    application[kind] = { name: file.name, size: file.size, stored: `${kind}.${file.extension}` };
+  }
+
+  const db = await readDb();
   db.applications.unshift(application);
   await writeDb(db);
   return res.status(201).json({ success: true, application });
+});
+
+app.get('/api/admin/applications/:id/files/:kind', requireAdmin, async (req, res) => {
+  const { id, kind } = req.params;
+  if (!Object.hasOwn(APPLICATION_FILE_KINDS, kind)) return res.status(404).json({ error: 'File not found' });
+
+  const db = await readDb();
+  const file = db.applications.find((application) => application.id === id)?.[kind];
+  if (!file?.stored) return res.status(404).json({ error: 'File not found' });
+
+  return res.download(path.join(APPLICATION_FILE_DIR, id, file.stored), file.name, (error) => {
+    if (error && !res.headersSent) res.status(404).json({ error: 'File not found' });
+  });
 });
 
 app.get('/api/admin/stats', requireAdmin, async (_req, res) => {
