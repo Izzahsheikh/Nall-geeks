@@ -71,9 +71,11 @@ export default function Services() {
         y: at.y + (img.offsetHeight - drawnH) / 2 + LOGO_ANCHOR.y * drawnH,
       };
 
+      /* x from sub-pixel rects (cards only ever move vertically, so it's unaffected by their transforms); y from offsets. */
+      const hubLeft = hub.getBoundingClientRect().left;
       const ends = cardRefs.current.map((card) => {
-        const pos = offsetWithin(card, hub);
-        return { x: pos.x + card.offsetWidth / 2, y: pos.y };
+        const rect = card.getBoundingClientRect();
+        return { x: rect.left - hubLeft + rect.width / 2, y: offsetWithin(card, hub).y };
       });
 
       setTree({ width: hub.offsetWidth, height: hub.offsetHeight, start, ends });
