@@ -107,6 +107,9 @@ export default function Hero() {
           }}
         />
 
+        {/* Lighter gray tone behind the text (matches the Projects hero); fades out before the image */}
+        <div className="hero-left-tint" />
+
         <div className="hero-grid" style={{ position: 'relative', zIndex: 2, width: '100%' }}>
           <div className="hero-left">
 
