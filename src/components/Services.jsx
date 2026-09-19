@@ -28,6 +28,23 @@ const offsetWithin = (el, ancestor) => {
   return { x, y };
 };
 
+/*
+ * Org-chart tree: one trunk down from the logo to a horizontal bar, then a vertical drop from the bar to the
+ * top-centre of every card. The bar sits halfway between the logo and the cards. The outer drops are drawn as
+ * one continuous path with the bar so their corners join cleanly.
+ */
+const treePath = ({ start, ends }) => {
+  const barY = start.y + (Math.min(...ends.map((e) => e.y)) - start.y) / 2;
+  const first = ends[0];
+  const last = ends[ends.length - 1];
+  const inner = ends.slice(1, -1).map((e) => `M ${e.x},${barY} V ${e.y}`);
+  return [
+    `M ${start.x},${start.y} V ${barY}`,
+    `M ${first.x},${first.y} V ${barY} H ${last.x} V ${last.y}`,
+    ...inner,
+  ].join(' ');
+};
+
 export default function Services() {
   const sectionRef = useRef(null);
   const hubRef = useRef(null);
@@ -123,15 +140,7 @@ export default function Services() {
               viewBox={`0 0 ${tree.width} ${tree.height}`}
               aria-hidden="true"
             >
-              {tree.ends.map((end, i) => {
-                const midY = tree.start.y + (end.y - tree.start.y) / 2;
-                return (
-                  <path
-                    key={i}
-                    d={`M ${tree.start.x},${tree.start.y} C ${tree.start.x},${midY} ${end.x},${midY} ${end.x},${end.y}`}
-                  />
-                );
-              })}
+              <path d={treePath(tree)} />
             </svg>
           )}
 
