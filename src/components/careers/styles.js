@@ -19,12 +19,13 @@ export const css = `
   @media (max-width: 768px) { .ngc-wrap { padding: 0 20px; } }
 
   /* ── Hero ── */
+  /* The hero runs under the fixed, transparent navbar, so it carries the 72px the page used to reserve above it. */
   .ngc-hero {
     position: relative;
-    min-height: 92vh;
+    min-height: calc(92vh + 72px);
     display: flex;
     align-items: center;
-    padding: 140px 0 72px;
+    padding: 212px 0 72px;
     overflow: hidden;
   }
   .ngc-hero-bg {

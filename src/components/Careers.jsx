@@ -37,7 +37,7 @@ export default function Careers() {
     document.querySelector(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   return (
-    <main className="ng-careers" ref={pageRef} style={{ background: '#fff' }}>
+    <main className="ng-careers" ref={pageRef} style={{ background: '#fff', paddingTop: 0 }}>
       <style>{css}</style>
 
       {/* ════════════════ HERO ════════════════ */}

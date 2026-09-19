@@ -20,25 +20,25 @@
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* ===== Navbar ===== */
-/* Two states. Default = DARK (over the hero): dark glass, light text. `.on-light` (once the hero has scrolled past) = white glass, dark text. */
-.navbar { --nav-h: 72px; background: rgba(10, 10, 10, 0.4); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.06); position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; padding: 0 5%; transition: all 0.3s ease; }
+/* Two states. Default = TRANSPARENT (at the top, over the hero): no blur, no border. `.glass` (scrolled, or a page with no hero) = dark glass. Text stays white in both. */
+.navbar { --nav-h: 72px; background: transparent; backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); border-bottom: 1px solid transparent; position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; padding: 0 5%; transition: background 0.4s ease, backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease; }
+.navbar.glass { background: rgba(20, 20, 20, 0.75); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom-color: rgba(255, 255, 255, 0.06); }
 .navbar::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: linear-gradient(90deg, transparent, rgba(242,138,69,0.55), transparent); opacity: 0; transition: opacity 0.35s ease; pointer-events: none; }
 .navbar.scrolled { --nav-h: 64px; box-shadow: 0 10px 30px rgba(0,0,0,0.28); }
 .navbar.scrolled::after { opacity: 1; }
 .navbar-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: var(--nav-h); position: relative; transition: height 0.35s ease; }
 .navbar-logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; position: relative; isolation: isolate; }
-/* Both marks are 3:2 with ~23% / ~18% transparent padding left / right of the glyph. The wrapper's negative margins trim that
-   (0.34 and 0.2 of the height), putting the glyph flush with the content edge, 13px from the wordmark. The two marks crossfade. */
+/* The mark is 3:2 with ~23% / ~18% transparent padding left / right of the glyph. The wrapper's negative margins trim that
+   (0.34 and 0.2 of the height), putting the glyph flush with the content edge, 13px from the wordmark. */
 .navbar-logo-mark { --logo-h: 50px; position: relative; display: block; flex-shrink: 0; height: var(--logo-h); width: calc(var(--logo-h) * 1.5); margin-left: calc(var(--logo-h) * -0.34); margin-right: calc(var(--logo-h) * -0.2); }
-.navbar-logo-mark img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; border-radius: 0; object-fit: contain; transition: opacity 0.3s ease; }
-.navbar-logo-mark .logo-on-light { opacity: 0; transform: translateX(calc(var(--logo-h) * 0.051)); } /* aligns this mark's glyph edge with the cream one */
+.navbar-logo-mark img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; border-radius: 0; object-fit: contain; }
 .navbar-wordmark { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; color: #fff; transition: color 0.3s ease; letter-spacing: -0.02em; display: inline-flex; position: relative; overflow: hidden; padding-bottom: 2px; perspective: 420px; }
 .navbar-wordmark::after { content: ""; position: absolute; inset: 0 -35%; background: linear-gradient(90deg, transparent, rgba(242,138,69,0.18), rgba(255,255,255,0.72), rgba(242,138,69,0.22), transparent); mix-blend-mode: screen; pointer-events: none; animation: brandTextSweep 2.2s cubic-bezier(0.22, 1, 0.36, 1) 0.75s both; }
 .brand-letter { display: inline-block; transform-origin: 50% 100%; animation: brandLetterReveal 0.72s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: calc(var(--letter-index) * 55ms); }
 .navbar-logo:hover .navbar-wordmark::after { animation: brandTextSweep 1.15s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .navbar-logo:hover .brand-letter { color: var(--accent); transition: color 0.25s ease; }
 .nav-links-wrap { display: flex; align-items: center; gap: 0.25rem; position: absolute; left: 50%; transform: translateX(-50%); }
-.nav-link { position: relative; padding: 0.55rem 0.95rem; font-size: 0.875rem; font-weight: 500; font-family: var(--font-body); letter-spacing: 0.04em; color: rgba(255,255,255,0.62); border-radius: 8px; transition: color 0.3s ease; }
+.nav-link { position: relative; padding: 0.55rem 0.95rem; font-size: 0.875rem; font-weight: 500; font-family: var(--font-body); letter-spacing: 0.04em; color: #fff; border-radius: 8px; transition: color 0.3s ease; }
 .nav-link::after { content: ""; position: absolute; left: 0.95rem; right: 0.95rem; bottom: 0.2rem; height: 2px; border-radius: 2px; background: var(--cta); transform: scaleX(0); transform-origin: left center; transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
 .nav-link:hover, .nav-link.active { color: #fff; }
 .nav-link:hover::after { transform: scaleX(1); }
@@ -52,17 +52,6 @@
 .hamburger.open span:nth-child(1) { transform: rotate(45deg); }
 .hamburger.open span:nth-child(2) { opacity: 0; }
 .hamburger.open span:nth-child(3) { transform: rotate(-45deg); }
-/* Light state: white glass over light sections, dark text and dark mark. "Book a Call" stays orange. */
-.navbar.on-light { background: rgba(255, 255, 255, 0.75); border-bottom: 1px solid rgba(0, 0, 0, 0.08); }
-.navbar.on-light.scrolled { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); }
-.navbar.on-light .navbar-wordmark { color: #1a1a1a; }
-.navbar.on-light .nav-link { color: #1a1a1a; }
-.navbar.on-light .nav-link:hover, .navbar.on-light .nav-link.active { color: #000; }
-.navbar.on-light .logo-on-dark { opacity: 0; }
-.navbar.on-light .logo-on-light { opacity: 1; }
-.navbar.on-light .hamburger { background: rgba(0, 0, 0, 0.04); border-color: rgba(0, 0, 0, 0.14); }
-.navbar.on-light .hamburger:hover, .navbar.on-light .hamburger.open { background: rgba(228, 104, 34, 0.12); border-color: rgba(228, 104, 34, 0.45); }
-.navbar.on-light .hamburger span { background: #1a1a1a; }
 .mob-menu { --nav-h: 72px; position: fixed; top: var(--nav-h); left: 0; width: 100%; max-height: calc(100vh - var(--nav-h)); overflow-y: auto; padding: 0.5rem 5% 1.5rem; background: rgba(26,26,26,0.94); backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%); border-bottom: 1px solid rgba(255,255,255,0.08); box-shadow: 0 24px 40px rgba(0,0,0,0.35); z-index: 999; animation: mobMenuIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .mob-menu.scrolled { --nav-h: 64px; }
 .mob-menu a.mob-link { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 0.25rem; font-size: 1.05rem; font-weight: 500; letter-spacing: 0.04em; color: rgba(255,255,255,0.68); border-bottom: 1px solid rgba(255,255,255,0.07); transition: color 0.2s ease, padding-left 0.25s ease; }
