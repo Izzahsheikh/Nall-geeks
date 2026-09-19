@@ -361,7 +361,7 @@ export const css = `
     flex-shrink: 0;
     width: 16px; height: 16px;
     margin: 0;
-    border: 1.5px solid #e8622a;
+    border: 2px solid #e8622a;
     border-radius: 50%;
     background: #fff;
     display: grid; place-content: center;
