@@ -282,7 +282,7 @@ function FinalCTA() {
 /* ─── Hero ─────────────────────────────────────────── */
 function Hero() {
   return (
-    <section style={{
+    <section data-nav-hero style={{
       background: '#171717',
       padding: 'calc(72px + 5rem) clamp(1.5rem, 6%, 5rem) 6rem',
       position: 'relative',

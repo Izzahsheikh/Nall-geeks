@@ -225,6 +225,7 @@ export default function Hero() {
 
       {/* Ticker */}
       <div
+        data-nav-hero
         style={{
           background: '#171717',
           borderTop: '1px solid rgba(247,245,240,0.08)',

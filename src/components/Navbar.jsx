@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import logoDark from '../assets/nallgeeks-logo-mark.png';
 
 const LINKS = [
   { href: '/', label: 'Home' },
@@ -11,8 +12,14 @@ const LINKS = [
 
 const BRAND_TEXT = 'NallGeeks';
 
+// The dark section(s) at the top of a page: the hero, plus the dark strip that follows it on the homepage.
+// Pages without one (contact, job pages) start in the light state.
+const HERO_SELECTOR = '#hero, .ngc-hero, .abx-hero, [data-nav-hero]';
+
 export default function Navbar() {
+  const navRef = useRef(null);
   const [scrolled, setScrolled] = useState(false);
+  const [overLight, setOverLight] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeHref, setActiveHref] = useState(() => {
     if (window.location.pathname === '/about') return '/about';
@@ -23,10 +30,27 @@ export default function Navbar() {
   });
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    const update = () => {
+      const y = window.scrollY;
+      setScrolled(y > 20);
+
+      // Dark while the hero is under the bar, light once the hero has scrolled past it. The switch happens when the
+      // hero's bottom edge crosses the middle of the bar, so the bar never sits half over the hero and half over light content.
+      const heroBottom = Math.max(
+        0,
+        ...Array.from(document.querySelectorAll(HERO_SELECTOR), (el) => el.getBoundingClientRect().bottom + y)
+      );
+      const barMiddle = (navRef.current?.offsetHeight || 72) / 2;
+      setOverLight(y + barMiddle >= heroBottom);
+    };
+
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    return () => {
+      window.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+    };
   }, []);
 
   useEffect(() => {
@@ -90,10 +114,14 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className={`navbar${scrolled ? ' scrolled' : ''}`}>
+      <nav ref={navRef} className={`navbar${scrolled ? ' scrolled' : ''}${overLight ? ' on-light' : ''}`}>
         <div className="navbar-inner">
           <a href="/" className="navbar-logo" onClick={(e) => handleNavClick(e, '/')}>
-            <img src="/nallgeeks-logo-mark-clean.png" width="1536" height="1024" alt="NallGeeks logo" />
+            {/* Two marks that crossfade: the cream one reads on the dark bar, the original dark one on the light bar. */}
+            <span className="navbar-logo-mark">
+              <img className="logo-on-dark" src="/nallgeeks-logo-mark-clean.png" width="1536" height="1024" alt="NallGeeks logo" />
+              <img className="logo-on-light" src={logoDark} alt="" aria-hidden="true" />
+            </span>
             <span className="navbar-wordmark" aria-label={BRAND_TEXT}>
               {BRAND_TEXT.split('').map((letter, index) => (
                 <span
