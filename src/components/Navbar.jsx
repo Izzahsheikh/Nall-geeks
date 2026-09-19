@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import logo from '../assets/nallgeeks-logo-mark.png';
 
 const LINKS = [
   { href: '/', label: 'Home' },
@@ -94,7 +93,7 @@ export default function Navbar() {
       <nav className={`navbar${scrolled ? ' scrolled' : ''}`}>
         <div className="navbar-inner">
           <a href="/" className="navbar-logo" onClick={(e) => handleNavClick(e, '/')}>
-            <img src={logo} alt="NallGeeks logo" />
+            <img src="/nallgeeks-logo-mark.png" width="1536" height="1024" alt="NallGeeks logo" />
             <span className="navbar-wordmark" aria-label={BRAND_TEXT}>
               {BRAND_TEXT.split('').map((letter, index) => (
                 <span
