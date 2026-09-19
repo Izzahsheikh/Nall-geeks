@@ -611,6 +611,12 @@ app.get('/api/admin/applications', requireAdmin, async (_req, res) => {
   });
 });
 
+// "PDF, DOC or DOCX"
+const listFormats = (extensions) => {
+  const names = extensions.map((ext) => ext.toUpperCase());
+  return names.length > 1 ? `${names.slice(0, -1).join(', ')} or ${names.at(-1)}` : names[0];
+};
+
 // Decodes and validates one attached file; returns { name, extension, size, buffer }, null if none was sent.
 const readApplicationFile = (kind, file) => {
   if (!file) return null;
@@ -620,7 +626,7 @@ const readApplicationFile = (kind, file) => {
   const name = path.basename(String(file.name || '')).replace(/[^\w.\- ]/g, '_').slice(-120);
   const extension = path.extname(name).slice(1).toLowerCase();
   if (!extensions.includes(extension)) {
-    throw fail(`${label} must be a ${extensions.join(', ').toUpperCase()} file`);
+    throw fail(`${label} must be a ${listFormats(extensions)} file`);
   }
 
   const match = String(file.data || '').match(/^data:[^;,]*;base64,(.+)$/s);
