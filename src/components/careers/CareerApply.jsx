@@ -3,17 +3,11 @@ import { css } from './styles';
 import { INTERN_TRACKS, trackLabel, isInternRole, useOpenings, jobHref } from './shared';
 import { PinIcon, BriefcaseIcon, BackLink, useDocumentTitle } from './parts';
 
-const initialForm = {
-  name: '', email: '', phone: '', portfolio: '', linkedin: '',
-  availability: '', availabilityNote: '', details: '',
-};
-
-const AVAILABILITY = ['Immediately', '2 Weeks Notice', '1 Month Notice', 'Other'];
+const initialForm = { name: '', email: '', phone: '', portfolio: '', linkedin: '', details: '' };
 
 const MAX_FILE_BYTES = 4 * 1024 * 1024;
 const FILE_RULES = {
   resume: { label: 'Resume', extensions: ['pdf', 'doc', 'docx'] },
-  portfolioFile: { label: 'Portfolio', extensions: ['pdf', 'zip', 'jpg', 'jpeg', 'png'] },
 };
 
 const listFormats = (extensions) => {
@@ -43,12 +37,11 @@ const readAsPayload = (file) =>
     reader.readAsDataURL(file);
   });
 
-function FileField({ id, label, optional, accept, hint, file, error, onPick, onClear }) {
+function FileField({ id, label, accept, hint, file, error, onPick, onClear }) {
   return (
     <div className="ngc-field">
       <span className="ngc-label" id={`${id}-label`}>
         {label}
-        {optional && <span className="ngc-optional"> (Optional)</span>}
       </span>
       <div className={`ngc-file${error ? ' has-error' : ''}`}>
         <label className="ngc-file-btn" htmlFor={id}>{file ? 'Change file' : 'Choose file'}</label>
@@ -92,7 +85,7 @@ export default function CareerApply({ jobId }) {
   const [form, setForm] = useState(initialForm);
   const [track, setTrack] = useState(trackFromQuery);
   const [status, setStatus] = useState('idle');
-  const [files, setFiles] = useState({ resume: null, portfolioFile: null });
+  const [files, setFiles] = useState({ resume: null });
   const [fileErrors, setFileErrors] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -132,21 +125,18 @@ export default function CareerApply({ jobId }) {
     setErrorMessage('');
     const position = isInternship ? `${job.title} — ${track}` : job.title;
     try {
-      const [resume, portfolioFile] = await Promise.all([
-        readAsPayload(files.resume),
-        readAsPayload(files.portfolioFile),
-      ]);
+      const resume = await readAsPayload(files.resume);
       const res = await fetch('/api/careers/applications', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, position, resume, portfolioFile }),
+        body: JSON.stringify({ ...form, position, resume }),
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
         throw new Error(body.error || 'failed');
       }
       setForm(initialForm);
-      setFiles({ resume: null, portfolioFile: null });
+      setFiles({ resume: null });
       setStatus('success');
     } catch (err) {
       setErrorMessage(err.message === 'failed' ? '' : err.message);
@@ -279,41 +269,6 @@ export default function CareerApply({ jobId }) {
                   onPick={(f) => pickFile('resume', f)}
                   onClear={() => clearFile('resume')}
                 />
-
-                <FileField
-                  id="ng-portfolio-file"
-                  label="Portfolio"
-                  optional
-                  accept=".pdf,.zip,.jpg,.jpeg,.png"
-                  hint="PDF, ZIP, JPG or PNG · up to 4 MB — or paste a link in Portfolio link above"
-                  file={files.portfolioFile}
-                  error={fileErrors.portfolioFile}
-                  onPick={(f) => pickFile('portfolioFile', f)}
-                  onClear={() => clearFile('portfolioFile')}
-                />
-
-                <div className="ngc-field" role="radiogroup" aria-labelledby="ng-availability-label">
-                  <span className="ngc-label" id="ng-availability-label">Availability</span>
-                  <div className="ngc-radio-row">
-                    {AVAILABILITY.map((option) => (
-                      <label key={option} className="ngc-radio">
-                        <input
-                          type="radio"
-                          name="availability"
-                          value={option}
-                          checked={form.availability === option}
-                          onChange={handleChange}
-                        />
-                        <span>{option}</span>
-                      </label>
-                    ))}
-                  </div>
-                  {form.availability === 'Other' && (
-                    <input name="availabilityNote" type="text" placeholder="Tell us when you could start"
-                      aria-label="Availability details" maxLength={300}
-                      className="ngc-input" value={form.availabilityNote} onChange={handleChange} />
-                  )}
-                </div>
 
                 <div className="ngc-field">
                   <label className="ngc-label" htmlFor="ng-details">About you</label>

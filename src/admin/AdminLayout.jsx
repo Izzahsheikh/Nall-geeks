@@ -200,22 +200,14 @@ export default function AdminLayout() {
               {selectedApplication.phone ? <span>{selectedApplication.phone}</span> : null}
               {selectedApplication.portfolio ? <span>Portfolio: {selectedApplication.portfolio}</span> : null}
               {selectedApplication.linkedin ? <span>LinkedIn: {selectedApplication.linkedin}</span> : null}
-              {selectedApplication.availability ? (
+              {selectedApplication.resume ? (
                 <span>
-                  Availability: {selectedApplication.availability}
-                  {selectedApplication.availabilityNote ? ` — ${selectedApplication.availabilityNote}` : ''}
+                  Resume:{' '}
+                  <a href={`/api/admin/applications/${selectedApplication.id}/files/resume`} download>
+                    {selectedApplication.resume.name}
+                  </a>
                 </span>
               ) : null}
-              {[['resume', 'Resume'], ['portfolioFile', 'Portfolio file']].map(([kind, label]) =>
-                selectedApplication[kind] ? (
-                  <span key={kind}>
-                    {label}:{' '}
-                    <a href={`/api/admin/applications/${selectedApplication.id}/files/${kind}`} download>
-                      {selectedApplication[kind].name}
-                    </a>
-                  </span>
-                ) : null
-              )}
             </div>
             <p>{selectedApplication.details || 'No extra application details were provided.'}</p>
           </aside>

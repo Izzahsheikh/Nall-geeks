@@ -295,7 +295,6 @@ export const css = `
   }
   .ngc-done p { font-size: 15px; line-height: 1.75; color: rgba(0,0,0,0.6); }
   .ngc-done .ngc-apply-btn { margin-top: 10px; }
-  .ngc-optional { text-transform: none; letter-spacing: 0; font-weight: 500; }
   .ngc-hint { font-size: 12px; color: rgba(0,0,0,0.42); line-height: 1.5; }
   .ngc-field-error { font-size: 12.5px; color: #991b1b; }
 
@@ -310,21 +309,21 @@ export const css = `
     min-height: 48px;
     transition: border-color 0.2s, box-shadow 0.2s;
   }
-  .ngc-file:hover { border-color: rgba(232,98,42,0.45); }
-  .ngc-file:focus-within { border-color: #e8622a; box-shadow: 0 0 0 3px rgba(232,98,42,0.1); background: #fff; }
+  .ngc-file:hover { border-color: rgba(0,0,0,0.28); }
+  .ngc-file:focus-within { border-color: #555; box-shadow: 0 0 0 3px rgba(0,0,0,0.07); background: #fff; }
   .ngc-file.has-error { border-color: rgba(153,27,27,0.5); }
   .ngc-file-btn {
     flex-shrink: 0;
     cursor: pointer;
     font-size: 13px; font-weight: 600; letter-spacing: 0.01em;
-    color: #e8622a;
+    color: #1a1a1a;
     background: #fff;
-    border: 1px solid #e8622a;
+    border: 1px solid #333;
     border-radius: 6px;
     padding: 8px 16px;
     transition: background 0.2s, color 0.2s;
   }
-  .ngc-file-btn:hover { background: #e8622a; color: #fff; }
+  .ngc-file-btn:hover { background: #ececec; color: #1a1a1a; }
   .ngc-file-input {
     position: absolute; width: 1px; height: 1px;
     opacity: 0; overflow: hidden; pointer-events: none;
@@ -347,39 +346,7 @@ export const css = `
     transition: background 0.2s, color 0.2s;
     font-family: inherit;
   }
-  .ngc-file-clear:hover { background: rgba(232,98,42,0.12); color: #e8622a; }
-
-  /* Radio buttons */
-  .ngc-radio-row { display: flex; flex-wrap: wrap; gap: 12px 26px; padding-top: 2px; }
-  .ngc-radio {
-    display: inline-flex; align-items: center; gap: 9px;
-    font-size: 14px; color: #1a1a1a;
-    cursor: pointer;
-  }
-  .ngc-radio input {
-    appearance: none; -webkit-appearance: none;
-    flex-shrink: 0;
-    width: 16px; height: 16px;
-    margin: 0;
-    border: 2px solid #e8622a;
-    border-radius: 50%;
-    background: #fff;
-    display: grid; place-content: center;
-    cursor: pointer;
-    transition: background 0.15s, box-shadow 0.15s;
-  }
-  .ngc-radio input::before {
-    content: '';
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: #fff;
-    transform: scale(0);
-    transition: transform 0.15s;
-  }
-  .ngc-radio input:checked { background: #e8622a; }
-  .ngc-radio input:checked::before { transform: scale(1); }
-  .ngc-radio input:hover { box-shadow: 0 0 0 3px rgba(232,98,42,0.14); }
-  .ngc-radio input:focus-visible { outline: 2px solid #e8622a; outline-offset: 3px; }
+  .ngc-file-clear:hover { background: rgba(0,0,0,0.08); color: #1a1a1a; }
 
   .ngc-input[readonly] { color: rgba(0,0,0,0.7); background: #f3f3f1; cursor: default; }
 

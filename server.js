@@ -19,9 +19,7 @@ const APPLICATION_FILE_DIR = path.join(__dirname, 'data', 'applications');
 const MAX_APPLICATION_FILE_BYTES = 4 * 1024 * 1024;
 const APPLICATION_FILE_KINDS = {
   resume: { label: 'Resume', extensions: ['pdf', 'doc', 'docx'] },
-  portfolioFile: { label: 'Portfolio', extensions: ['pdf', 'zip', 'jpg', 'jpeg', 'png'] },
 };
-const APPLICATION_AVAILABILITY = ['Immediately', '2 Weeks Notice', '1 Month Notice', 'Other'];
 // Leading bytes for each extension, so a renamed executable can't pass as a PDF.
 const FILE_SIGNATURES = {
   pdf: [[0x25, 0x50, 0x44, 0x46]],
@@ -643,12 +641,9 @@ const readApplicationFile = (kind, file) => {
 };
 
 app.post('/api/careers/applications', async (req, res) => {
-  const { name, position, email, phone, portfolio, linkedin, availability, availabilityNote, details } = req.body || {};
+  const { name, position, email, phone, portfolio, linkedin, details } = req.body || {};
   if (!name || !position || !email) {
     return res.status(400).json({ error: 'Name, position, and email are required' });
-  }
-  if (availability && !APPLICATION_AVAILABILITY.includes(availability)) {
-    return res.status(400).json({ error: 'Choose one of the listed availability options' });
   }
   if (!req.body.resume) {
     return res.status(400).json({ error: 'Please attach your resume' });
@@ -658,7 +653,6 @@ app.post('/api/careers/applications', async (req, res) => {
   try {
     files = {
       resume: readApplicationFile('resume', req.body.resume),
-      portfolioFile: readApplicationFile('portfolioFile', req.body.portfolioFile),
     };
   } catch (error) {
     return res.status(error.status || 400).json({ error: error.message });
@@ -673,8 +667,6 @@ app.post('/api/careers/applications', async (req, res) => {
     phone: String(phone || '').trim(),
     portfolio: String(portfolio || '').trim(),
     linkedin: String(linkedin || '').trim(),
-    availability: String(availability || '').trim(),
-    availabilityNote: availability === 'Other' ? String(availabilityNote || '').trim().slice(0, 300) : '',
     details: String(details || '').trim(),
     status: 'New',
     date: new Date().toISOString(),
