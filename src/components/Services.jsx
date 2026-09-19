@@ -10,28 +10,33 @@ const SERVICES = [
   { num: '06', icon: '🤖', title: 'AI & Automation', desc: 'Eliminate the repetitive. Build AI into your product or process.' },
 ];
 
-const PATH_X = [90, 275, 457, 643, 825, 1010];
+/*
+ * Where the branches leave the logo, as fractions of the logo image: horizontally centred, on the
+ * lowest visible pixel of the "NG" glyph at that centre line. (The PNG has transparent padding, so
+ * the bottom of the image box would leave the lines floating below the mark.)
+ */
+const LOGO_ANCHOR = { x: 0.5, y: 0.821 };
+
+/* Position of `el` inside `ancestor`. Offsets ignore CSS transforms, so the card entrance/hover motion can't skew the lines. */
+const offsetWithin = (el, ancestor) => {
+  let x = 0;
+  let y = 0;
+  for (let node = el; node && node !== ancestor; node = node.offsetParent) {
+    x += node.offsetLeft;
+    y += node.offsetTop;
+  }
+  return { x, y };
+};
 
 export default function Services() {
   const sectionRef = useRef(null);
-  const pathRefs = useRef([]);
+  const hubRef = useRef(null);
+  const logoRef = useRef(null);
+  const cardRefs = useRef([]);
   const [isVisible, setIsVisible] = useState(false);
-  const [activeIdx, setActiveIdx] = useState(null);
+  const [tree, setTree] = useState(null);
 
   useEffect(() => {
-    const paths = pathRefs.current;
-    paths.forEach((p) => {
-      if (!p) return;
-      try {
-        const len = p.getTotalLength();
-        p.style.strokeDasharray = len;
-        p.style.strokeDashoffset = len;
-      } catch {
-        p.style.strokeDasharray = '600';
-        p.style.strokeDashoffset = '600';
-      }
-    });
-
     const section = sectionRef.current;
     if (!section) return;
 
@@ -39,12 +44,6 @@ export default function Services() {
       (entries) => {
         if (entries[0].isIntersecting) {
           setIsVisible(true);
-          paths.forEach((p) => {
-            if (!p) return;
-            p.style.transition = 'stroke-dashoffset 0.9s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease, stroke 0.35s ease, stroke-width 0.35s ease';
-            p.style.strokeDashoffset = '0';
-            p.style.animation = 'pathPulse 3.8s ease-in-out infinite';
-          });
           obs.disconnect();
         }
       },
@@ -54,13 +53,42 @@ export default function Services() {
     return () => obs.disconnect();
   }, []);
 
-  const handleEnter = (idx) => {
-    setActiveIdx(idx);
-  };
+  /* Measure the logo and every card, in the hub's own pixel space, and redo it whenever layout changes. */
+  useEffect(() => {
+    const hub = hubRef.current;
+    const img = logoRef.current;
+    if (!hub || !img) return;
 
-  const handleLeave = () => {
-    setActiveIdx(null);
-  };
+    const measure = () => {
+      if (!img.naturalWidth) return;
+
+      const at = offsetWithin(img, hub);
+      const scale = Math.min(img.offsetWidth / img.naturalWidth, img.offsetHeight / img.naturalHeight);
+      const drawnW = img.naturalWidth * scale;
+      const drawnH = img.naturalHeight * scale;
+      const start = {
+        x: at.x + (img.offsetWidth - drawnW) / 2 + LOGO_ANCHOR.x * drawnW,
+        y: at.y + (img.offsetHeight - drawnH) / 2 + LOGO_ANCHOR.y * drawnH,
+      };
+
+      const ends = cardRefs.current.map((card) => {
+        const pos = offsetWithin(card, hub);
+        return { x: pos.x + card.offsetWidth / 2, y: pos.y };
+      });
+
+      setTree({ width: hub.offsetWidth, height: hub.offsetHeight, start, ends });
+    };
+
+    measure();
+    img.addEventListener('load', measure);
+    const ro = new ResizeObserver(measure);
+    ro.observe(hub);
+    cardRefs.current.forEach((card) => card && ro.observe(card));
+    return () => {
+      img.removeEventListener('load', measure);
+      ro.disconnect();
+    };
+  }, []);
 
   return (
     <section id="services" className="services-section" ref={sectionRef}>
@@ -74,56 +102,46 @@ export default function Services() {
           </h2>
         </div>
 
-        <div className={`services-hub${isVisible ? ' is-visible' : ''}`}>
+        <div className={`services-hub${isVisible ? ' is-visible' : ''}`} ref={hubRef}>
           <div className="services-badge-wrap">
             <div className="services-badge">
               <img
+                ref={logoRef}
                 src={logo}
                 alt="NallGeeks logo"
               />
             </div>
           </div>
 
-          <svg className="services-svg" viewBox="0 0 1100 210" preserveAspectRatio="xMidYMid meet">
-            {PATH_X.map((x, i) => {
-              const pathState = activeIdx === i ? ' active' : activeIdx !== null ? ' muted' : '';
-              const d = `M 550,20 C 550,110 ${x},110 ${x},195`;
+          {tree && (
+            <svg
+              className="services-tree"
+              width={tree.width}
+              height={tree.height}
+              viewBox={`0 0 ${tree.width} ${tree.height}`}
+              aria-hidden="true"
+            >
+              {tree.ends.map((end, i) => {
+                const midY = tree.start.y + (end.y - tree.start.y) / 2;
+                return (
+                  <path
+                    key={i}
+                    d={`M ${tree.start.x},${tree.start.y} C ${tree.start.x},${midY} ${end.x},${midY} ${end.x},${end.y}`}
+                  />
+                );
+              })}
+            </svg>
+          )}
 
-              return (
-                <g key={i}>
-                  <path
-                    className={`service-path-glow${pathState}`}
-                    d={d}
-                    fill="none"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    ref={(el) => (pathRefs.current[i] = el)}
-                    className={`service-path${pathState}`}
-                    d={d}
-                    fill="none"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    className={`service-path-flow${pathState}`}
-                    d={d}
-                    fill="none"
-                    strokeLinecap="round"
-                    style={{ '--path-index': i, '--path-delay': `${i * 0.28}s` }}
-                  />
-                </g>
-              );
-            })}
-          </svg>
+          <div className="services-tree-gap" />
 
           <div className="svc-row">
             {SERVICES.map((s, i) => (
               <div
                 key={s.num}
-                className={`svc-card${isVisible ? ' is-visible' : ''}${activeIdx === i ? ' active' : ''}`}
+                ref={(el) => { cardRefs.current[i] = el; }}
+                className={`svc-card${isVisible ? ' is-visible' : ''}`}
                 style={{ '--svc-index': i }}
-                onMouseEnter={() => handleEnter(i)}
-                onMouseLeave={handleLeave}
               >
                 <div className="svc-card-top">
                   <span className="svc-num">{s.num}</span>
