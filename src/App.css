@@ -26,7 +26,6 @@
 .navbar.scrolled::after { opacity: 1; }
 .navbar-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: var(--nav-h); position: relative; transition: height 0.35s ease; }
 .navbar-logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; position: relative; isolation: isolate; }
-.navbar-logo::before { content: ""; position: absolute; left: -18px; top: 50%; width: 112px; height: 74px; transform: translateY(-50%); border-radius: 999px; background: radial-gradient(ellipse at center, rgba(242,138,69,0.55) 0%, rgba(228,104,34,0.34) 38%, rgba(242,138,69,0.16) 62%, transparent 82%); filter: blur(16px); opacity: 1; pointer-events: none; z-index: -1; }
 .navbar-logo img { height: 44px; width: 70px; border-radius: 0; object-fit: contain; }
 .navbar-wordmark { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; color: var(--footer-text); letter-spacing: -0.02em; display: inline-flex; position: relative; overflow: hidden; padding-bottom: 2px; perspective: 420px; }
 .navbar-wordmark::after { content: ""; position: absolute; inset: 0 -35%; background: linear-gradient(90deg, transparent, rgba(242,138,69,0.18), rgba(255,255,255,0.72), rgba(242,138,69,0.22), transparent); mix-blend-mode: screen; pointer-events: none; animation: brandTextSweep 2.2s cubic-bezier(0.22, 1, 0.36, 1) 0.75s both; }
