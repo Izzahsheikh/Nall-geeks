@@ -100,8 +100,9 @@ export default function Hero() {
             position: 'absolute',
             inset: 0,
             background: [
-              'linear-gradient(180deg, rgba(23,23,23,0.55) 0%, rgba(23,23,23,0.4) 35%, rgba(23,23,23,0.9) 100%)',
-              'linear-gradient(90deg, rgba(23,23,23,0.96) 0%, rgba(23,23,23,0.78) 38%, rgba(23,23,23,0.3) 68%, rgba(23,23,23,0.1) 100%)',
+              // Bottom stop stays dark so the hero still joins the #171717 ticker strip without a seam.
+              'linear-gradient(180deg, rgba(23,23,23,0.32) 0%, rgba(23,23,23,0.18) 35%, rgba(23,23,23,0.9) 100%)',
+              'linear-gradient(90deg, rgba(23,23,23,0.72) 0%, rgba(23,23,23,0.48) 38%, rgba(23,23,23,0.16) 68%, rgba(23,23,23,0.05) 100%)',
             ].join(', '),
             zIndex: 1,
           }}
@@ -137,7 +138,7 @@ export default function Hero() {
                 fontSize: 'clamp(2.2rem, 5vw, 3.9rem)',
                 fontWeight: 400,
                 lineHeight: 1.1,
-                color: '#FFFFFF',
+                color: '#ffffff',
                 letterSpacing: '-0.01em',
                 marginBottom: '1.75rem',
                 textShadow: '0 4px 20px rgba(0,0,0,0.85)',
@@ -151,12 +152,13 @@ export default function Hero() {
               <span
                 style={{
                   display: 'inline-block',
-                  color: '#F36B21',
+                  color: '#e8622a',
                   fontStyle: 'italic',
                   opacity: fading ? 0 : 1,
                   transform: fading ? 'translateY(-10px)' : 'translateY(0)',
                   transition: 'opacity 0.4s ease, transform 0.4s ease',
-                  textShadow: '0 0 24px rgba(243,107,33,0.6), 0 0 48px rgba(243,107,33,0.3)',
+                  // Flat colour only. Must be explicit: text-shadow inherits, so without it the word would pick up the h1's dark shadow.
+                  textShadow: 'none',
                   willChange: 'opacity, transform',
                 }}
               >
@@ -172,7 +174,7 @@ export default function Hero() {
                 fontSize: 'clamp(0.95rem, 1.4vw, 1.1rem)',
                 fontWeight: 400,
                 lineHeight: 1.7,
-                color: 'rgba(247,245,240,0.62)',
+                color: 'rgba(255,255,255,0.9)',
                 maxWidth: '46ch',   // ← slightly wider than before (was 42ch)
                 marginBottom: '2.5rem',
               }}
