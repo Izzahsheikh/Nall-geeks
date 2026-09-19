@@ -38,9 +38,9 @@ export const css = `
     position: absolute; inset: 0;
     background: linear-gradient(
       160deg,
-      rgba(6,6,6,0.88) 0%,
-      rgba(6,6,6,0.72) 40%,
-      rgba(6,6,6,0.30) 100%
+      rgba(6,6,6,0.93) 0%,
+      rgba(6,6,6,0.77) 40%,
+      rgba(6,6,6,0.35) 100%
     );
   }
   .ngc-hero-content {
@@ -51,7 +51,7 @@ export const css = `
     display: inline-flex; align-items: center; gap: 8px;
     font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.55);
+    color: rgba(255,255,255,0.8);
     margin-bottom: 28px;
   }
   .ngc-tag::before {
@@ -70,7 +70,8 @@ export const css = `
   }
   .ngc-hero h1 em {
     font-style: normal;
-    color: var(--accent);
+    color: #e8622a;
+    text-shadow: none;
   }
   .ngc-hero-lead {
     font-size: 17px;
@@ -81,8 +82,8 @@ export const css = `
   }
   .ngc-hero-scroll {
     display: inline-flex; align-items: center; gap: 12px;
-    background: none; border: 1px solid rgba(255,255,255,0.25);
-    color: rgba(255,255,255,0.75);
+    background: transparent; border: 1px solid #fff;
+    color: #fff;
     font-size: 13px; font-weight: 500;
     padding: 14px 26px;
     margin-top: 16px;
@@ -92,9 +93,9 @@ export const css = `
     font-family: inherit;
   }
   .ngc-hero-scroll:hover {
-    border-color: var(--accent);
-    background: var(--accent);
-    color: #fff;
+    border-color: #fff;
+    background: #fff;
+    color: #111;
   }
   .ngc-hero-scroll svg { transition: transform 0.2s; }
   .ngc-hero-scroll:hover svg { transform: translateY(3px); }
