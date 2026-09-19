@@ -19,87 +19,111 @@ export const css = `
   @media (max-width: 768px) { .ngc-wrap { padding: 0 20px; } }
 
   /* ── Hero ── */
-  /* The hero runs under the fixed, transparent navbar, so it carries the 72px the page used to reserve above it. */
+  /* Two columns on a warm cream page: copy on the left (55%), a tall rounded image card on the right (45%).
+     The 72px top padding clears the fixed navbar. */
   .ngc-hero {
-    position: relative;
-    min-height: calc(92vh + 72px);
+    box-sizing: border-box;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 55fr 45fr;
+    padding-top: 72px;
+    background: #f5f2ee;
+  }
+  .ngc-hero-left {
     display: flex;
     align-items: center;
-    padding: 212px 0 72px;
-    overflow: hidden;
+    padding: 56px clamp(24px, 4vw, 64px) 56px max(48px, calc((100vw - 1180px) / 2 + 48px));
   }
-  .ngc-hero-bg {
-    position: absolute; inset: 0;
-    background-size: cover; background-position: center;
-    transform: scale(1.04);
-    transition: transform 8s ease;
-  }
-  .ngc-hero-bg.loaded { transform: scale(1); }
-  .ngc-hero-overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(
-      160deg,
-      rgba(6,6,6,0.93) 0%,
-      rgba(6,6,6,0.77) 40%,
-      rgba(6,6,6,0.35) 100%
-    );
-  }
-  .ngc-hero-content {
-    position: relative; z-index: 2;
-    max-width: 680px;
-  }
+  .ngc-hero-content { max-width: 560px; }
   .ngc-tag {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.8);
-    margin-bottom: 28px;
+    color: #e8622a;
+    margin-bottom: 24px;
   }
   .ngc-tag::before {
     content: '';
     display: block; width: 28px; height: 1px;
-    background: var(--accent);
+    background: #e8622a;
   }
   .ngc-hero h1 {
     font-family: 'Fraunces', Georgia, serif;
-    font-size: clamp(2.8rem, 6.4vw, 5rem);
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
     font-weight: 700;
     line-height: 1.12;
     letter-spacing: -0.01em;
-    color: #fff;
-    margin-bottom: 28px;
+    color: #1a1a1a;
+    margin-bottom: 24px;
   }
   .ngc-hero h1 em {
     font-style: normal;
     color: #e8622a;
     text-shadow: none;
   }
-  .ngc-hero-lead {
-    font-size: 17px;
+  .ng-careers .ngc-hero-lead {
+    font-size: 1rem;
     line-height: 1.75;
-    color: rgba(255,255,255,0.65);
-    max-width: 500px;
-    margin-bottom: 44px;
+    color: #555;
+    max-width: 420px;
+    margin-bottom: 28px;
   }
+  .ngc-hero-stats {
+    list-style: none;
+    display: flex; flex-wrap: wrap; align-items: center;
+    gap: 8px 0;
+    margin-bottom: 36px;
+    font-size: 13px;
+    color: #7a746c;
+  }
+  .ngc-hero-stats li { display: inline-flex; align-items: baseline; gap: 5px; padding-right: 16px; }
+  .ngc-hero-stats li + li { padding-left: 16px; border-left: 1px solid rgba(0,0,0,0.16); }
+  .ngc-hero-stats strong { color: #1a1a1a; font-weight: 700; }
   .ngc-hero-scroll {
     display: inline-flex; align-items: center; gap: 12px;
-    background: transparent; border: 1px solid #fff;
+    background: #e8622a; border: none;
     color: #fff;
-    font-size: 13px; font-weight: 500;
-    padding: 14px 26px;
-    margin-top: 16px;
+    font-size: 14px; font-weight: 600;
+    padding: 15px 30px;
     border-radius: 50px;
     cursor: pointer;
-    transition: border-color 0.2s, color 0.2s, background 0.2s;
+    box-shadow: 0 6px 18px rgba(232,98,42,0.28);
+    transition: background 0.2s, transform 0.15s;
     font-family: inherit;
   }
-  .ngc-hero-scroll:hover {
-    border-color: #fff;
-    background: #fff;
-    color: #111;
-  }
+  .ngc-hero-scroll:hover { background: #c54e18; transform: translateY(-1px); }
   .ngc-hero-scroll svg { transition: transform 0.2s; }
   .ngc-hero-scroll:hover svg { transform: translateY(3px); }
+
+  .ngc-hero-right {
+    display: flex;
+    padding: 24px clamp(16px, 3vw, 48px) 32px 0;
+  }
+  .ngc-hero-card {
+    position: relative;
+    flex: 1;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #111;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+  }
+  .ngc-hero-img {
+    position: absolute; inset: 0;
+    display: block; width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: 88% center;   /* the code sits in the right half of the photo */
+  }
+  .ngc-hero-card::after {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(0,0,0,0.25);
+    pointer-events: none;
+  }
+  @media (max-width: 900px) {
+    .ngc-hero { grid-template-columns: 1fr; min-height: 0; }
+    .ngc-hero-left { padding: 48px 24px 32px; }
+    .ngc-hero-right { padding: 0 24px 32px; }
+    .ngc-hero-card { min-height: 380px; }
+  }
 
   /* ── Positions section ── */
   .ngc-positions {
@@ -556,7 +580,6 @@ export const css = `
 
   @media (prefers-reduced-motion: reduce) {
     [data-reveal] { opacity: 1 !important; transform: none !important; }
-    .ngc-hero-bg { transition: none; }
   }
 
   /* Loading skeleton */

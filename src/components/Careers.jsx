@@ -4,16 +4,15 @@ import { css } from './careers/styles';
 import { INTERN_TRACKS, trackLabel, useOpenings, jobHref, applyHref } from './careers/shared';
 import { PinIcon, BriefcaseIcon, ArrowIcon } from './careers/parts';
 
+const HERO_STATS = [
+  { value: '12+', label: 'Projects' },
+  { value: '4', label: 'Countries' },
+  { value: '100%', label: 'Remote' },
+];
+
 export default function Careers() {
   const { roles, internship, status: jobsStatus } = useOpenings();
   const pageRef = useRef(null);
-  const heroBgRef = useRef(null);
-
-  /* Hero bg pan-in */
-  useEffect(() => {
-    const t = setTimeout(() => heroBgRef.current?.classList.add('loaded'), 100);
-    return () => clearTimeout(t);
-  }, []);
 
   /* Scroll reveal */
   useEffect(() => {
@@ -42,28 +41,26 @@ export default function Careers() {
 
       {/* ════════════════ HERO ════════════════ */}
       <section className="ngc-hero">
-        <div
-          ref={heroBgRef}
-          className="ngc-hero-bg"
-          style={{ backgroundImage: `url(${careerpageBg})` }}
-        />
-        <div className="ngc-hero-overlay" />
-
-        <div className="ngc-wrap" style={{ width: '100%' }}>
+        <div className="ngc-hero-left">
           <div className="ngc-hero-content" data-reveal>
             <span className="ngc-tag">Join NallGeeks</span>
 
             <h1>
-              Build work you're<br />
-              <em>proud</em> to put your<br />
-              name on.
+              Build work you're <em>proud</em> to put your name on.
             </h1>
 
             <p className="ngc-hero-lead">
               We're a small studio that designs and builds for clients who want
-              work that actually holds up after launch. You build it, you defend
-              it, you watch it go live.
+              work that actually holds up after launch.
             </p>
+
+            <ul className="ngc-hero-stats">
+              {HERO_STATS.map(({ value, label }) => (
+                <li key={label}>
+                  <strong>{value}</strong> {label}
+                </li>
+              ))}
+            </ul>
 
             <button
               type="button"
@@ -71,10 +68,16 @@ export default function Careers() {
               onClick={() => scrollTo('#open-positions')}
             >
               View open positions
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                 <path d="M7 1v12M1.5 7.5 7 13l5.5-5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
+          </div>
+        </div>
+
+        <div className="ngc-hero-right">
+          <div className="ngc-hero-card" data-reveal>
+            <img className="ngc-hero-img" src={careerpageBg} alt="" />
           </div>
         </div>
       </section>

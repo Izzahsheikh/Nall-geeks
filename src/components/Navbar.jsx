@@ -13,7 +13,7 @@ const BRAND_TEXT = 'NallGeeks';
 
 // A dark hero at the top of the page. The bar is transparent over it; pages without one (contact, job pages) have a light
 // background at the top, where transparent bar + white links would be unreadable, so they get the glass bar from the start.
-const HERO_SELECTOR = '#hero, .ngc-hero, .abx-hero, [data-nav-hero]';
+const HERO_SELECTOR = '#hero, .abx-hero, [data-nav-hero]';
 
 const SCROLL_THRESHOLD = 50;
 
