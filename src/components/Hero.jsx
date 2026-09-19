@@ -101,8 +101,8 @@ export default function Hero() {
             inset: 0,
             background: [
               // Bottom stop stays dark so the hero still joins the #171717 ticker strip without a seam.
-              'linear-gradient(180deg, rgba(23,23,23,0.32) 0%, rgba(23,23,23,0.18) 35%, rgba(23,23,23,0.9) 100%)',
-              'linear-gradient(90deg, rgba(23,23,23,0.72) 0%, rgba(23,23,23,0.48) 38%, rgba(23,23,23,0.16) 68%, rgba(23,23,23,0.05) 100%)',
+              'linear-gradient(180deg, rgba(23,23,23,0.2) 0%, rgba(23,23,23,0.08) 35%, rgba(23,23,23,0.9) 100%)',
+              'linear-gradient(90deg, rgba(23,23,23,0.55) 0%, rgba(23,23,23,0.34) 38%, rgba(23,23,23,0.1) 68%, rgba(23,23,23,0.03) 100%)',
             ].join(', '),
             zIndex: 1,
           }}
@@ -122,7 +122,7 @@ export default function Hero() {
                 fontSize: '0.7rem',
                 fontWeight: 600,
                 letterSpacing: '0.18em',
-                color: 'rgba(247,245,240,0.5)',  // ← was #F36B21, now muted white
+                color: 'rgba(255,255,255,0.85)',
                 textTransform: 'uppercase',
                 marginBottom: '1.4rem',
               }}
@@ -209,9 +209,9 @@ export default function Hero() {
                 style={{
                   fontFamily: "'Inter', sans-serif",
                   fontWeight: 500,
-                  color: 'rgba(247,245,240,0.92)',           // ← was 0.75, now more visible
-                  borderColor: 'rgba(247,245,240,0.45)',     // ← was 0.22, now clearly visible border
-                  background: 'rgba(247,245,240,0.06)',      // ← subtle fill so it reads as a button
+                  color: '#ffffff',
+                  borderColor: '#ffffff',
+                  background: 'rgba(255,255,255,0.06)',      // ← subtle fill so it reads as a button
                 }}
               >
                 View Projects
