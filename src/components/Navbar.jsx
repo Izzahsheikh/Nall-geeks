@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import logo from '../assets/nallgeeks-logo-mark.png';
 
 const LINKS = [
@@ -22,37 +22,31 @@ export default function Navbar() {
     if (window.location.pathname === '/careers') return '/careers';
     return window.location.hash ? `/${window.location.hash}` : '/';
   });
-  const [spotlight, setSpotlight] = useState({ left: 0, width: 0 });
-  const linksWrapRef = useRef(null);
-  const linkRefs = useRef({});
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80);
-    window.addEventListener('scroll', onScroll);
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  useLayoutEffect(() => {
-    const updateSpotlight = () => {
-      const wrap = linksWrapRef.current;
-      const activeLink = linkRefs.current[activeHref];
+  useEffect(() => {
+    if (!mobileOpen) return;
 
-      if (!wrap || !activeLink) return;
-
-      const wrapRect = wrap.getBoundingClientRect();
-      const linkRect = activeLink.getBoundingClientRect();
-
-      setSpotlight({
-        left: linkRect.left - wrapRect.left,
-        width: linkRect.width,
-      });
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') setMobileOpen(false);
+    };
+    const onResize = () => {
+      if (window.innerWidth > 960) setMobileOpen(false);
     };
 
-    updateSpotlight();
-    window.addEventListener('resize', updateSpotlight);
-
-    return () => window.removeEventListener('resize', updateSpotlight);
-  }, [activeHref]);
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('resize', onResize);
+    };
+  }, [mobileOpen]);
 
   const handleNavClick = (event, href, closeMobile = false) => {
     event.preventDefault();
@@ -114,22 +108,13 @@ export default function Navbar() {
               ))}
             </span>
           </a>
-          <div className="nav-links-wrap" ref={linksWrapRef}>
-            <span
-              className="nav-spotlight"
-              style={{
-                transform: `translateX(${spotlight.left}px)`,
-                width: `${spotlight.width}px`,
-              }}
-            />
+          <div className="nav-links-wrap">
             {LINKS.map((l) => (
               <a
                 key={l.href}
                 href={l.href}
-                ref={(el) => {
-                  linkRefs.current[l.href] = el;
-                }}
-                className={`nav-link hover-accent${activeHref === l.href ? ' active' : ''}`}
+                className={`nav-link${activeHref === l.href ? ' active' : ''}`}
+                aria-current={activeHref === l.href ? 'page' : undefined}
                 onClick={(e) => handleNavClick(e, l.href)}
               >
                 {l.label}
@@ -139,7 +124,12 @@ export default function Navbar() {
           <a href="/contact" className="btn-primary navbar-cta" onClick={(e) => handleNavClick(e, '/contact')}>
             Book a Call
           </a>
-          <button className="hamburger" onClick={() => setMobileOpen((v) => !v)} aria-label="Toggle menu">
+          <button
+            className={`hamburger${mobileOpen ? ' open' : ''}`}
+            onClick={() => setMobileOpen((v) => !v)}
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileOpen}
+          >
             <span></span>
             <span></span>
             <span></span>
@@ -148,27 +138,25 @@ export default function Navbar() {
       </nav>
 
       {mobileOpen && (
-        <div className="mob-menu">
+        <div className={`mob-menu${scrolled ? ' scrolled' : ''}`}>
           {LINKS.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className={activeHref === l.href ? 'active' : ''}
+              className={`mob-link${activeHref === l.href ? ' active' : ''}`}
+              aria-current={activeHref === l.href ? 'page' : undefined}
               onClick={(e) => handleNavClick(e, l.href, true)}
             >
               {l.label}
             </a>
           ))}
-          <div style={{ padding: '1rem 5%' }}>
-            <a
-              href="/contact"
-              className="btn-primary"
-              onClick={(e) => handleNavClick(e, '/contact', true)}
-              style={{ display: 'inline-block' }}
-            >
-              Book a Call
-            </a>
-          </div>
+          <a
+            href="/contact"
+            className="btn-primary navbar-cta"
+            onClick={(e) => handleNavClick(e, '/contact', true)}
+          >
+            Book a Call
+          </a>
         </div>
       )}
     </>
