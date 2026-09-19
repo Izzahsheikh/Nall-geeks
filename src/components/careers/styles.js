@@ -134,99 +134,168 @@ export const css = `
     max-width: 260px;
   }
 
-  /* Job card — restructured for breathing room */
+  /* Job listing */
+  .ngc-job-list { display: flex; flex-direction: column; gap: 16px; }
   .ngc-job-card {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 32px;
-    align-items: start;
-    padding: 44px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 28px 32px;
     border-radius: var(--radius);
-    border: 1px solid rgba(0,0,0,0.07);
-    background: #fafafa;
-    margin-bottom: 20px;
-    transition: background 0.25s, border-color 0.25s, transform 0.2s;
-    cursor: default;
+    border: 1px solid rgba(0,0,0,0.09);
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03), 0 6px 20px rgba(0,0,0,0.03);
+    transition: border-color 0.2s, box-shadow 0.25s;
   }
   .ngc-job-card:hover {
-    background: #fff7f3;
-    border-color: rgba(232,99,42,0.3);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 40px rgba(232,99,42,0.08);
+    border-color: rgba(232,99,42,0.45);
+    box-shadow: 0 12px 34px rgba(0,0,0,0.08);
   }
   .ngc-job-main { min-width: 0; }
-  .ngc-dept-pill {
-    display: inline-block;
-    font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  .ngc-job-dept {
+    display: block;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
     color: var(--accent);
-    background: var(--accent-light);
-    border: 1px solid rgba(232,99,42,0.2);
-    border-radius: 6px;
-    padding: 4px 11px;
-    margin-bottom: 20px;
+    margin-bottom: 8px;
   }
-  .ngc-job-title {
+  .ng-careers .ngc-job-title {
     font-family: 'Fraunces', Georgia, serif;
-    font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+    font-size: clamp(1.3rem, 2.2vw, 1.6rem);
     font-weight: 700;
     line-height: 1.25;
     letter-spacing: -0.01em;
     color: #0d0d0d;
-    margin-bottom: 26px;
+    margin-bottom: 14px;
   }
+  /* The title link stretches over the whole card so the card is one click target. */
+  .ngc-job-link { color: inherit; text-decoration: none; transition: color 0.2s; }
+  .ngc-job-link::after { content: ''; position: absolute; inset: 0; border-radius: var(--radius); }
+  .ngc-job-link:focus-visible { outline: none; }
+  .ngc-job-link:focus-visible::after { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .ngc-job-card:hover .ngc-job-link { color: var(--accent); }
   .ngc-job-meta {
-    display: flex; align-items: center; gap: 14px;
-    flex-wrap: wrap;
-    margin-bottom: 26px;
+    display: flex; flex-wrap: wrap; align-items: center;
+    gap: 6px 22px;
+    font-size: 14px; font-weight: 400;
+    color: rgba(0,0,0,0.56);
   }
-  .ngc-meta-pill {
-    font-size: 12.5px; font-weight: 500; color: rgba(0,0,0,0.62);
-    background: rgba(0,0,0,0.06);
-    border-radius: 20px;
-    padding: 5px 16px;
+  .ngc-job-meta span { display: inline-flex; align-items: center; gap: 7px; }
+  .ngc-job-meta svg { flex-shrink: 0; color: rgba(0,0,0,0.38); }
+  .ngc-job-arrow {
+    flex-shrink: 0;
+    display: grid; place-items: center;
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.12);
+    color: rgba(0,0,0,0.4);
+    transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
   }
-  .ngc-meta-dot { display: none; }
-  .ngc-meta-loc {
-    font-size: 12.5px; font-weight: 500; color: rgba(0,0,0,0.62);
-    background: rgba(0,0,0,0.06);
-    border-radius: 20px;
-    padding: 5px 16px;
+  .ngc-job-card:hover .ngc-job-arrow {
+    background: var(--accent); border-color: var(--accent); color: #fff;
+    transform: translateX(3px);
   }
-  .ngc-job-summary {
-    font-size: 14.5px; line-height: 1.8;
-    color: rgba(0,0,0,0.68);
-    max-width: 520px;
-    margin-bottom: 22px;
+  @media (max-width: 640px) {
+    .ngc-job-card { padding: 22px 20px; gap: 16px; }
+    .ngc-job-arrow { display: none; }
   }
-  .ngc-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-  .ngc-tag-chip {
-    font-size: 12px; font-weight: 500; color: rgba(0,0,0,0.58);
-    border: 1px solid rgba(0,0,0,0.14);
-    border-radius: var(--radius-sm);
-    padding: 4px 12px;
+
+  /* ── Job detail + application pages ── */
+  .ngc-page { background: #fff; padding: 128px 0 120px; min-height: 80vh; }
+  .ngc-narrow { max-width: 820px; margin: 0 auto; }
+  .ngc-back {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13.5px; font-weight: 500;
+    color: rgba(0,0,0,0.55);
+    margin-bottom: 36px;
+    transition: color 0.2s;
   }
+  .ngc-back:hover { color: var(--accent); }
+  .ngc-detail-head {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 28px 40px; flex-wrap: wrap;
+    padding-bottom: 36px;
+    border-bottom: 1px solid rgba(0,0,0,0.09);
+  }
+  .ng-careers .ngc-detail-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: #0d0d0d;
+    margin-bottom: 18px;
+  }
+  .ngc-detail-head .ngc-job-meta { font-size: 15px; }
   .ngc-apply-btn {
     flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
     background: var(--accent);
     color: #fff;
     border: none;
     border-radius: 50px;
     padding: 15px 32px;
-    font-size: 13px; font-weight: 600;
-    cursor: pointer;
+    font-size: 14px; font-weight: 600;
+    text-decoration: none;
     white-space: nowrap;
     letter-spacing: 0.02em;
-    transition: background 0.2s, transform 0.15s;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
     font-family: inherit;
+    box-shadow: 0 6px 18px rgba(232,99,42,0.28);
   }
-  .ngc-apply-btn:hover {
-    background: var(--accent-dark);
-    transform: translateY(-1px);
+  .ngc-apply-btn:hover { background: var(--accent-dark); color: #fff; transform: translateY(-1px); }
+  @media (max-width: 640px) { .ngc-apply-btn { width: 100%; } }
+  .ngc-detail-section { margin-top: 44px; }
+  .ngc-detail-section h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.45rem; font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #0d0d0d;
+    margin-bottom: 18px;
   }
-  @media (max-width: 640px) {
-    .ngc-job-card { grid-template-columns: 1fr; }
-    .ngc-apply-btn { width: 100%; text-align: center; }
+  .ngc-detail-section p {
+    font-size: 16px; line-height: 1.85;
+    color: rgba(0,0,0,0.7);
+    margin-bottom: 14px;
+    max-width: 68ch;
   }
+  .ngc-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .ngc-list li {
+    position: relative;
+    padding-left: 26px;
+    font-size: 16px; line-height: 1.7;
+    color: rgba(0,0,0,0.7);
+    max-width: 68ch;
+  }
+  .ngc-list li::before {
+    content: '';
+    position: absolute; left: 4px; top: 0.72em;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+  }
+  .ngc-state { color: rgba(0,0,0,0.55); font-size: 16px; line-height: 1.7; }
+  .ngc-state h1 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    color: #0d0d0d;
+    margin-bottom: 14px;
+  }
+  .ngc-state .ngc-apply-btn { margin-top: 28px; }
+
+  .ngc-apply-page { padding-top: 132px; min-height: 100vh; }
+  .ngc-apply-copy .ngc-job-meta { margin-bottom: 36px; }
+  .ngc-apply-copy h2 { font-size: clamp(2rem, 3.6vw, 3rem); }
+  .ngc-done { align-items: flex-start; gap: 14px; }
+  .ngc-done h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.7rem; font-weight: 700;
+    color: #0d0d0d;
+  }
+  .ngc-done p { font-size: 15px; line-height: 1.75; color: rgba(0,0,0,0.6); }
+  .ngc-done .ngc-apply-btn { margin-top: 10px; }
+  .ngc-input[readonly] { color: rgba(0,0,0,0.7); background: #f3f3f1; cursor: default; }
 
   /* Internship block */
   .ngc-intern-block {

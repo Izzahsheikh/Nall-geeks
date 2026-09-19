@@ -86,6 +86,19 @@ const initialDb = {
       location: 'Remote / Hybrid',
       summary: 'Build clean, responsive React interfaces for websites, dashboards, and digital products.',
       description: 'You will work on premium public websites, private dashboards, and product interfaces with a focus on clean execution and responsive polish.',
+      department: 'Engineering',
+      responsibilities: [
+        'Build responsive, accessible React interfaces for websites, dashboards and product screens',
+        'Turn design files into polished, pixel-accurate components',
+        'Work with backend developers to connect interfaces to APIs',
+        'Review code and keep the codebase clean and maintainable',
+      ],
+      qualifications: [
+        'Strong experience with React, JavaScript and modern CSS',
+        'Eye for detail and responsive design',
+        'Comfortable working with REST APIs and Git',
+        'A portfolio or public projects we can look at',
+      ],
       status: 'Open',
       order: 1,
       createdAt: '2026-09-07T00:00:00.000Z',
@@ -98,6 +111,19 @@ const initialDb = {
       location: 'Remote',
       summary: 'Shape premium product flows, website screens, wireframes, and brand-led digital experiences.',
       description: 'You will turn business goals into clear layouts, usable flows, and polished interfaces for NallGeeks and client projects.',
+      department: 'Design',
+      responsibilities: [
+        'Turn business goals into clear user flows, wireframes and high-fidelity screens',
+        'Design polished interfaces for websites and digital products',
+        'Build and maintain reusable design components in Figma',
+        'Hand off designs to developers and review the built result',
+      ],
+      qualifications: [
+        'A portfolio showing end-to-end product or website design work',
+        'Strong Figma skills and a solid grasp of layout and typography',
+        'Ability to explain design decisions to clients and teammates',
+        'Experience with design systems is a plus',
+      ],
       status: 'Open',
       order: 2,
       createdAt: '2026-09-07T00:00:00.000Z',
@@ -110,6 +136,19 @@ const initialDb = {
       location: 'Remote',
       summary: 'Support content, research, campaigns, and growth experiments for NallGeeks and client work.',
       description: 'You will help with research, social content, campaign support, and simple growth tasks across the NallGeeks brand.',
+      department: 'Growth',
+      responsibilities: [
+        'Research audiences, competitors and content ideas',
+        'Draft and schedule social content across NallGeeks channels',
+        'Support campaign setup and report on results',
+        'Help run simple growth experiments',
+      ],
+      qualifications: [
+        'Interest in marketing, content or growth',
+        'Clear written communication',
+        'Willingness to learn tools and analytics quickly',
+        'Currently studying or recently graduated is welcome',
+      ],
       status: 'Open',
       order: 3,
       createdAt: '2026-09-07T00:00:00.000Z',
@@ -282,12 +321,20 @@ const validateJob = (job) => {
   return errors;
 };
 
+// Accepts an array or a newline-separated string; stores a clean array of non-empty lines.
+const toLines = (value) => (Array.isArray(value) ? value : String(value || '').split('\n'))
+  .map((line) => String(line).replace(/^\s*[-•*]\s*/, '').trim())
+  .filter(Boolean);
+
 const sanitizeJob = (job) => ({
   title: String(job.title || '').trim(),
   type: String(job.type || '').trim(),
+  department: String(job.department || '').trim(),
   location: String(job.location || '').trim(),
   summary: String(job.summary || '').trim(),
   description: String(job.description || '').trim(),
+  responsibilities: toLines(job.responsibilities),
+  qualifications: toLines(job.qualifications),
   status: String(job.status || 'Open').trim(),
   order: Number(job.order || 0),
 });

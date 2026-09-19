@@ -6,9 +6,12 @@ import ApplicationRow from './components/ApplicationRow';
 const emptyJob = {
   title: '',
   type: 'Full-time',
+  department: '',
   location: '',
   summary: '',
   description: '',
+  responsibilities: '',
+  qualifications: '',
   status: 'Open',
   order: 1,
 };
@@ -36,9 +39,12 @@ export default function AdminCareers({ jobs, applications, onProjectsChange, onV
     setForm({
       title: job.title || '',
       type: job.type || 'Full-time',
+      department: job.department || '',
       location: job.location || '',
       summary: job.summary || '',
       description: job.description || '',
+      responsibilities: (job.responsibilities || []).join('\n'),
+      qualifications: (job.qualifications || []).join('\n'),
       status: job.status || 'Open',
       order: job.order || 1,
     });
@@ -121,6 +127,10 @@ export default function AdminCareers({ jobs, applications, onProjectsChange, onV
               </select>
             </label>
             <label>
+              Department
+              <input name="department" value={form.department} onChange={handleChange} placeholder="e.g. Engineering, Design" />
+            </label>
+            <label>
               Location
               <input name="location" value={form.location} onChange={handleChange} required />
             </label>
@@ -145,6 +155,14 @@ export default function AdminCareers({ jobs, applications, onProjectsChange, onV
           <label>
             Full Description
             <textarea name="description" rows="5" value={form.description} onChange={handleChange} />
+          </label>
+          <label>
+            Responsibilities (one per line)
+            <textarea name="responsibilities" rows="5" value={form.responsibilities} onChange={handleChange} />
+          </label>
+          <label>
+            Qualifications (one per line)
+            <textarea name="qualifications" rows="5" value={form.qualifications} onChange={handleChange} />
           </label>
 
           <button type="submit" className="admin-primary-action" disabled={status.type === 'loading'}>

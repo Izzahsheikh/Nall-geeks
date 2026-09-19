@@ -19,7 +19,7 @@ export default function Navbar() {
     if (window.location.pathname === '/about') return '/about';
     if (window.location.pathname === '/contact') return '/contact';
     if (window.location.pathname === '/projects') return '/projects';
-    if (window.location.pathname === '/careers') return '/careers';
+    if (window.location.pathname.startsWith('/careers')) return '/careers';
     return window.location.hash ? `/${window.location.hash}` : '/';
   });
 
