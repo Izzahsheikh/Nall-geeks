@@ -20,8 +20,8 @@
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* ===== Navbar ===== */
-/* Glass from page load: the same translucent, blurred bar at every scroll position. */
-.navbar { --nav-h: 72px; background: rgba(10, 10, 10, 0.4); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.06); position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; padding: 0 5%; transition: box-shadow 0.35s ease; }
+/* Dark glass, 95% opaque: the blur softens whatever scrolls under the bar and the near-solid fill hides it, at every scroll position. */
+.navbar { --nav-h: 72px; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.06); position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; padding: 0 5%; transition: box-shadow 0.35s ease; }
 .navbar::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: linear-gradient(90deg, transparent, rgba(242,138,69,0.55), transparent); opacity: 0; transition: opacity 0.35s ease; pointer-events: none; }
 .navbar.scrolled { --nav-h: 64px; box-shadow: 0 10px 30px rgba(0,0,0,0.28); }
 .navbar.scrolled::after { opacity: 1; }
