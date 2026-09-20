@@ -28,10 +28,12 @@
 .navbar.scrolled::after { opacity: 1; }
 .navbar-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: var(--nav-h); position: relative; transition: height 0.35s ease; }
 .navbar-logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; position: relative; isolation: isolate; }
-/* The mark is 3:2 with ~23% / ~18% transparent padding left / right of the glyph. The wrapper's negative margins trim that
-   (0.34 and 0.2 of the height), putting the glyph flush with the content edge, 13px from the wordmark. */
+/* The wrapper is a fixed 3:2 box with negative margins that trim transparent padding, so the glyph sits flush with the content
+   edge, 13px from the wordmark. The image is placed inside it so the glyph keeps the same height, top and left edge whatever the
+   artwork's own padding is. These numbers fit the current 1665x944 mark (glyph = 12.7-87.6% x, 11.7-93.5% y of the image);
+   if the logo's proportions change again, recompute them. */
 .navbar-logo-mark { --logo-h: 50px; position: relative; display: block; flex-shrink: 0; height: var(--logo-h); width: calc(var(--logo-h) * 1.5); margin-left: calc(var(--logo-h) * -0.34); margin-right: calc(var(--logo-h) * -0.2); }
-.navbar-logo-mark img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; border-radius: 0; object-fit: contain; }
+.navbar-logo-mark img { position: absolute; display: block; max-width: none; left: calc(var(--logo-h) * 0.1768); top: calc(var(--logo-h) * 0.1322); width: calc(var(--logo-h) * 1.2957); height: calc(var(--logo-h) * 0.7346); border-radius: 0; }
 .navbar-wordmark { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; color: #fff; transition: color 0.3s ease; letter-spacing: -0.02em; display: inline-flex; position: relative; overflow: hidden; padding-bottom: 2px; perspective: 420px; }
 .navbar-wordmark::after { content: ""; position: absolute; inset: 0 -35%; background: linear-gradient(90deg, transparent, rgba(242,138,69,0.18), rgba(255,255,255,0.72), rgba(242,138,69,0.22), transparent); mix-blend-mode: screen; pointer-events: none; animation: brandTextSweep 2.2s cubic-bezier(0.22, 1, 0.36, 1) 0.75s both; }
 .brand-letter { display: inline-block; transform-origin: 50% 100%; animation: brandLetterReveal 0.72s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: calc(var(--letter-index) * 55ms); }

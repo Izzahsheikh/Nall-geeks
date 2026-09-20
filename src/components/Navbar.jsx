@@ -106,7 +106,7 @@ export default function Navbar() {
         <div className="navbar-inner">
           <a href="/" className="navbar-logo" onClick={(e) => handleNavClick(e, '/')}>
             <span className="navbar-logo-mark">
-              <img src="/nallgeeks-logo-mark-clean.png" width="1536" height="1024" alt="NallGeeks logo" />
+              <img src="/nallgeeks-logo-mark.png" width="1665" height="944" alt="NallGeeks logo" />
             </span>
             <span className="navbar-wordmark" aria-label={BRAND_TEXT}>
               {BRAND_TEXT.split('').map((letter, index) => (
