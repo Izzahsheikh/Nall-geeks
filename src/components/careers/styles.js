@@ -18,118 +18,7 @@ export const css = `
   .ngc-wrap { max-width: 1180px; margin: 0 auto; padding: 0 48px; }
   @media (max-width: 768px) { .ngc-wrap { padding: 0 20px; } }
 
-  /* ── Hero ── */
-  /* Two columns on a warm cream page: copy on the left (55%), a tall rounded image card on the right (45%).
-     The 72px top padding clears the fixed navbar. */
-  .ngc-hero {
-    box-sizing: border-box;
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 55fr 45fr;
-    padding-top: 72px;
-    background: #f5f2ee;
-  }
-  .ngc-hero-left {
-    display: flex;
-    align-items: center;
-    padding: 56px clamp(24px, 4vw, 64px) 56px max(48px, calc((100vw - 1180px) / 2 + 48px));
-  }
-  .ngc-hero-content { max-width: 560px; }
-  .ngc-tag {
-    display: inline-flex; align-items: center; gap: 10px;
-    font-size: 12px; font-weight: 600; letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: #e8622a;
-    margin-bottom: 24px;
-  }
-  .ngc-tag::before {
-    content: '';
-    display: block; width: 28px; height: 1px;
-    background: #e8622a;
-  }
-  .ngc-hero h1 {
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: clamp(2.5rem, 4vw, 3.5rem);
-    font-weight: 700;
-    line-height: 1.12;
-    letter-spacing: -0.01em;
-    color: #1a1a1a;
-    margin-bottom: 24px;
-  }
-  .ngc-hero h1 em {
-    font-style: normal;
-    color: #e8622a;
-    text-shadow: none;
-  }
-  .ng-careers .ngc-hero-lead {
-    font-size: 1rem;
-    line-height: 1.75;
-    color: #555;
-    max-width: 420px;
-    margin-bottom: 28px;
-  }
-  .ngc-hero-stats {
-    list-style: none;
-    display: flex; flex-wrap: wrap; align-items: center;
-    gap: 8px 0;
-    margin-bottom: 36px;
-    font-size: 13px;
-    color: #7a746c;
-  }
-  .ngc-hero-stats li { display: inline-flex; align-items: baseline; gap: 5px; padding-right: 16px; }
-  .ngc-hero-stats li + li { padding-left: 16px; border-left: 1px solid rgba(0,0,0,0.16); }
-  .ngc-hero-stats strong { color: #1a1a1a; font-weight: 700; }
-  .ngc-hero-scroll {
-    display: inline-flex; align-items: center; gap: 12px;
-    background: #e8622a; border: none;
-    color: #fff;
-    font-size: 14px; font-weight: 600;
-    padding: 15px 30px;
-    border-radius: 50px;
-    cursor: pointer;
-    box-shadow: 0 6px 18px rgba(232,98,42,0.28);
-    transition: background 0.2s, transform 0.15s;
-    font-family: inherit;
-  }
-  .ngc-hero-scroll:hover { background: #c54e18; transform: translateY(-1px); }
-  .ngc-hero-scroll svg { transition: transform 0.2s; }
-  .ngc-hero-scroll:hover svg { transform: translateY(3px); }
-
-  .ngc-hero-right {
-    display: flex;
-    padding: 24px clamp(16px, 3vw, 48px) 32px 0;
-  }
-  .ngc-hero-card {
-    position: relative;
-    flex: 1;
-    border-radius: 20px;
-    overflow: hidden;
-    background: #111;
-    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
-  }
-  .ngc-hero-img {
-    position: absolute; inset: 0;
-    display: block; width: 100%; height: 100%;
-    object-fit: cover;
-    object-position: 88% center;   /* the code sits in the right half of the photo */
-  }
-  .ngc-hero-card::after {
-    content: ''; position: absolute; inset: 0;
-    background: rgba(0,0,0,0.25);
-    pointer-events: none;
-  }
-  @media (max-width: 900px) {
-    .ngc-hero { grid-template-columns: 1fr; min-height: 0; }
-    .ngc-hero-left { padding: 48px 24px 32px; }
-    .ngc-hero-right { padding: 0 24px 32px; }
-    .ngc-hero-card { min-height: 380px; }
-  }
-
-  /* ── Positions section ── */
-  .ngc-positions {
-    background: #fff;
-    padding: 120px 0 140px;
-  }
+  /* ── Small shared pieces (also used by the apply page) ── */
   .ngc-section-label {
     font-size: 11px; font-weight: 600;
     letter-spacing: 0.14em; text-transform: uppercase;
@@ -137,70 +26,6 @@ export const css = `
     margin-bottom: 14px;
     display: block;
   }
-  .ngc-section-h2 {
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: clamp(2.2rem, 4vw, 3.4rem);
-    font-weight: 700;
-    line-height: 1.15;
-    letter-spacing: -0.01em;
-    color: #0d0d0d;
-  }
-  .ngc-pos-header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 32px;
-    flex-wrap: wrap;
-    margin-bottom: 64px;
-  }
-  .ngc-pos-header p {
-    color: rgba(0,0,0,0.4);
-    font-size: 15px;
-    line-height: 1.6;
-    max-width: 260px;
-  }
-
-  /* Job listing */
-  .ngc-job-list { display: flex; flex-direction: column; gap: 16px; }
-  .ngc-job-card {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-    padding: 28px 32px;
-    border-radius: var(--radius);
-    border: 1px solid rgba(0,0,0,0.09);
-    background: #fff;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.03), 0 6px 20px rgba(0,0,0,0.03);
-    transition: border-color 0.2s, box-shadow 0.25s;
-  }
-  .ngc-job-card:hover {
-    border-color: rgba(232,99,42,0.45);
-    box-shadow: 0 12px 34px rgba(0,0,0,0.08);
-  }
-  .ngc-job-main { min-width: 0; }
-  .ngc-job-dept {
-    display: block;
-    font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 8px;
-  }
-  .ng-careers .ngc-job-title {
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: clamp(1.3rem, 2.2vw, 1.6rem);
-    font-weight: 700;
-    line-height: 1.25;
-    letter-spacing: -0.01em;
-    color: #0d0d0d;
-    margin-bottom: 14px;
-  }
-  /* The title link stretches over the whole card so the card is one click target. */
-  .ngc-job-link { color: inherit; text-decoration: none; transition: color 0.2s; }
-  .ngc-job-link::after { content: ''; position: absolute; inset: 0; border-radius: var(--radius); }
-  .ngc-job-link:focus-visible { outline: none; }
-  .ngc-job-link:focus-visible::after { outline: 2px solid var(--accent); outline-offset: 3px; }
-  .ngc-job-card:hover .ngc-job-link { color: var(--accent); }
   .ngc-job-meta {
     display: flex; flex-wrap: wrap; align-items: center;
     gap: 6px 22px;
@@ -209,22 +34,212 @@ export const css = `
   }
   .ngc-job-meta span { display: inline-flex; align-items: center; gap: 7px; }
   .ngc-job-meta svg { flex-shrink: 0; color: rgba(0,0,0,0.38); }
-  .ngc-job-arrow {
+
+  /* ═════════ Light theme: company profile, open positions and job detail pages ═════════ */
+  .ng-careers.ngc-light {
+    background: #f7f7f7;
+    color: #1a1a1a;
+    --ngc-surface: #ffffff;
+    --ngc-line: rgba(0,0,0,0.09);
+    --ngc-text: #1a1a1a;
+    --ngc-body: #3f4448;
+    --ngc-muted: #5f6468;
+    --ngc-faint: #666c71;
+    --ngc-orange-text: #a3400e;
+    /* The footer has rounded top corners (2.5rem); tuck it up over the page's bottom edge so this page's background, not the body's, shows behind them. */
+    margin-bottom: -2.5rem;
+    padding-bottom: calc(120px + 2.5rem);
+  }
+
+  /* Tags */
+  .ngc-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.02em; line-height: 1.3;
+    padding: 5px 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .ngc-pill svg { flex-shrink: 0; }
+  .ngc-pill--category { color: var(--ngc-orange-text); background: rgba(232,98,42,0.1); border: 1px solid rgba(232,98,42,0.32); }
+  .ngc-pill--type { color: #2b2f33; background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.1); }
+  .ngc-pill--plain { color: var(--ngc-muted); background: transparent; border: 1px solid rgba(0,0,0,0.13); }
+
+  /* Company logo: the dark mark on a white tile */
+  .ngc-logo-tile {
     flex-shrink: 0;
     display: grid; place-items: center;
-    width: 38px; height: 38px;
+    background: #fff;
+    border: 1px solid var(--ngc-line);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.07);
+  }
+  .ngc-logo-tile img { display: block; width: 100%; height: auto; }
+  .ngc-logo-tile--lg { width: 96px; height: 96px; padding: 10px; border-radius: 20px; }
+  .ngc-logo-tile--md { width: 64px; height: 64px; padding: 7px; border-radius: 15px; }
+
+  /* Company profile header */
+  .ngc-company {
+    position: relative;
+    display: flex; align-items: center; gap: 28px;
+    margin-top: 40px;
+    padding: 32px 36px;
+    background: var(--ngc-surface);
+    border: 1px solid var(--ngc-line);
+    border-radius: 22px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 18px 40px -20px rgba(0,0,0,0.14);
+  }
+  .ngc-company-main { flex: 1; min-width: 0; }
+  .ng-careers .ngc-company-name {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: clamp(2rem, 3.2vw, 2.5rem);
+    font-weight: 700; line-height: 1.1; letter-spacing: -0.01em;
+    color: var(--ngc-text);
+    margin-bottom: 8px;
+  }
+  .ng-careers .ngc-company-desc {
+    font-size: 16px; line-height: 1.6;
+    color: var(--ngc-muted);
+    margin-bottom: 18px;
+  }
+  .ngc-company-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
+  .ngc-company-location, .ngc-role-location {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 14px; color: var(--ngc-muted);
+  }
+  .ngc-company-location svg, .ngc-role-location svg { flex-shrink: 0; opacity: 0.85; }
+  .ngc-social {
+    flex-shrink: 0; align-self: flex-start;
+    display: grid; place-items: center;
+    width: 40px; height: 40px;
+    border-radius: 11px;
+    color: #4a5055;
+    background: #f7f7f7;
+    border: 1px solid var(--ngc-line);
+  }
+
+  /* Open positions */
+  .ngc-board { margin-top: 72px; }
+  .ngc-board-head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+    padding-bottom: 20px; margin-bottom: 36px;
+    border-bottom: 1px solid var(--ngc-line);
+  }
+  .ng-careers .ngc-board-head h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: clamp(1.7rem, 2.6vw, 2.1rem);
+    font-weight: 700; letter-spacing: -0.01em; line-height: 1.15;
+    color: var(--ngc-text);
+  }
+  .ngc-board-count { font-size: 14px; color: var(--ngc-muted); white-space: nowrap; }
+  .ng-careers .ngc-board-empty { color: var(--ngc-muted); font-size: 16px; }
+  .ngc-group + .ngc-group { margin-top: 52px; }
+  .ng-careers .ngc-group-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; line-height: 1.4;
+    color: var(--ngc-faint);
+    margin-bottom: 18px;
+  }
+  .ngc-role-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+
+  /* One card per role */
+  .ngc-role {
+    position: relative;
+    display: flex; flex-direction: column; gap: 18px;
+    min-height: 176px;
+    padding: 24px;
+    background: var(--ngc-surface);
+    border: 1px solid var(--ngc-line);
+    border-radius: 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    transition: border-color 0.2s, box-shadow 0.25s, transform 0.2s;
+  }
+  .ngc-role:hover {
+    border-color: rgba(232,98,42,0.55);
+    box-shadow: 0 18px 38px -18px rgba(0,0,0,0.22);
+    transform: translateY(-2px);
+  }
+  .ngc-role-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .ng-careers .ngc-role-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.3rem; font-weight: 700; line-height: 1.25; letter-spacing: -0.01em;
+    color: var(--ngc-text);
+  }
+  /* The title link is stretched over the whole card so the card is one click target. */
+  .ngc-role-link { color: inherit; text-decoration: none; transition: color 0.2s; }
+  .ngc-role-link::after { content: ''; position: absolute; inset: 0; border-radius: 16px; }
+  .ngc-role-link:focus-visible { outline: none; }
+  .ngc-role-link:focus-visible::after { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .ngc-role:hover .ngc-role-link { color: var(--accent-dark); }
+  .ngc-role-foot { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .ngc-role-arrow {
+    flex-shrink: 0;
+    display: grid; place-items: center;
+    width: 34px; height: 34px;
     border-radius: 50%;
-    border: 1px solid rgba(0,0,0,0.12);
-    color: rgba(0,0,0,0.4);
+    color: #6b7075;
+    border: 1px solid rgba(0,0,0,0.14);
     transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
   }
-  .ngc-job-card:hover .ngc-job-arrow {
-    background: var(--accent); border-color: var(--accent); color: #fff;
-    transform: translateX(3px);
+  .ngc-role:hover .ngc-role-arrow { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateX(3px); }
+
+  /* Job detail page */
+  .ngc-job-page .ngc-narrow { padding-top: 40px; }
+  .ngc-light .ngc-back { margin-bottom: 36px; }
+  .ngc-job-head { display: flex; align-items: center; gap: 20px; }
+  .ngc-job-company {
+    display: block;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ngc-faint);
+    margin-bottom: 6px;
   }
-  @media (max-width: 640px) {
-    .ngc-job-card { padding: 22px 20px; gap: 16px; }
-    .ngc-job-arrow { display: none; }
+  .ng-careers .ngc-job-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: clamp(1.9rem, 4vw, 2.75rem);
+    font-weight: 700; line-height: 1.12; letter-spacing: -0.01em;
+    color: var(--ngc-text);
+  }
+  .ngc-job-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 28px; }
+  .ngc-job-description { margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--ngc-line); }
+  .ng-careers .ngc-job-description h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.2;
+    color: var(--ngc-text);
+    margin-bottom: 20px;
+  }
+  .ng-careers .ngc-job-description h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.15rem; font-weight: 700; letter-spacing: -0.005em; line-height: 1.3;
+    color: var(--ngc-text);
+    margin: 32px 0 14px;
+  }
+  .ngc-job-description p {
+    font-size: 16px; line-height: 1.85;
+    color: var(--ngc-body);
+    margin-bottom: 16px;
+    max-width: 68ch;
+  }
+  .ngc-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .ngc-list li {
+    position: relative;
+    padding-left: 26px;
+    font-size: 16px; line-height: 1.7;
+    color: var(--ngc-body);
+    max-width: 68ch;
+  }
+  .ngc-list li::before {
+    content: '';
+    position: absolute; left: 4px; top: 0.72em;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+  }
+
+  @media (max-width: 720px) {
+    .ngc-company { flex-direction: column; align-items: flex-start; gap: 20px; margin-top: 28px; padding: 24px 22px; }
+    .ngc-logo-tile--lg { width: 80px; height: 80px; }
+    .ngc-social { position: absolute; top: 22px; right: 22px; }
+    .ngc-board { margin-top: 56px; }
+    .ngc-board-head { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .ngc-role-grid { grid-template-columns: 1fr; }
+    .ngc-job-head { gap: 16px; }
   }
 
   /* ── Job detail + application pages ── */
@@ -238,22 +253,6 @@ export const css = `
     transition: color 0.2s;
   }
   .ngc-back:hover { color: var(--accent); }
-  .ngc-detail-head {
-    display: flex; align-items: flex-start; justify-content: space-between;
-    gap: 28px 40px; flex-wrap: wrap;
-    padding-bottom: 36px;
-    border-bottom: 1px solid rgba(0,0,0,0.09);
-  }
-  .ng-careers .ngc-detail-title {
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: clamp(2rem, 4.5vw, 3rem);
-    font-weight: 700;
-    line-height: 1.15;
-    letter-spacing: -0.01em;
-    color: #0d0d0d;
-    margin-bottom: 18px;
-  }
-  .ngc-detail-head .ngc-job-meta { font-size: 15px; }
   .ngc-apply-btn {
     flex-shrink: 0;
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -273,34 +272,6 @@ export const css = `
   }
   .ngc-apply-btn:hover { background: var(--accent-dark); color: #fff; transform: translateY(-1px); }
   @media (max-width: 640px) { .ngc-apply-btn { width: 100%; } }
-  .ngc-detail-section { margin-top: 44px; }
-  .ngc-detail-section h2 {
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: 1.45rem; font-weight: 700;
-    letter-spacing: -0.01em;
-    color: #0d0d0d;
-    margin-bottom: 18px;
-  }
-  .ngc-detail-section p {
-    font-size: 16px; line-height: 1.85;
-    color: rgba(0,0,0,0.7);
-    margin-bottom: 14px;
-    max-width: 68ch;
-  }
-  .ngc-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-  .ngc-list li {
-    position: relative;
-    padding-left: 26px;
-    font-size: 16px; line-height: 1.7;
-    color: rgba(0,0,0,0.7);
-    max-width: 68ch;
-  }
-  .ngc-list li::before {
-    content: '';
-    position: absolute; left: 4px; top: 0.72em;
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--accent);
-  }
   .ngc-state { color: rgba(0,0,0,0.55); font-size: 16px; line-height: 1.7; }
   .ngc-state h1 {
     font-family: 'Fraunces', Georgia, serif;
@@ -375,57 +346,6 @@ export const css = `
   .ngc-file-clear:hover { background: rgba(0,0,0,0.08); color: #1a1a1a; }
 
   .ngc-input[readonly] { color: rgba(0,0,0,0.7); background: #f3f3f1; cursor: default; }
-
-  /* Internship block */
-  .ngc-intern-block {
-    margin-top: 44px;
-    background: linear-gradient(135deg, #fdf1eb 0%, #fff8f5 100%);
-    border: 1px solid rgba(232,99,42,0.18);
-    border-radius: 20px;
-    padding: 52px 56px;
-    display: flex;
-    gap: 60px;
-    align-items: flex-start;
-    flex-wrap: wrap;
-  }
-  .ngc-intern-intro { flex: 0 0 240px; }
-  .ngc-intern-intro h3 {
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: 1.65rem; font-weight: 700;
-    letter-spacing: -0.01em;
-    line-height: 1.25;
-    color: #0d0d0d;
-    margin-bottom: 12px;
-  }
-  .ngc-intern-intro p {
-    font-size: 14px; line-height: 1.75;
-    color: rgba(0,0,0,0.5);
-  }
-  .ngc-intern-tracks { flex: 1; min-width: 240px; }
-  .ngc-tracks-label {
-    font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
-    color: rgba(0,0,0,0.3);
-    margin-bottom: 18px;
-    display: block;
-  }
-  .ngc-track-pills { display: flex; flex-wrap: wrap; gap: 10px; }
-  .ngc-track-pill {
-    background: #fff;
-    border: 1px solid rgba(0,0,0,0.12);
-    border-radius: 50px;
-    color: rgba(0,0,0,0.7);
-    font-size: 13px; font-weight: 500;
-    padding: 10px 22px;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: inherit;
-  }
-  .ngc-track-pill:hover {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #fff;
-    transform: translateY(-1px);
-  }
 
   /* ── Application ── */
   .ngc-apply-section {
@@ -517,33 +437,6 @@ export const css = `
   }
   .ngc-textarea { resize: vertical; min-height: 120px; }
 
-  /* Track selector inside form */
-  .ngc-track-group {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .ngc-track-toggle {
-    padding: 9px 18px;
-    border-radius: 50px;
-    font-size: 13px; font-weight: 500;
-    cursor: pointer;
-    border: 1px solid rgba(0,0,0,0.12);
-    background: #fff;
-    color: rgba(0,0,0,0.65);
-    transition: all 0.15s;
-    font-family: inherit;
-  }
-  .ngc-track-toggle.active {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #fff;
-  }
-  .ngc-track-toggle:not(.active):hover {
-    border-color: rgba(232,99,42,0.4);
-    color: var(--accent);
-  }
-
   /* Submit button */
   .ngc-submit {
     background: var(--accent);
@@ -573,25 +466,4 @@ export const css = `
   .ngc-alert.error { color: #991b1b; background: #fff2f2; border: 1px solid rgba(153,27,27,0.15); }
   .ngc-alert.warn { color: var(--accent-dark); background: #fff5f0; }
 
-  /* Scroll reveal */
-  [data-reveal] { opacity: 0; transform: translateY(18px); transition: opacity 0.55s ease, transform 0.55s ease; }
-  [data-reveal].is-in { opacity: 1; transform: none; }
-  [data-reveal][style*='--d'] { transition-delay: var(--d, 0ms); }
-
-  @media (prefers-reduced-motion: reduce) {
-    [data-reveal] { opacity: 1 !important; transform: none !important; }
-  }
-
-  /* Loading skeleton */
-  .ngc-skeleton {
-    height: 140px;
-    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-    border-radius: var(--radius);
-  }
-  @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-  }
 `;

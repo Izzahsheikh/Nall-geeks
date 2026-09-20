@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import logo from '../assets/nallgeeks-logo-mark.png';
 
 const SERVICES = [
   { num: '01', icon: '</>', title: 'Web Development', desc: 'We write lean, fast code. No plugin bloat — just clean builds that load instantly.' },
@@ -15,7 +14,7 @@ const SERVICES = [
  * lowest visible pixel of the "NG" glyph at that centre line. (The PNG has transparent padding, so
  * the bottom of the image box would leave the lines floating below the mark.)
  */
-const LOGO_ANCHOR = { x: 0.5, y: 0.821 };
+const LOGO_ANCHOR = { x: 0.5, y: 0.8729 };
 
 /* Position of `el` inside `ancestor`. Offsets ignore CSS transforms, so the card entrance/hover motion can't skew the lines. */
 const offsetWithin = (el, ancestor) => {
@@ -120,7 +119,9 @@ export default function Services() {
             <div className="services-badge">
               <img
                 ref={logoRef}
-                src={logo}
+                src="/nallgeeks-logo-mark.png"
+                width="1665"
+                height="944"
                 alt="NallGeeks logo"
               />
             </div>

@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import aboutHeroVideo from '../assets/Camera_pans_across_digital_lands…_202609021757.mp4';
-import logo from '../assets/nallgeeks-logo-mark.png';
 
 /*
   About — self-contained.
@@ -108,7 +107,7 @@ export default function About() {
           {/* clean plate — just the mark */}
           <div className="abx-plate" data-reveal aria-hidden="true">
             <div className="abx-plate__mark">
-              <img src={logo} alt="" />
+              <img src="/nallgeeks-logo-mark.png" width="1665" height="944" alt="" />
             </div>
           </div>
         </div>
@@ -325,7 +324,8 @@ const css = `
 /* ── vision ── */
 .ng-about .abx-vision{ background: var(--ax-bg); }
 
-/* bare mark — no card */
+/* bare mark — no card. The current artwork has little transparent padding, so it is drawn at 81.35% of the box to keep the
+   visible NG the same width as the previous mark (a plain 100% would be ~23% larger). */
 .ng-about .abx-plate{
   position: relative;
   aspect-ratio: 5 / 4;
@@ -334,7 +334,7 @@ const css = `
 }
 .ng-about .abx-plate__mark{ width: min(66%, 300px); }
 .ng-about .abx-plate__mark img{
-  width: 100%; height: auto; display: block;
+  width: 81.35%; height: auto; display: block; margin-inline: auto;
   filter: drop-shadow(0 16px 28px rgba(33,30,25,.12));
 }
 
