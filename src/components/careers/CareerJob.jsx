@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { css } from './styles';
 import { COMPANY, getPosition, applyHref } from './positions';
-import { PinIcon, BackLink, CompanyLogo, RoleDescription, useDocumentTitle } from './parts';
+import { BackLink, CompanyLogo, RoleDescription, useDocumentTitle } from './parts';
 
 export default function CareerJob({ jobId }) {
   const job = getPosition(jobId);
@@ -26,17 +26,8 @@ export default function CareerJob({ jobId }) {
             <>
               <header className="ngc-job-head">
                 <CompanyLogo src={COMPANY.logoSrc} size="md" />
-                <div>
-                  <span className="ngc-job-company">{COMPANY.name}</span>
-                  <h1 className="ngc-job-title">{job.title}</h1>
-                </div>
+                <h1 className="ngc-job-title">{job.title}</h1>
               </header>
-
-              <div className="ngc-job-tags">
-                <span className="ngc-pill ngc-pill--type">{job.type}</span>
-                <span className="ngc-pill ngc-pill--category">{job.category}</span>
-                <span className="ngc-pill ngc-pill--plain"><PinIcon />{job.location}</span>
-              </div>
 
               <a href={applyHref(job)} className="ngc-apply-btn">Apply</a>
 

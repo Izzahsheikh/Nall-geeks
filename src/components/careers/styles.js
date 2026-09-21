@@ -51,19 +51,6 @@ export const css = `
     padding-bottom: calc(120px + 2.5rem);
   }
 
-  /* Tags */
-  .ngc-pill {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-size: 12px; font-weight: 600; letter-spacing: 0.02em; line-height: 1.3;
-    padding: 5px 12px;
-    border-radius: 999px;
-    white-space: nowrap;
-  }
-  .ngc-pill svg { flex-shrink: 0; }
-  .ngc-pill--category { color: var(--ngc-orange-text); background: rgba(232,98,42,0.1); border: 1px solid rgba(232,98,42,0.32); }
-  .ngc-pill--type { color: #2b2f33; background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.1); }
-  .ngc-pill--plain { color: var(--ngc-muted); background: transparent; border: 1px solid rgba(0,0,0,0.13); }
-
   /* Company logo: the dark mark on a white tile */
   .ngc-logo-tile {
     flex-shrink: 0;
@@ -181,20 +168,13 @@ export const css = `
   /* Job detail page */
   .ngc-job-page .ngc-narrow { padding-top: 40px; }
   .ngc-light .ngc-back { margin-bottom: 36px; }
-  .ngc-job-head { display: flex; align-items: center; gap: 20px; }
-  .ngc-job-company {
-    display: block;
-    font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--ngc-faint);
-    margin-bottom: 6px;
-  }
+  .ngc-job-head { display: flex; align-items: center; gap: 20px; margin-bottom: 28px; }
   .ng-careers .ngc-job-title {
     font-family: 'Fraunces', Georgia, serif;
     font-size: clamp(1.9rem, 4vw, 2.75rem);
     font-weight: 700; line-height: 1.12; letter-spacing: -0.01em;
     color: var(--ngc-text);
   }
-  .ngc-job-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 28px; }
   .ngc-job-description { margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--ngc-line); }
   .ng-careers .ngc-job-description h2 {
     font-family: 'Fraunces', Georgia, serif;
