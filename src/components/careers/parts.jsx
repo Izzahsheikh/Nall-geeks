@@ -21,12 +21,7 @@ export const ArrowIcon = () => (
 );
 
 export const BackLink = ({ href, children }) => (
-  <a href={href} className="ngc-back">
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-      <path d="M12.5 7h-11M6 2.5 1.5 7 6 11.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-    {children}
-  </a>
+  <a href={href} className="ngc-back"><span aria-hidden="true">&lt;</span> {children}</a>
 );
 
 export function useDocumentTitle(title) {

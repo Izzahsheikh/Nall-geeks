@@ -169,13 +169,15 @@ export const css = `
   .ngc-job-page .ngc-narrow { padding-top: 40px; }
   .ngc-light .ngc-back { margin-bottom: 36px; }
   .ngc-job-head { display: flex; align-items: center; gap: 20px; margin-bottom: 28px; }
+  /* Job page only: the bare mark, no white tile. The PNG has ~12% transparent padding either side (10px at this width), so pull it back so the mark lines up with the content edge. */
+  .ngc-job-head .ngc-logo-tile { width: 80px; height: auto; padding: 0; margin: 0 -10px; background: transparent; border: 0; border-radius: 0; box-shadow: none; }
   .ng-careers .ngc-job-title {
     font-family: 'Fraunces', Georgia, serif;
     font-size: clamp(1.9rem, 4vw, 2.75rem);
     font-weight: 700; line-height: 1.12; letter-spacing: -0.01em;
     color: var(--ngc-text);
   }
-  .ngc-job-description { margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--ngc-line); }
+  .ngc-job-description { margin-top: 48px; padding-top: 40px; }
   .ng-careers .ngc-job-description h2 {
     font-family: 'Fraunces', Georgia, serif;
     font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.2;
@@ -235,13 +237,14 @@ export const css = `
   .ngc-page { background: #fff; padding: 128px 0 120px; min-height: 80vh; }
   .ngc-narrow { max-width: 820px; margin: 0 auto; }
   .ngc-back {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-size: 13.5px; font-weight: 500;
-    color: rgba(0,0,0,0.55);
+    display: inline-block;
+    font-size: 0.85rem; font-weight: 500;
+    color: #666;
+    background: none; border: 0; padding: 0;
     margin-bottom: 36px;
-    transition: color 0.2s;
+    transition: color 0.2s ease;
   }
-  .ngc-back:hover { color: var(--accent); }
+  .ngc-back:hover { color: #111; text-decoration: underline; }
   .ngc-apply-btn {
     flex-shrink: 0;
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
