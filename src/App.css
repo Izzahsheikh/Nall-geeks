@@ -1489,6 +1489,10 @@ button.danger,
 .sp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .sp-card { position: relative; width: 100%; height: 300px; background: #f7f7f7; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; overflow: hidden; transition: all 0.2s ease; }
 .sp-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: #c45e00; z-index: 1; }
+/* A card holding a real photo: no orange strip, and the whole screenshot shows (contain, never cropped) at one shared ratio so the row stays even. */
+.sp-card--photo { height: auto; aspect-ratio: 16 / 10; border: 1px solid #e5e7eb; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06); }
+.sp-card--photo::before { display: none; }
+.sp-card--photo .sp-card-img { object-fit: contain; }
 .sp-card:hover { box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08); transform: translateY(-4px); }
 .sp-card-icon { font-size: 2rem; line-height: 1; }
 .sp-card-text { font-size: 0.85rem; color: #9ca3af; }
@@ -1502,6 +1506,12 @@ button.danger,
 @media (max-width: 900px) {
   .sp-grid { grid-template-columns: 1fr; }
   .sp-cta { padding: 48px 40px; }
+}
+@media (max-width: 1024px) {
+  .sp-grid.sp-grid--photos { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .sp-grid.sp-grid--photos { grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
   .sp-header { padding: 92px 0 40px; }
