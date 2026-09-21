@@ -88,12 +88,12 @@ export const css = `
     box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 18px 40px -20px rgba(0,0,0,0.14);
   }
   .ngc-company-main { flex: 1; min-width: 0; }
+  .ngc-company-head { display: flex; align-items: center; gap: 20px; margin-bottom: 18px; }
   .ng-careers .ngc-company-name {
     font-family: 'Fraunces', Georgia, serif;
     font-size: clamp(2rem, 3.2vw, 2.5rem);
     font-weight: 700; line-height: 1.1; letter-spacing: -0.01em;
     color: var(--ngc-text);
-    margin-bottom: 8px;
   }
   .ng-careers .ngc-company-desc {
     font-size: 16px; line-height: 1.6;
@@ -121,7 +121,6 @@ export const css = `
   .ngc-board-head {
     display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
     padding-bottom: 20px; margin-bottom: 36px;
-    border-bottom: 1px solid var(--ngc-line);
   }
   .ng-careers .ngc-board-head h2 {
     font-family: 'Fraunces', Georgia, serif;
@@ -157,7 +156,6 @@ export const css = `
     box-shadow: 0 18px 38px -18px rgba(0,0,0,0.22);
     transform: translateY(-2px);
   }
-  .ngc-role-tags { display: flex; flex-wrap: wrap; gap: 8px; }
   .ng-careers .ngc-role-title {
     font-family: 'Fraunces', Georgia, serif;
     font-size: 1.3rem; font-weight: 700; line-height: 1.25; letter-spacing: -0.01em;
@@ -170,16 +168,15 @@ export const css = `
   .ngc-role-link:focus-visible::after { outline: 2px solid var(--accent); outline-offset: 3px; }
   .ngc-role:hover .ngc-role-link { color: var(--accent-dark); }
   .ngc-role-foot { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-  .ngc-role-arrow {
+  /* Looks like a button but isn't one: the stretched title link makes the whole card the click target, so it reacts to the card's hover. */
+  .ngc-role-apply {
     flex-shrink: 0;
-    display: grid; place-items: center;
-    width: 34px; height: 34px;
-    border-radius: 50%;
-    color: #6b7075;
-    border: 1px solid rgba(0,0,0,0.14);
-    transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
+    padding: 8px 18px; border-radius: 999px;
+    font-size: 0.8rem; font-weight: 600; line-height: 1.2; color: #fff;
+    background: var(--accent);
+    transition: all 0.2s ease;
   }
-  .ngc-role:hover .ngc-role-arrow { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateX(3px); }
+  .ngc-role:hover .ngc-role-apply { background: var(--accent-dark); box-shadow: 0 4px 12px rgba(197,78,24,0.3); }
 
   /* Job detail page */
   .ngc-job-page .ngc-narrow { padding-top: 40px; }
@@ -240,6 +237,18 @@ export const css = `
     .ngc-board-head { flex-direction: column; align-items: flex-start; gap: 6px; }
     .ngc-role-grid { grid-template-columns: 1fr; }
     .ngc-job-head { gap: 16px; }
+  }
+
+  /* Logo and name now share one line and the LinkedIn tile sits top-right; keep them from meeting on narrow phones. */
+  @media (max-width: 420px) {
+    .ngc-company-head { gap: 14px; }
+    .ngc-company .ngc-logo-tile--lg { width: 64px; height: 64px; padding: 8px; border-radius: 16px; }
+    .ng-careers .ngc-company-name { font-size: 1.75rem; }
+  }
+  @media (max-width: 360px) {
+    .ngc-company-head { gap: 12px; }
+    .ngc-company .ngc-logo-tile--lg { width: 56px; height: 56px; padding: 7px; border-radius: 14px; }
+    .ng-careers .ngc-company-name { font-size: 1.5rem; }
   }
 
   /* ── Job detail + application pages ── */

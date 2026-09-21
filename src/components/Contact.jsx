@@ -1,11 +1,15 @@
 import { useState } from 'react';
+import { SERVICE_MENU } from './navbar/serviceMenu';
+
+// Same six services as the navbar's Services dropdown, so the two never drift apart.
+const SERVICE_OPTIONS = SERVICE_MENU.map((item) => item.title);
 
 const initialForm = {
   firstName: '',
   lastName: '',
   phone: '',
   email: '',
-  company: '',
+  services: [],
   message: '',
 };
 
@@ -13,14 +17,30 @@ export default function Contact() {
   const [form, setForm] = useState(initialForm);
   const [submitted, setSubmitted] = useState(false);
   const [status, setStatus] = useState('idle'); // idle | sending | error
+  const [servicesError, setServicesError] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
   };
 
+  // Toggle one chip. The list is kept in the same order as the options, whatever order they were clicked in.
+  const toggleService = (title) => {
+    setForm((f) => {
+      const picked = f.services.includes(title) ? f.services.filter((s) => s !== title) : [...f.services, title];
+      return { ...f, services: SERVICE_OPTIONS.filter((option) => picked.includes(option)) };
+    });
+    setServicesError(false);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (form.services.length === 0) {
+      setServicesError(true);
+      return;
+    }
+
     setStatus('sending');
 
     try {
@@ -103,13 +123,30 @@ export default function Contact() {
                 onChange={handleChange}
                 required
               />
-              <input
-                type="text"
-                name="company"
-                placeholder="Company name (optional)"
-                value={form.company}
-                onChange={handleChange}
-              />
+              <div className="contact-services" role="group" aria-labelledby="contact-services-label">
+                <span id="contact-services-label" className="contact-services-label">Services</span>
+                <div className="contact-chips">
+                  {SERVICE_OPTIONS.map((title) => {
+                    const selected = form.services.includes(title);
+                    return (
+                      <button
+                        key={title}
+                        type="button"
+                        className={`contact-chip${selected ? ' selected' : ''}`}
+                        aria-pressed={selected}
+                        onClick={() => toggleService(title)}
+                      >
+                        {title}
+                      </button>
+                    );
+                  })}
+                </div>
+                {servicesError && (
+                  <p className="contact-services-error" role="alert">
+                    Please choose at least one service so we know how to help.
+                  </p>
+                )}
+              </div>
               <textarea
                 name="message"
                 placeholder="Tell us about your timeline, budget, and scope..."

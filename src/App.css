@@ -449,6 +449,14 @@
 .form-row input { margin-bottom: 0; flex: 1; min-width: 0; }
 .contact-submit { width: 100%; background: var(--cta); color: #fff; font-family: var(--font-body); font-weight: 600; font-size: 1rem; padding: 16px; border-radius: 8px; cursor: pointer; text-align: center; border: none; transition: background 0.2s, transform 0.2s; }
 .contact-submit:hover { background: var(--cta-hover); transform: scale(1.03); }
+.contact-services { margin-bottom: 1rem; }
+.contact-services-label { display: block; font-family: var(--font-body); font-size: 0.8rem; font-weight: 600; color: var(--muted); margin-bottom: 0.6rem; }
+.contact-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.contact-chip { font-family: var(--font-body); font-size: 0.85rem; font-weight: 500; line-height: 1.2; color: var(--primary); background: #fff; border: 1.5px solid var(--border); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+.contact-chip:hover { border-color: var(--cta); }
+.contact-chip.selected { background: var(--cta); border-color: var(--cta); color: #fff; }
+.contact-chip:focus-visible { outline: 2px solid var(--cta); outline-offset: 2px; }
+.contact-services-error { margin-top: 0.6rem; font-family: var(--font-body); font-size: 0.8rem; color: #b42318; }
 
 /* OrganicFields mockup */
 .of-topbar { background: #2D5A1B; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }

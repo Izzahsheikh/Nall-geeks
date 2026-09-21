@@ -24,7 +24,6 @@
 export const COMPANY = {
   name: 'NallGeeks',
   description: 'A software studio designing and building web, mobile and cloud products for founders and brands.',
-  category: 'Software House',
   location: 'Islamabad',
   logoSrc: '/nallgeeks-logo-mark.png',
 };

@@ -7,10 +7,18 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { firstName, lastName, phone, email, company, message } = req.body || {};
+  const { firstName, lastName, phone, email, services, message } = req.body || {};
 
   if (!firstName || !lastName || !email) {
     return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  const cleanServices = Array.isArray(services)
+    ? services.filter((s) => typeof s === 'string' && s.trim()).map((s) => s.trim().slice(0, 100)).slice(0, 20)
+    : [];
+
+  if (cleanServices.length === 0) {
+    return res.status(400).json({ error: 'Select at least one service' });
   }
 
   try {
@@ -23,7 +31,7 @@ export default async function handler(req, res) {
         `Name: ${firstName} ${lastName}`,
         `Email: ${email}`,
         `Phone: ${phone || '—'}`,
-        `Company: ${company || '—'}`,
+        `Services: ${cleanServices.join(', ')}`,
         '',
         'Message:',
         message || '—',

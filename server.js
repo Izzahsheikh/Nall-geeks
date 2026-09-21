@@ -527,10 +527,18 @@ app.delete('/api/admin/jobs/:id', requireAdmin, async (req, res) => {
 });
 
 app.post('/api/contact', async (req, res) => {
-  const { firstName, lastName, phone, email, company, message } = req.body || {};
+  const { firstName, lastName, phone, email, services, message } = req.body || {};
 
   if (!firstName || !lastName || !email) {
     return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  const cleanServices = Array.isArray(services)
+    ? services.filter((s) => typeof s === 'string' && s.trim()).map((s) => s.trim().slice(0, 100)).slice(0, 20)
+    : [];
+
+  if (cleanServices.length === 0) {
+    return res.status(400).json({ error: 'Select at least one service' });
   }
 
   const db = await readDb();
@@ -539,8 +547,8 @@ app.post('/api/contact', async (req, res) => {
     sender: `${firstName} ${lastName}`.trim(),
     email,
     phone: phone || '',
-    company: company || '',
-    subject: company ? `Project inquiry from ${company}` : `Project inquiry from ${firstName} ${lastName}`,
+    services: cleanServices,
+    subject: `Project inquiry from ${firstName} ${lastName}`,
     body: message || '',
     status: 'Unread',
     date: new Date().toISOString(),
@@ -560,7 +568,7 @@ app.post('/api/contact', async (req, res) => {
           `Name: ${firstName} ${lastName}`,
           `Email: ${email}`,
           `Phone: ${phone || '-'}`,
-          `Company: ${company || '-'}`,
+          `Services: ${cleanServices.join(', ')}`,
           '',
           'Message:',
           message || '-',
