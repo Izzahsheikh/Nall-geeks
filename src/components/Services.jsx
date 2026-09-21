@@ -129,9 +129,15 @@ export default function Services() {
 
           {tree && (
             <svg className="services-tree" aria-hidden="true">
-              {tree.ends.map((end, i) => (
-                <path key={i} d={branchPath(tree.start, end)} />
-              ))}
+              {tree.ends.map((end, i) => {
+                const d = branchPath(tree.start, end);
+                return (
+                  <g key={i}>
+                    <path d={d} />
+                    <path className="flow" d={d} pathLength="100" />
+                  </g>
+                );
+              })}
             </svg>
           )}
 

@@ -31,6 +31,7 @@ export default function Navbar() {
     if (window.location.pathname === '/contact') return '/contact';
     if (window.location.pathname === '/projects') return '/projects';
     if (window.location.pathname.startsWith('/careers')) return '/careers';
+    if (window.location.pathname.startsWith('/services/')) return '/#services';
     return window.location.hash ? `/${window.location.hash}` : '/';
   });
 
@@ -79,6 +80,11 @@ export default function Navbar() {
     closeTimer.current = setTimeout(() => setServicesOpen(false), delay);
   };
   useEffect(() => () => clearTimeout(closeTimer.current), []);
+  // A service link navigates on its own (plain href); this just shuts the dropdown at once instead of after the hover delay.
+  const closeServicesNow = () => {
+    clearTimeout(closeTimer.current);
+    setServicesOpen(false);
+  };
 
   // Arriving on a URL with a #hash (e.g. "/#services" from another page): the browser tries to scroll before React has drawn the
   // section, so it stays at the top. Scroll once the page is mounted.
@@ -201,7 +207,7 @@ export default function Navbar() {
                       <ul className="nav-dd-list">
                         {SERVICE_MENU.map((item) => (
                           <li key={item.title}>
-                            <a href={SERVICES_HREF} className="nav-dd-item" onClick={(e) => handleNavClick(e, SERVICES_HREF)}>
+                            <a href={item.href} className="nav-dd-item" onClick={closeServicesNow}>
                               <span className="nav-dd-icon">{item.icon}</span>
                               <span className="nav-dd-text">
                                 <span className="nav-dd-title">{item.title}</span>
@@ -259,7 +265,7 @@ export default function Navbar() {
                     <ul className="mob-sub-list">
                       {SERVICE_MENU.map((item) => (
                         <li key={item.title}>
-                          <a href={SERVICES_HREF} className="mob-sub-item" onClick={(e) => handleNavClick(e, SERVICES_HREF, true)}>
+                          <a href={item.href} className="mob-sub-item" onClick={() => setMobileOpen(false)}>
                             <span className="nav-dd-icon">{item.icon}</span>
                             <span className="nav-dd-text">
                               <span className="nav-dd-title">{item.title}</span>

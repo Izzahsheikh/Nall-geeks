@@ -1,9 +1,9 @@
 /*
  * Items in the navbar's "Services" dropdown.
  *
- * The titles mirror the six services shown in the Services section on the homepage (Services.jsx). The homepage rows below
- * that section have no anchors of their own, so every item leads to the Services section itself (`/#services`), the same
- * place the footer's service links and the "Services" nav item already go.
+ * The titles mirror the six services shown in the Services section on the homepage (Services.jsx). Each item opens its own
+ * page under /services/ (see SERVICE_PAGES in App.jsx). SERVICES_HREF is the Services section on the homepage, which the
+ * "View all services" link and the "Services" nav item itself go to.
  */
 
 export const SERVICES_HREF = '/#services';
@@ -19,31 +19,37 @@ const glyph = (character) => (
 export const SERVICE_MENU = [
   {
     title: 'Web Development',
+    href: '/services/web-development',
     description: 'Custom web applications built for speed, scale, and performance.',
     icon: glyph("</>"),
   },
   {
     title: 'Mobile Apps',
+    href: '/services/mobile-apps',
     description: 'Native and cross-platform mobile apps for iOS and Android.',
     icon: glyph("📱"),
   },
   {
     title: 'UI/UX Design',
+    href: '/services/uiux-design',
     description: 'Beautiful, intuitive interfaces that users love to engage with.',
     icon: glyph("🎨"),
   },
   {
     title: 'Software Management',
+    href: '/services/software-management',
     description: 'Tools shaped around your workflow, not the other way around.',
     icon: glyph("⊞"),
   },
   {
     title: 'Search Engine Optimization',
+    href: '/services/seo',
     description: 'Rank higher and get found faster on the search engines that matter.',
     icon: glyph("🔍"),
   },
   {
     title: 'AI & Automation',
+    href: '/services/ai-automation',
     description: 'Eliminate the repetitive by building AI into your product or process.',
     icon: glyph("🤖"),
   },
