@@ -133,9 +133,9 @@ export const css = `
   .ngc-group + .ngc-group { margin-top: 52px; }
   .ng-careers .ngc-group-title {
     font-family: 'Inter', system-ui, sans-serif;
-    font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; line-height: 1.4;
-    color: var(--ngc-faint);
-    margin-bottom: 18px;
+    font-size: 1.1rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; line-height: 1.4;
+    color: #1a1a1a;
+    margin-bottom: 26px;
   }
   .ngc-role-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
 

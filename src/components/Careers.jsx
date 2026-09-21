@@ -2,12 +2,15 @@ import { css } from './careers/styles';
 import { COMPANY, POSITIONS, groupedPositions, jobHref } from './careers/positions';
 import { PinIcon, LinkedInIcon, CompanyLogo } from './careers/parts';
 
+// The "Internships" heading already says it, so internship cards drop the trailing "Intern" (the job pages keep the full title).
+const cardTitle = (title) => title.replace(/\s+intern$/i, '');
+
 function RoleCard({ position }) {
   return (
     <article className="ngc-role">
       <h4 className="ngc-role-title">
         {/* The title link is stretched over the whole card, so the entire card is one click target. */}
-        <a href={jobHref(position)} className="ngc-role-link">{position.title}</a>
+        <a href={jobHref(position)} className="ngc-role-link">{cardTitle(position.title)}</a>
       </h4>
 
       <div className="ngc-role-foot">
