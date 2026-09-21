@@ -40,9 +40,10 @@ export default function Services() {
   const [isVisible, setIsVisible] = useState(false);
   const [tree, setTree] = useState(null);
 
+  /* Play the entrance once, when 30% of the hub (logo + cards) is on screen; it is never replayed. */
   useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
+    const hub = hubRef.current;
+    if (!hub) return;
 
     const obs = new IntersectionObserver(
       (entries) => {
@@ -51,9 +52,9 @@ export default function Services() {
           obs.disconnect();
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.3 }
     );
-    obs.observe(section);
+    obs.observe(hub);
     return () => obs.disconnect();
   }, []);
 
@@ -133,7 +134,7 @@ export default function Services() {
                 const d = branchPath(tree.start, end);
                 return (
                   <g key={i}>
-                    <path d={d} />
+                    <path d={d} pathLength="100" />
                     <path className="flow" d={d} pathLength="100" />
                   </g>
                 );
