@@ -76,6 +76,8 @@ export const css = `
   }
   .ngc-company-main { flex: 1; min-width: 0; }
   .ngc-company-head { display: flex; align-items: center; gap: 20px; margin-bottom: 18px; }
+  /* Company card only: the bare mark, no white tile, at the same visible size as before (it used to be a 96px tile with 10px padding). The PNG has ~13% transparent padding either side, so the margins pull the mark flush with the card's content edge and keep ~20px to the name. */
+  .ngc-company .ngc-logo-tile { width: 76px; height: auto; padding: 0; margin: 0 -10px; background: transparent; border: 0; border-radius: 0; box-shadow: none; }
   .ng-careers .ngc-company-name {
     font-family: 'Fraunces', Georgia, serif;
     font-size: clamp(2rem, 3.2vw, 2.5rem);
@@ -213,7 +215,7 @@ export const css = `
 
   @media (max-width: 720px) {
     .ngc-company { flex-direction: column; align-items: flex-start; gap: 20px; margin-top: 28px; padding: 24px 22px; }
-    .ngc-logo-tile--lg { width: 80px; height: 80px; }
+    .ngc-company .ngc-logo-tile { width: 60px; margin: 0 -8px; }
     .ngc-social { position: absolute; top: 22px; right: 22px; }
     .ngc-board { margin-top: 56px; }
     .ngc-board-head { flex-direction: column; align-items: flex-start; gap: 6px; }
@@ -224,12 +226,12 @@ export const css = `
   /* Logo and name now share one line and the LinkedIn tile sits top-right; keep them from meeting on narrow phones. */
   @media (max-width: 420px) {
     .ngc-company-head { gap: 14px; }
-    .ngc-company .ngc-logo-tile--lg { width: 64px; height: 64px; padding: 8px; border-radius: 16px; }
+    .ngc-company .ngc-logo-tile { width: 48px; margin: 0 -6px; }
     .ng-careers .ngc-company-name { font-size: 1.75rem; }
   }
   @media (max-width: 360px) {
     .ngc-company-head { gap: 12px; }
-    .ngc-company .ngc-logo-tile--lg { width: 56px; height: 56px; padding: 7px; border-radius: 14px; }
+    .ngc-company .ngc-logo-tile { width: 42px; margin: 0 -5px; }
     .ng-careers .ngc-company-name { font-size: 1.5rem; }
   }
 
