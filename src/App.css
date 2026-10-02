@@ -3500,10 +3500,8 @@ button.danger,
   font-weight: 400;
   line-height: 1.7;
 }
-.sp--web-development .sp-process,
-.sp--web-development .sp-work {
-  padding: 96px 0;
-}
+.sp--web-development .sp-process { padding: 112px 0; }
+.sp--web-development .sp-work { padding: 96px 0; }
 .sp--web-development .sp-subtitle {
   margin-bottom: 40px;
   color: var(--sp-ink);
@@ -3511,27 +3509,16 @@ button.danger,
   line-height: 1.2;
 }
 .sp--web-development .sp-process-grid {
-  position: relative;
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 24px;
+  gap: clamp(28px, 3vw, 48px);
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.sp--web-development .sp-process-grid::before {
-  position: absolute;
-  top: 23px;
-  right: 9%;
-  left: 9%;
-  height: 1px;
-  background: var(--sp-line);
-  content: "";
-}
 .sp--web-development .sp-process-step {
-  position: relative;
   min-width: 0;
-  padding: 0 8px 8px;
+  padding: 0;
   text-align: center;
   opacity: 0;
   transform: translateY(18px);
@@ -3542,40 +3529,43 @@ button.danger,
   transform: translateY(0);
 }
 .sp--web-development .sp-step-marker {
-  position: relative;
-  z-index: 1;
   display: grid;
-  width: 48px;
-  height: 48px;
+  width: 84px;
+  height: 84px;
   margin: 0 auto;
   place-items: center;
-  border: 1px solid #ead8c9;
+  border: 1px solid rgba(243, 107, 43, 0.22);
   border-radius: 50%;
-  background: #fff;
+  background: #fff8f3;
   color: var(--sp-accent);
+}
+.sp--web-development .sp-step-marker svg {
+  width: 34px;
+  height: 34px;
 }
 .sp--web-development .sp-step-number {
   display: block;
-  margin: 16px 0 8px;
+  margin: 24px 0 8px;
   color: var(--sp-accent);
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 700;
-  line-height: 1.4;
+  font-family: var(--font-body);
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.2;
 }
 .sp--web-development .sp-process-step h3 {
-  position: relative;
-  margin: 0 0 12px;
+  margin: 0 0 10px;
   color: var(--sp-ink);
   font-family: var(--font-body);
-  font-size: 1rem;
-  font-weight: 700;
-  line-height: 1.4;
+  font-size: clamp(1.125rem, 1.4vw, 1.25rem);
+  font-weight: 650;
+  line-height: 1.35;
 }
 .sp--web-development .sp-process-step p {
+  max-width: 220px;
+  margin: 0 auto;
   color: var(--sp-muted);
-  font-size: 0.875rem;
-  line-height: 1.7;
+  font-size: 0.9375rem;
+  line-height: 1.65;
 }
 .sp--web-development .sp-build {
   padding: 32px 0 96px;
@@ -3713,31 +3703,14 @@ button.danger,
 }
 @media (max-width: 900px) {
   .sp--web-development .sp-process-grid {
-    grid-template-columns: 1fr;
-    gap: 0;
-    padding-left: 0;
-  }
-  .sp--web-development .sp-process-grid::before {
-    top: 24px;
-    bottom: 24px;
-    left: 23px;
-    width: 1px;
-    height: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 56px 40px;
   }
   .sp--web-development .sp-process-step {
-    min-height: 144px;
-    padding: 0 0 32px 72px;
-    text-align: left;
+    padding: 0 20px;
+    text-align: center;
   }
-  .sp--web-development .sp-step-marker {
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin: 0;
-  }
-  .sp--web-development .sp-step-number { margin: 0 0 8px; }
-  .sp--web-development .sp-process-step h3 { margin: 0 0 8px; }
-  .sp--web-development .sp-process-step p { max-width: 520px; }
+  .sp--web-development .sp-process-step:last-child { grid-column: 1 / -1; }
 }
 @media (max-width: 640px) {
   .sp--web-development .sp-header {
@@ -3746,10 +3719,19 @@ button.danger,
   }
   .sp--web-development .sp-title { font-size: clamp(2.2rem, 5vw, 3.9rem); }
   .sp--web-development .sp-desc { font-size: 1rem; }
-  .sp--web-development .sp-process,
+  .sp--web-development .sp-process { padding: 72px 0; }
   .sp--web-development .sp-work { padding: 56px 0; }
   .sp--web-development .sp-process .sp-subtitle,
   .sp--web-development .sp-work .sp-subtitle { margin-bottom: 32px; }
+  .sp--web-development .sp-process-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  .sp--web-development .sp-process-step,
+  .sp--web-development .sp-process-step:last-child {
+    grid-column: auto;
+    padding: 0;
+  }
   .sp--web-development .sp-build { padding: 56px 0; }
   .sp--web-development .sp-build-grid,
   .sp--web-development .sp-grid--projects { grid-template-columns: 1fr; }
