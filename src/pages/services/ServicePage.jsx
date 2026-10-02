@@ -31,6 +31,8 @@ export default function ServicePage({
   buildTypes = [],
   platformSection = null,
   pageClassName = '',
+  heroActions = null,
+  heroAside = null,
   hideWork = false,
   hideCta = false,
 }) {
@@ -71,11 +73,14 @@ export default function ServicePage({
   return (
     <main className={`sp${hasWebDevelopmentContent ? ' sp--web-development' : ''}${pageClassName ? ` ${pageClassName}` : ''}`}>
       <section className="sp-header" data-nav-hero>
-        <div className="sp-inner">
-          <div className="sp-eyebrow">Services</div>
-          <h1 className="sp-title">{renderServiceTitle(title)}</h1>
-          <p className="sp-desc">{description}</p>
-
+        <div className={`sp-inner sp-hero-layout${heroAside ? ' sp-hero-layout--split' : ''}`}>
+          <div className="sp-hero-copy">
+            <div className="sp-eyebrow">Services</div>
+            <h1 className="sp-title">{renderServiceTitle(title)}</h1>
+            <p className="sp-desc">{description}</p>
+            {heroActions && <div className="sp-hero-actions">{heroActions}</div>}
+          </div>
+          {heroAside && <div className="sp-hero-aside" aria-hidden="true">{heroAside}</div>}
         </div>
       </section>
 
