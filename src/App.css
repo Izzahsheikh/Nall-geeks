@@ -1500,6 +1500,7 @@ button.danger,
     transition-duration: 0.001ms !important;
   }
 }
+
 /* ===== Service pages (/services/*) ===== */
 @keyframes spHeroIn {
   from {
@@ -4830,4 +4831,41 @@ button.danger,
   .ux2-final-cta a:focus-visible {
     transform: none;
   }
+}
+
+/* Shared image treatment for every individual service-page hero. */
+.sp .sp-header {
+  isolation: isolate;
+  background-color: #292825;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.58)),
+    url('/servicesHero.jpeg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.sp .sp-header::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse at 40% 50%,
+      rgba(165, 165, 165, 0.18) 0%,
+      rgba(115, 115, 115, 0.11) 32%,
+      rgba(65, 65, 65, 0.06) 52%,
+      rgba(0, 0, 0, 0) 72%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.72) 0%,
+      rgba(0, 0, 0, 0.58) 45%,
+      rgba(0, 0, 0, 0.42) 100%
+    );
+  content: '';
+  pointer-events: none;
+}
+.sp .sp-header > * {
+  position: relative;
+  z-index: 1;
 }
