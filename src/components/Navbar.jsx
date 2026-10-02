@@ -19,7 +19,7 @@ const HERO_SELECTOR = '#hero, .abx-hero, [data-nav-hero]';
 const SCROLL_THRESHOLD = 50;
 
 export default function Navbar() {
-  const hideBookingCta = window.location.pathname.replace(/\/+$/, '') === '/services/uiux-design';
+  const hideBookingCta = false;
   const [scrolled, setScrolled] = useState(false);
   const [glass, setGlass] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);

@@ -70,7 +70,7 @@ export default function ServicePage({
 
   return (
     <main className={`sp${hasWebDevelopmentContent ? ' sp--web-development' : ''}${pageClassName ? ` ${pageClassName}` : ''}`}>
-      <section className="sp-header">
+      <section className="sp-header" data-nav-hero>
         <div className="sp-inner">
           <div className="sp-eyebrow">Services</div>
           <h1 className="sp-title">{renderServiceTitle(title)}</h1>
