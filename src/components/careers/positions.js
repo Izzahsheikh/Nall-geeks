@@ -104,12 +104,12 @@ export const POSITIONS = [
     description: internshipDescription('UI/UX Design'),
   },
   {
-    id: 'software-management-intern',
-    title: 'Software Management Intern',
-    category: 'Software Management',
+    id: 'custom-business-software-intern',
+    title: 'Custom Business Software Intern',
+    category: 'Custom Business Software',
     type: 'Internship',
     location: 'Remote',
-    description: internshipDescription('Software Management'),
+    description: internshipDescription('Custom Business Software'),
   },
   {
     id: 'seo-intern',

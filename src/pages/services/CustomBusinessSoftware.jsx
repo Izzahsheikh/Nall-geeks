@@ -48,7 +48,7 @@ const workflowPrinciples = [
   ['GROWTH', 'A structure that can evolve as requirements change.'],
 ];
 
-function SoftwareSection({ eyebrow, title, description, children, className = '' }) {
+function BusinessSoftwareSection({ eyebrow, title, description, children, className = '' }) {
   return (
     <section className={`sm-section${className ? ` ${className}` : ''}`}>
       <div className="sp-inner">
@@ -65,20 +65,20 @@ function DiagramNode({ children, accent = false }) {
   return <div className={`sm-diagram-node${accent ? ' sm-diagram-node--accent' : ''}`}>{children}</div>;
 }
 
-export default function SoftwareManagement() {
+export default function CustomBusinessSoftware() {
   return (
     <ServicePage
       title="Custom Business Software"
-      description="We design software around the way your business actually works — connecting customers, sales, operations and internal processes in one clear system."
-      pageClassName="sp--software-management"
+      description="We build custom CRM, ERP, POS, admin dashboard, inventory and workflow systems around the way your business actually operates."
+      pageClassName="sp--custom-business-software"
       hideWork
       hideCta
     >
       <div className="sm-page">
-        <SoftwareSection
+        <BusinessSoftwareSection
           eyebrow="WHAT WE BUILD"
           title="Systems built around your operations"
-          description="From customer relationships to daily sales and internal operations, we build software around the processes your team already relies on."
+          description="From customer relationships and daily sales to inventory, dashboards and internal workflows, we build tailored software around the processes your team relies on."
           className="sm-section--build"
         >
           <div className="sm-systems-grid">
@@ -94,9 +94,9 @@ export default function SoftwareManagement() {
               </article>
             ))}
           </div>
-        </SoftwareSection>
+        </BusinessSoftwareSection>
 
-        <SoftwareSection
+        <BusinessSoftwareSection
           eyebrow="CONNECTED OPERATIONS"
           title="One system, connected information"
           description="Business tools work better when information does not have to be entered, checked and managed in separate places."
@@ -132,9 +132,9 @@ export default function SoftwareManagement() {
               </div>
             </div>
           </div>
-        </SoftwareSection>
+        </BusinessSoftwareSection>
 
-        <SoftwareSection
+        <BusinessSoftwareSection
           eyebrow="OUR APPROACH"
           title="Built around the business, not the other way around"
           description="Custom software should reflect real workflows. We first understand how the business operates, then define the system around those requirements."
@@ -148,9 +148,9 @@ export default function SoftwareManagement() {
               </li>
             ))}
           </ol>
-        </SoftwareSection>
+        </BusinessSoftwareSection>
 
-        <SoftwareSection eyebrow="CONNECTED WORKFLOW" title="A connected workflow">
+        <BusinessSoftwareSection eyebrow="CONNECTED WORKFLOW" title="A connected workflow">
           <div className="sm-workflow-layout">
             <ol className="sm-workflow-flow">
               {workflowSteps.map((step) => <li key={step}>{step}</li>)}
@@ -163,9 +163,9 @@ export default function SoftwareManagement() {
               </p>
             </div>
           </div>
-        </SoftwareSection>
+        </BusinessSoftwareSection>
 
-        <SoftwareSection
+        <BusinessSoftwareSection
           eyebrow="BUILT FOR YOUR WORKFLOW"
           title="Not every business works the same way."
           description="That is why we do not start with a fixed feature list. The structure, permissions, workflows and functionality of each system are defined around the requirements of the business using it."
@@ -179,7 +179,7 @@ export default function SoftwareManagement() {
               </article>
             ))}
           </div>
-        </SoftwareSection>
+        </BusinessSoftwareSection>
       </div>
     </ServicePage>
   );

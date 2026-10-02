@@ -36,9 +36,9 @@ export const SERVICE_MENU = [
     icon: glyph("🎨"),
   },
   {
-    title: 'Software Management',
-    href: '/services/software-management',
-    description: 'Tools shaped around your workflow, not the other way around.',
+    title: 'Custom Business Software',
+    href: '/services/custom-business-software',
+    description: 'Tailored systems built around the way your business works.',
     icon: glyph("⊞"),
   },
   {

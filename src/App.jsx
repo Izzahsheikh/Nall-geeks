@@ -16,7 +16,7 @@ import FAQ from './components/FAQ';
 import WebDevelopment from './pages/services/WebDevelopment';
 import MobileApps from './pages/services/MobileApps';
 import UIUXDesign from './pages/services/UIUXDesign';
-import SoftwareManagement from './pages/services/SoftwareManagement';
+import CustomBusinessSoftware from './pages/services/CustomBusinessSoftware';
 import SEO from './pages/services/SEO';
 import AIAutomation from './pages/services/AIAutomation';
 import Footer from './components/Footer';
@@ -26,7 +26,7 @@ const SERVICE_PAGES = {
   '/services/web-development': WebDevelopment,
   '/services/mobile-apps': MobileApps,
   '/services/uiux-design': UIUXDesign,
-  '/services/software-management': SoftwareManagement,
+  '/services/custom-business-software': CustomBusinessSoftware,
   '/services/seo': SEO,
   '/services/ai-automation': AIAutomation,
 };

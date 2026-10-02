@@ -68,23 +68,23 @@ export default function ServiceStrips() {
           </div>
         </div>
 
-        {/* Software Management */}
+        {/* Custom Business Software */}
         <div className="strip-row flip reveal visible" style={{ borderBottom: 'none' }}>
           <div className="strip-text">
             <div className="strip-tag">
               <div className="strip-tag-icon">⊞</div>
-              <span className="strip-tag-label">Software Management</span>
+              <span className="strip-tag-label">Custom Business Software</span>
             </div>
-            <h3>End-to-end platform care, proactive maintenance, and infrastructure stability.</h3>
+            <h3>Tailored business systems designed around the way your team works.</h3>
             <p>
-              Long-term software health demands continuous oversight. We manage performance monitoring, routine
-              security patches, infrastructure updates, and system scaling so your platform stays secure, reliable,
-              and online around the clock.
+              We build custom CRM, ERP, POS, inventory, workflow, and admin systems that connect everyday operations.
+              Each platform is shaped around your processes, roles, and information so your team can work clearly and
+              efficiently in one place.
             </p>
-            <a href="/projects" className="btn-ghost">View projects →</a>
+            <a href="/services/custom-business-software" className="btn-ghost">Explore this service →</a>
           </div>
           <div className="strip-visual">
-            <img src={cloudImg} alt="Software Management" className="strip-img" />
+            <img src={cloudImg} alt="Custom Business Software" className="strip-img" />
           </div>
         </div>
 
