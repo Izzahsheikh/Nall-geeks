@@ -4,12 +4,9 @@ import { useEffect, useRef, useState } from 'react';
  * Shared layout for the six /services/* pages: header, "Our Work" photo grid, and optional CTA band.
  * The Navbar and Footer are rendered by App.jsx around every page, so they aren't repeated here.
  *
- * `photos` is an optional list of up to three { src, alt, width, height } objects (width/height are the file's pixel size, so the browser
- * can reserve space). A photo slot without one shows the "coming soon" placeholder. Passing any photos also switches the grid to the
- * photo layout: whole screenshots shown at a fixed ratio, 3 columns on desktop, 2 on tablet, 1 on phones.
+ * `photos` is an optional list of { src, alt, width, height } objects (width/height are the file's pixel size, so the browser
+ * can reserve space). When projects are supplied, only project/photo pairs are rendered so the grid never leaves empty slots.
  */
-const SLOTS = [0, 1, 2];
-
 function renderServiceTitle(title) {
   const words = title.trim().split(/\s+/);
 
@@ -27,15 +24,25 @@ function renderServiceTitle(title) {
 export default function ServicePage({
   title,
   description,
+  children = null,
   photos = [],
   projects = [],
   processSteps = [],
   buildTypes = [],
+  platformSection = null,
+  pageClassName = '',
+  hideWork = false,
   hideCta = false,
 }) {
   const [visibleSteps, setVisibleSteps] = useState([]);
   const processRef = useRef(null);
   const hasWebDevelopmentContent = processSteps.length > 0;
+  const workItems = projects.length
+    ? projects
+        .map((project, index) => ({ project, photo: photos[index] }))
+        .filter(({ project, photo }) => project && photo)
+    : photos.map((photo) => ({ photo })).filter(({ photo }) => photo);
+  const workColumns = Math.min(Math.max(workItems.length, 1), 3);
 
   useEffect(() => {
     if (!hasWebDevelopmentContent) return undefined;
@@ -62,7 +69,7 @@ export default function ServicePage({
   }, [hasWebDevelopmentContent, processSteps]);
 
   return (
-    <main className={`sp${hasWebDevelopmentContent ? ' sp--web-development' : ''}`}>
+    <main className={`sp${hasWebDevelopmentContent ? ' sp--web-development' : ''}${pageClassName ? ` ${pageClassName}` : ''}`}>
       <section className="sp-header">
         <div className="sp-inner">
           <div className="sp-eyebrow">Services</div>
@@ -124,49 +131,73 @@ export default function ServicePage({
         </>
       )}
 
-      <section className="sp-work">
-        <div className="sp-inner">
-          <div className="sp-label">Our Work</div>
-          <h2 className="sp-subtitle">A few things we've built</h2>
-          <div className={`sp-grid${photos.length ? ' sp-grid--photos' : ''}${projects.length ? ' sp-grid--projects' : ''}`}>
-            {SLOTS.map((slot) => (
-              projects[slot] && photos[slot] ? (
-                <article className="sp-project" key={slot}>
-                  <div className="sp-project-image">
-                    <img
-                      className="sp-card-img"
-                      src={photos[slot].src}
-                      alt={photos[slot].alt || ''}
-                      width={photos[slot].width}
-                      height={photos[slot].height}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </div>
-                  <div className="sp-project-content">
-                    <h3>{projects[slot].name}</h3>
-                    <p>{projects[slot].description}</p>
-                    <ul className="sp-tags" aria-label="Project features">
-                      {projects[slot].tags.map((tag) => <li key={tag}>{tag}</li>)}
-                    </ul>
-                  </div>
-                </article>
-              ) : (
-                <div className={`sp-card${photos[slot] ? ' sp-card--photo' : ''}`} key={slot}>
-                  {photos[slot] ? (
-                    <img className="sp-card-img" src={photos[slot].src} alt={photos[slot].alt || ''} width={photos[slot].width} height={photos[slot].height} loading="lazy" decoding="async" />
-                  ) : (
-                    <>
-                      <span className="sp-card-icon" aria-hidden="true">📷</span>
-                      <span className="sp-card-text">Project photo coming soon</span>
-                    </>
-                  )}
-                </div>
-              )
-            ))}
+      {platformSection && (
+        <section className="sp-platform" aria-labelledby="sp-platform-title">
+          <div className="sp-inner">
+            <div className="sp-label">{platformSection.eyebrow}</div>
+            <h2 className="sp-subtitle" id="sp-platform-title">{platformSection.title}</h2>
+            <p className="sp-platform-intro">{platformSection.intro}</p>
+            <div className="sp-platform-grid">
+              {platformSection.items.map((item) => {
+                const ItemIcon = item.icon;
+                return (
+                  <article className="sp-platform-card" key={item.title}>
+                    <span className="sp-platform-icon" aria-hidden="true">
+                      <ItemIcon size={22} strokeWidth={1.8} />
+                    </span>
+                    <h3>{item.title}</h3>
+                    <p>{item.description}</p>
+                  </article>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
+
+      {children}
+
+      {!hideWork && (
+        <section className="sp-work">
+          <div className="sp-inner">
+            <div className="sp-label">Our Work</div>
+            <h2 className="sp-subtitle">A few things we've built</h2>
+            <div
+              className={`sp-grid${photos.length ? ' sp-grid--photos' : ''}${projects.length ? ' sp-grid--projects' : ''}`}
+              style={{ '--sp-work-columns': workColumns }}
+            >
+              {workItems.map(({ project, photo }) => (
+                project ? (
+                  <article className="sp-project" key={project.name}>
+                    <div className="sp-project-image">
+                      <img
+                        className="sp-card-img"
+                        src={photo.src}
+                        alt={photo.alt || ''}
+                        width={photo.width}
+                        height={photo.height}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </div>
+                    <div className="sp-project-content">
+                      <h3>{project.name}</h3>
+                      <p>{project.description}</p>
+                      <ul className="sp-tags" aria-label="Project features">
+                        {project.tags.map((tag) => <li key={tag}>{tag}</li>)}
+                      </ul>
+                    </div>
+                  </article>
+                ) : (
+                  <div className="sp-card sp-card--photo" key={photo.src}>
+                    <img className="sp-card-img" src={photo.src} alt={photo.alt || ''} width={photo.width} height={photo.height} loading="lazy" decoding="async" />
+                  </div>
+                )
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {!hideCta && (
         <div className="sp-inner sp-cta-wrap">

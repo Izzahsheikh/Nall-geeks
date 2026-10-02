@@ -19,6 +19,7 @@ const HERO_SELECTOR = '#hero, .abx-hero, [data-nav-hero]';
 const SCROLL_THRESHOLD = 50;
 
 export default function Navbar() {
+  const hideBookingCta = window.location.pathname.replace(/\/+$/, '') === '/services/uiux-design';
   const [scrolled, setScrolled] = useState(false);
   const [glass, setGlass] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -229,9 +230,11 @@ export default function Navbar() {
               );
             })}
           </div>
-          <a href="/contact" className="btn-primary navbar-cta" onClick={(e) => handleNavClick(e, '/contact')}>
-            Book a Call
-          </a>
+          {!hideBookingCta && (
+            <a href="/contact" className="btn-primary navbar-cta" onClick={(e) => handleNavClick(e, '/contact')}>
+              Book a Call
+            </a>
+          )}
           <button
             className={`hamburger${mobileOpen ? ' open' : ''}`}
             onClick={() => setMobileOpen((v) => !v)}
@@ -295,13 +298,15 @@ export default function Navbar() {
               </a>
             )
           )}
-          <a
-            href="/contact"
-            className="btn-primary navbar-cta"
-            onClick={(e) => handleNavClick(e, '/contact', true)}
-          >
-            Book a Call
-          </a>
+          {!hideBookingCta && (
+            <a
+              href="/contact"
+              className="btn-primary navbar-cta"
+              onClick={(e) => handleNavClick(e, '/contact', true)}
+            >
+              Book a Call
+            </a>
+          )}
         </div>
       )}
     </>
