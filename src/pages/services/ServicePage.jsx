@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import WebsiteBuildProcess from './WebsiteBuildProcess';
 
 /*
  * Shared layout for the six /services/* pages: header, "Our Work" photo grid, and optional CTA band.
@@ -36,8 +36,6 @@ export default function ServicePage({
   hideWork = false,
   hideCta = false,
 }) {
-  const [visibleSteps, setVisibleSteps] = useState([]);
-  const processRef = useRef(null);
   const hasWebDevelopmentContent = processSteps.length > 0;
   const workItems = projects.length
     ? projects
@@ -45,30 +43,6 @@ export default function ServicePage({
         .filter(({ project, photo }) => project && photo)
     : photos.map((photo) => ({ photo })).filter(({ photo }) => photo);
   const workColumns = Math.min(Math.max(workItems.length, 1), 3);
-
-  useEffect(() => {
-    if (!hasWebDevelopmentContent) return undefined;
-
-    if (!('IntersectionObserver' in window)) {
-      setVisibleSteps(processSteps.map((_, index) => index));
-      return undefined;
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-      const newlyVisible = entries
-        .filter((entry) => entry.isIntersecting)
-        .map((entry) => Number(entry.target.dataset.stepIndex));
-
-      if (newlyVisible.length) {
-        setVisibleSteps((current) => [...new Set([...current, ...newlyVisible])]);
-      }
-    }, { threshold: 0.15, rootMargin: '0px 0px -32px 0px' });
-
-    const steps = processRef.current?.querySelectorAll('.sp-process-step') ?? [];
-    steps.forEach((step) => observer.observe(step));
-
-    return () => observer.disconnect();
-  }, [hasWebDevelopmentContent, processSteps]);
 
   return (
     <main className={`sp${hasWebDevelopmentContent ? ' sp--web-development' : ''}${pageClassName ? ` ${pageClassName}` : ''}`}>
@@ -86,34 +60,9 @@ export default function ServicePage({
 
       {hasWebDevelopmentContent && (
         <>
-          <section className="sp-process" aria-labelledby="sp-process-title" ref={processRef}>
-            <div className="sp-inner">
-              <div className="sp-label">A clear path from idea to launch</div>
-              <h2 className="sp-subtitle" id="sp-process-title">How We Build Your Website</h2>
-              <ol className="sp-process-grid">
-                {processSteps.map((step, index) => {
-                  const StepIcon = step.icon;
-                  return (
-                    <li
-                      className={`sp-process-step${visibleSteps.includes(index) ? ' is-visible' : ''}`}
-                      key={step.number}
-                      data-step-index={index}
-                      style={{ '--step-delay': `${index * 100}ms` }}
-                    >
-                      <span className="sp-step-marker" aria-hidden="true">
-                        <StepIcon size={20} strokeWidth={1.8} />
-                      </span>
-                      <span className="sp-step-number" aria-hidden="true">{step.number}</span>
-                      <h3>{step.title}</h3>
-                      <p>{step.description}</p>
-                    </li>
-                  );
-                })}
-              </ol>
-            </div>
-          </section>
+          <WebsiteBuildProcess steps={processSteps} />
 
-          <section className="sp-build" aria-labelledby="sp-build-title">
+          <section className="sp-build reveal" aria-labelledby="sp-build-title">
             <div className="sp-inner">
               <div className="sp-label">Built around your goals</div>
               <h2 className="sp-subtitle" id="sp-build-title">What we build</h2>
@@ -163,7 +112,7 @@ export default function ServicePage({
       {children}
 
       {!hideWork && (
-        <section className="sp-work">
+        <section className={`sp-work${hasWebDevelopmentContent ? ' reveal' : ''}`}>
           <div className="sp-inner">
             <div className="sp-label">Our Work</div>
             <h2 className="sp-subtitle">A few things we've built</h2>
@@ -184,6 +133,7 @@ export default function ServicePage({
                         loading="lazy"
                         decoding="async"
                       />
+                      <span className="sp-project-link" aria-hidden="true">View project →</span>
                     </div>
                     <div className="sp-project-content">
                       <h3>{project.name}</h3>
