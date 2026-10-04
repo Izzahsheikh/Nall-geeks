@@ -36,6 +36,14 @@ const STAGE_IMAGES = [
   },
 ];
 
+const PRELOAD_IMAGES = [...new Set([
+  STAGE_IMAGES[0].src,
+  STAGE_IMAGES[1].src,
+  ...STAGE_IMAGES[2].columns.map((image) => image.src),
+  STAGE_IMAGES[3].src,
+  STAGE_IMAGES[4].src,
+])];
+
 function useReducedMotion() {
   const [reducedMotion, setReducedMotion] = useState(false);
 
@@ -60,7 +68,7 @@ function StageVisual({ index }) {
       <div className="web-screenshot-pair">
         {visual.columns.map((image) => (
           <figure className="web-screenshot-card" key={image.src}>
-            <img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
+            <img src={image.src} alt={image.alt} loading="eager" decoding="sync" fetchPriority="high" />
           </figure>
         ))}
       </div>
@@ -69,7 +77,7 @@ function StageVisual({ index }) {
 
   return (
     <figure className={`web-screenshot-card${visual.final ? ' web-screenshot-card--final' : ''}`}>
-      <img src={visual.src} alt={visual.alt} loading="lazy" decoding="async" />
+      <img src={visual.src} alt={visual.alt} loading="eager" decoding="sync" fetchPriority="high" />
     </figure>
   );
 }
@@ -132,16 +140,18 @@ export default function WebsiteBuildProcess({ steps }) {
           <p>A clear, collaborative process that turns your vision into a high-performing digital experience.</p>
         </div>
 
+        <div className="web-stage-preloads" aria-hidden="true">
+          {PRELOAD_IMAGES.map((src) => (
+            <img src={src} alt="" loading="eager" decoding="async" key={src} />
+          ))}
+        </div>
+
         <div className="web-workspace" aria-live="polite">
           <div className="web-workspace-top">
             <div>
               <span className="web-stage-kicker">Stage {activeStep.number}</span>
               <h3>{activeStep.workspaceTitle}</h3>
               <p>{activeStep.description}</p>
-            </div>
-            <div className="web-workspace-status">
-              <span aria-hidden="true" />
-              {shouldPause ? 'Paused' : 'In progress'}
             </div>
           </div>
 
@@ -166,7 +176,6 @@ export default function WebsiteBuildProcess({ steps }) {
                   <span className="web-stage-dot">{step.number}</span>
                   <span className="web-stage-copy">
                     <strong>{step.title}</strong>
-                    <small>{step.description}</small>
                   </span>
                 </button>
               </li>
