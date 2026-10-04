@@ -20,18 +20,18 @@ const PHOTOS = [
 const PROJECTS = [
   {
     name: 'Interior Specialists',
+    category: 'Business Website',
     description: 'An image-led website for a commercial interior specialist.',
-    tags: ['React', 'Responsive', 'Interiors'],
   },
   {
     name: 'Partitions Portfolio',
-    description: 'A project gallery showcasing partition and ceiling installations.',
-    tags: ['React', 'Responsive', 'Projects'],
+    category: 'Project Portfolio',
+    description: 'A gallery of partition and ceiling installations.',
   },
   {
     name: 'Tyreline Online',
+    category: 'E-commerce Store',
     description: 'A smooth shopping experience for tyres and accessories.',
-    tags: ['E-commerce', 'Responsive', 'React'],
   },
 ];
 

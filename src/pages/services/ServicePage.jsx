@@ -58,32 +58,7 @@ export default function ServicePage({
         </div>
       </section>
 
-      {hasWebDevelopmentContent && (
-        <>
-          <WebsiteBuildProcess steps={processSteps} />
-
-          <section className="sp-build reveal" aria-labelledby="sp-build-title">
-            <div className="sp-inner">
-              <div className="sp-label">Built around your goals</div>
-              <h2 className="sp-subtitle" id="sp-build-title">What we build</h2>
-              <div className="sp-build-grid">
-                {buildTypes.map((type) => {
-                  const TypeIcon = type.icon;
-                  return (
-                    <article className="sp-build-card" key={type.title}>
-                      <TypeIcon size={23} strokeWidth={1.8} aria-hidden="true" />
-                      <div>
-                        <h3>{type.title}</h3>
-                        <p>{type.description}</p>
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
-            </div>
-          </section>
-        </>
-      )}
+      {hasWebDevelopmentContent && <WebsiteBuildProcess />}
 
       {platformSection && (
         <section className="sp-platform" aria-labelledby="sp-platform-title">
@@ -114,8 +89,18 @@ export default function ServicePage({
       {!hideWork && (
         <section className={`sp-work${hasWebDevelopmentContent ? ' reveal' : ''}`}>
           <div className="sp-inner">
-            <div className="sp-label">Our Work</div>
-            <h2 className="sp-subtitle">A few things we've built</h2>
+            {hasWebDevelopmentContent ? (
+              <header className="sp-work-head">
+                <div className="sp-label">Our Work</div>
+                <h2 className="sp-subtitle">What We’ve Built</h2>
+                <p>A selection of recent websites, designed and built end to end.</p>
+              </header>
+            ) : (
+              <>
+                <div className="sp-label">Our Work</div>
+                <h2 className="sp-subtitle">A few things we've built</h2>
+              </>
+            )}
             <div
               className={`sp-grid${photos.length ? ' sp-grid--photos' : ''}${projects.length ? ' sp-grid--projects' : ''}`}
               style={{ '--sp-work-columns': workColumns }}
@@ -133,14 +118,16 @@ export default function ServicePage({
                         loading="lazy"
                         decoding="async"
                       />
-                      <span className="sp-project-link" aria-hidden="true">View project →</span>
                     </div>
                     <div className="sp-project-content">
+                      {project.category && <span className="sp-project-category">{project.category}</span>}
                       <h3>{project.name}</h3>
-                      <p>{project.description}</p>
-                      <ul className="sp-tags" aria-label="Project features">
-                        {project.tags.map((tag) => <li key={tag}>{tag}</li>)}
-                      </ul>
+                      {project.description && <p>{project.description}</p>}
+                      {project.tags?.length > 0 && (
+                        <ul className="sp-tags" aria-label="Project features">
+                          {project.tags.map((tag) => <li key={tag}>{tag}</li>)}
+                        </ul>
+                      )}
                     </div>
                   </article>
                 ) : (
@@ -149,6 +136,29 @@ export default function ServicePage({
                   </div>
                 )
               ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {hasWebDevelopmentContent && (
+        <section className="sp-build reveal" aria-labelledby="sp-build-title">
+          <div className="sp-inner">
+            <div className="sp-label">Built around your goals</div>
+            <h2 className="sp-subtitle" id="sp-build-title">What we build</h2>
+            <div className="sp-build-grid">
+              {buildTypes.map((type) => {
+                const TypeIcon = type.icon;
+                return (
+                  <article className="sp-build-card" key={type.title}>
+                    <TypeIcon size={23} strokeWidth={1.8} aria-hidden="true" />
+                    <div>
+                      <h3>{type.title}</h3>
+                      <p>{type.description}</p>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           </div>
         </section>
