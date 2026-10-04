@@ -6611,7 +6611,7 @@ button.danger,
 /* Centered intro for the whole process */
 .build-header {
   max-width: 620px;
-  margin: 0 auto 60px;
+  margin: 0 auto 48px;
   text-align: center;
 }
 .sp--web-development .web-process--build .sp-label { margin-bottom: 14px; }
@@ -6636,17 +6636,20 @@ button.danger,
 /* Step copy (≈38%) beside the visual (≈62%), tabs underneath at the same width */
 .build-flow {
   display: grid;
-  grid-template-columns: minmax(0, 38fr) minmax(0, 62fr);
+  grid-template-columns: minmax(0, 37fr) minmax(0, 63fr);
   grid-template-areas:
     "copy preview"
     "tabs tabs";
-  align-items: center;
-  column-gap: clamp(40px, 5vw, 72px);
+  align-items: start;
+  column-gap: clamp(48px, 5.5vw, 76px);
 }
 .build-stages {
   grid-area: copy;
   display: grid;
+  align-items: start;
   min-width: 0;
+  /* Start beside the upper area of the screen, just below its top bar */
+  padding-top: 56px;
 }
 /* All five stages share one grid cell; outgoing copy drifts up, incoming copy rises in */
 .build-stage {
@@ -6671,27 +6674,28 @@ button.danger,
 }
 .build-stage-meta {
   display: block;
-  margin-bottom: 16px;
-  color: var(--build-muted);
-  font-size: 0.7rem;
+  margin-bottom: 20px;
+  color: #6b645b;
+  font-size: 0.9375rem;
   font-weight: 600;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 .build-stage-meta b { color: var(--build-orange); font-weight: 700; }
 .build-stage h3 {
-  margin: 0 0 14px;
+  margin: 0 0 18px;
   color: var(--build-ink);
   font-family: var(--font-display);
-  font-size: clamp(1.6rem, 2.4vw, 2rem);
-  font-weight: 400;
-  line-height: 1.15;
+  font-size: clamp(2rem, 2.7vw, 2.375rem);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
 }
 .build-stage p {
-  max-width: 34ch;
+  max-width: 420px;
   margin: 0;
   color: var(--build-copy);
-  font-size: 1rem;
+  font-size: 1.125rem;
   line-height: 1.6;
 }
 
@@ -6958,7 +6962,10 @@ button.danger,
       "preview"
       "tabs";
   }
-  .build-stages { margin-bottom: 24px; }
+  .build-stages { margin-bottom: 24px; padding-top: 0; }
+  .build-stage-meta { margin-bottom: 14px; font-size: 0.875rem; }
+  .build-stage h3 { margin-bottom: 14px; }
+  .build-stage p { font-size: 1.0625rem; }
   .build-preview { height: clamp(320px, 56vw, 430px); }
   .build-tabs button { padding: 12px 14px; }
 }
@@ -6968,7 +6975,9 @@ button.danger,
   .sp--web-development .web-process.web-process--build { padding: 56px 0 64px; }
   .build-header { margin-bottom: 32px; }
   .build-stages { margin-bottom: 20px; }
-  .build-stage h3 { font-size: 1.35rem; }
+  .build-stage-meta { margin-bottom: 12px; font-size: 0.8125rem; }
+  .build-stage h3 { margin-bottom: 12px; font-size: 1.75rem; }
+  .build-stage p { font-size: 1rem; }
   .build-preview-bar { height: 26px; font-size: 0.64rem; }
   .build-preview { height: clamp(240px, 68vw, 300px); border-radius: 5px; }
   .build-tabs {
