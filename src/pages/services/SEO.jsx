@@ -57,12 +57,12 @@ function Reveal({ as: Tag = 'div', delay = 0, className = '', children, ...rest 
 /* ---------- data ---------- */
 
 const FLOW = [
-  ['Website', 'Your site needs a clear structure search engines can access.'],
-  ['Crawl', 'Search engines discover pages, links and content across your website.'],
-  ['Understand', 'They interpret what each page is about and who it may be useful for.'],
-  ['Index', 'Useful and accessible pages become eligible to appear in search.'],
-  ['Rank', 'Search engines decide where relevant pages should appear for a query.'],
-  ['Visitor', 'The right search result brings a relevant person into your website.'],
+  ['Website', 'Your website is the foundation of your search presence.'],
+  ['Crawl', 'Search engines discover your pages and content.'],
+  ['Understand', 'Search engines analyze and understand your content.'],
+  ['Index', 'Relevant pages are stored and made searchable.'],
+  ['Rank', 'Your pages compete for visibility in search results.'],
+  ['Visitor', 'Better visibility brings the right visitors to your site.'],
 ];
 
 const INTENTS = [
@@ -72,11 +72,11 @@ const INTENTS = [
   ['Transactional', 'Take action'],
 ];
 
-const INTENT_FACTS = [
-  ['Intent type', 'Commercial'],
-  ['Why', '“best” and “for small business” suggest the person is comparing solutions.'],
-  ['Best page match', 'Custom CRM service page'],
-  ['Content focus', 'Features, benefits, proof, comparison'],
+const INTENT_EXAMPLES = [
+  ['what is CRM software', 'Informational', 'The user wants to understand the topic.', 'CRM guide / educational article', 'Explanation, examples, guidance'],
+  ['best CRM software for small business', 'Commercial', '“Best” and “for small business” suggest comparison between solutions.', 'Custom CRM service page', 'Features, benefits, proof, comparison'],
+  ['NallGeeks CRM services', 'Navigational', 'The user knows the brand and wants a specific page.', 'CRM services page', 'Clear navigation and relevant service information'],
+  ['hire CRM developers', 'Transactional', 'The user is ready to contact or purchase.', 'CRM enquiry / contact page', 'Offer, proof, CTA, contact'],
 ];
 
 const TECH_ITEMS = [
@@ -91,7 +91,7 @@ const TECH_ITEMS = [
 // Where each connector lands on the screenshot, as a fraction of its height.
 const TECH_TARGETS = [0.17, 0.47, 0.79, 0.21, 0.5, 0.79];
 const STEP_MS = 2800;
-const FLOW_STEP_MS = 3600;
+const FLOW_STEP_MS = 4500;
 
 // Dashboard panel each factor points at, as % of the screenshot: [left, top, width, height].
 const TECH_PANELS = [
@@ -158,15 +158,15 @@ const RANK_FROM = [2, 0, 1];
 const SITE_POSITIONS = [
   'translate(150px, 43px) scale(1.45)',
   'translate(150px, 43px) scale(1.45)',
-  'translate(50px, 120px) scale(0.55)',
-  'translate(34px, 150px) scale(0.6)',
-  'translate(150px, 43px) scale(1.45)',
-  'translate(510px, 90px) scale(0.9)',
+  'translate(70px, 72px) scale(1.05)',
+  'translate(44px, 95px) scale(0.9)',
+  'translate(456px, 76px) scale(1.0)',
+  'translate(456px, 76px) scale(1.0)',
 ];
 
 function FlowCanvas({ stage }) {
   const rowY = (row) => 112 + row * 100;
-  const wrapClass = ['sx-site-wrap', stage === 3 && 'is-index', stage === 4 && 'is-hidden', stage === 5 && 'is-visitor']
+  const wrapClass = ['sx-site-wrap', stage === 3 && 'is-index', stage === 5 && 'is-visitor']
     .filter(Boolean)
     .join(' ');
 
@@ -206,16 +206,16 @@ function FlowCanvas({ stage }) {
       {/* 03 understand */}
       <g className={`sx-layer${stage === 2 ? ' is-on' : ''}`}>
         {UNDERSTAND_ROWS.map(([label, value, fromY], i) => {
-          const y = 80 + i * 66;
+          const y = 70 + i * 66;
           const delay = 0.25 + i * 0.55;
           return (
             <g key={label}>
-              <path d={`M270 ${fromY} C320 ${fromY} 310 ${y} 360 ${y}`} pathLength="1" className="sx-link-line sx-u-line" style={{ animationDelay: `${delay}s` }} />
-              <circle cx="360" cy={y} r="4" className="sx-link-dot sx-u-dot" style={{ animationDelay: `${delay + 0.4}s` }} />
+              <path d={`M430 ${fromY} C470 ${fromY} 470 ${y} 510 ${y}`} pathLength="1" className="sx-link-line sx-u-line" style={{ animationDelay: `${delay}s` }} />
+              <circle cx="510" cy={y} r="4" className="sx-link-dot sx-u-dot" style={{ animationDelay: `${delay + 0.4}s` }} />
               <g className="sx-u-text" style={{ transitionDelay: `${delay + 0.45}s` }}>
-                <text x="380" y={y - 12} className="sx-svg-label">{label}</text>
-                <text x="380" y={y + 14} className="sx-svg-value">{value}</text>
-                <line x1="380" y1={y + 30} x2="840" y2={y + 30} className="sx-s-line" />
+                <text x="530" y={y - 12} className="sx-svg-label">{label}</text>
+                <text x="530" y={y + 14} className="sx-svg-value">{value}</text>
+                <line x1="530" y1={y + 30} x2="850" y2={y + 30} className="sx-s-line" />
               </g>
             </g>
           );
@@ -224,31 +224,28 @@ function FlowCanvas({ stage }) {
 
       {/* 04 index */}
       <g className={`sx-layer${stage === 3 ? ' is-on' : ''}`}>
-        <path d="M262 225 L336 225" className="sx-link-line sx-flow-arrow" />
-        <path d="M328 218 L338 225 L328 232" className="sx-link-line" />
-        <rect x="350" y="50" width="490" height="270" rx="10" className="sx-s-frame" />
-        <text x="374" y="86" className="sx-svg-label">Search index</text>
-        <line x1="350" y1="104" x2="840" y2="104" className="sx-s-line" />
+        <path d="M420 220 C450 220 455 220 485 220" className="sx-link-line sx-flow-arrow" />
+        <path d="M477 214 L486 220 L477 226" className="sx-link-line" />
+        <rect x="500" y="66" width="350" height="238" rx="8" className="sx-s-frame" />
+        <text x="522" y="96" className="sx-svg-label">Search index</text>
+        <line x1="500" y1="112" x2="850" y2="112" className="sx-s-line" />
         {INDEX_ROWS.map((row, i) => {
           const isNew = i === 2;
           return (
             <g key={row} className="sx-index-row" style={{ transitionDelay: `${0.25 + i * 0.14}s` }}>
-              {isNew && <rect x="358" y={116 + i * 48} width="474" height="40" rx="5" className="sx-index-hl" />}
-              <text x="378" y={141 + i * 48} className={`sx-svg-value${isNew ? ' sx-index-new-text' : ''}`}>{row}</text>
+              {isNew && <rect x="508" y={120 + i * 42} width="334" height="36" rx="5" className="sx-index-hl" />}
+              <text x="524" y={144 + i * 42} className={`sx-svg-value${isNew ? ' sx-index-new-text' : ''}`}>{row}</text>
             </g>
           );
         })}
       </g>
 
-      {/* 05 rank: a plain results page — position is the only story */}
+      {/* 05 rank — SERP left column (x 14–436), CRM right via SITE_POSITIONS[4] */}
       <g className={`sx-layer${stage === 4 ? ' is-on' : ''}`}>
-        <rect x="110" y="22" width="500" height="46" rx="23" className="sx-s-frame sx-serp-bar" />
-        <circle cx="140" cy="45" r="7" className="sx-s-line" />
-        <line x1="145" y1="50" x2="152" y2="57" className="sx-s-line" />
-        <text x="168" y="52" className="sx-svg-value">best CRM software for small business</text>
-        {[0, 1, 2].map((n) => (
-          <text key={n} x="86" y={rowY(n) + 38} textAnchor="end" className="sx-svg-label">{n + 1}</text>
-        ))}
+        <rect x="14" y="18" width="422" height="44" rx="22" className="sx-s-frame sx-serp-bar" />
+        <circle cx="42" cy="40" r="7" className="sx-s-line" />
+        <line x1="47" y1="45" x2="54" y2="52" className="sx-s-line" />
+        <text x="66" y="48" className="sx-svg-value">best CRM software for small business</text>
         {SERP_RESULTS.map((r, i) => (
           <g
             key={r.id}
@@ -256,39 +253,26 @@ function FlowCanvas({ stage }) {
             style={{ '--from': `${rowY(RANK_FROM[r.id])}px`, '--to': `${rowY(r.id)}px` }}
           >
             <g className="sx-result-in" style={{ animationDelay: `${0.25 + i * 0.25}s` }}>
-              <line x1="110" y1="-8" x2="610" y2="-8" className="sx-s-line sx-result-rule" />
+              <line x1="14" y1="-8" x2="436" y2="-8" className="sx-s-line sx-result-rule" />
               {r.client && (
                 <g className="sx-result-hl">
-                  <rect x="110" y="-8" width="500" height="92" className="sx-result-tint" />
-                  <rect x="110" y="-8" width="3" height="92" className="sx-result-bar" />
-                  <text x="596" y="12" textAnchor="end" className="sx-svg-label is-accent">Most relevant</text>
+                  <rect x="14" y="-8" width="422" height="90" rx="4" className="sx-result-tint" />
+                  <rect x="14" y="-8" width="3" height="90" className="sx-result-bar" />
                 </g>
               )}
-              <text x="128" y="12" className="sx-svg-label">{r.url}</text>
-              <text x="128" y="42" className="sx-result-title">{r.title}</text>
-              <rect x="128" y="56" width="400" height="6" rx="3" className="sx-s-fill" />
-              <rect x="128" y="68" width="300" height="6" rx="3" className="sx-s-fill" />
+              <text x="14" y="14" className="sx-svg-label sx-rank-num">{r.id + 1}</text>
+              <text x="38" y="14" className="sx-svg-label">{r.url}</text>
+              <text x="38" y="42" className="sx-result-title">{r.title}</text>
+              <rect x="38" y="56" width="360" height="6" rx="3" className="sx-s-fill" />
+              <rect x="38" y="68" width="270" height="6" rx="3" className="sx-s-fill" />
             </g>
           </g>
         ))}
-        <g className="sx-signals">
-          <rect x="672" y="112" width="168" height="196" rx="6" className="sx-s-frame sx-signal-box" />
-          <text x="692" y="144" className="sx-svg-label">Ranking signals</text>
-          {['Relevance', 'Quality', 'Authority'].map((t, i) => (
-            <g key={t}>
-              <line x1="672" y1={158 + i * 40} x2="840" y2={158 + i * 40} className="sx-s-line" />
-              <circle cx="692" cy={178 + i * 40} r="3" className="sx-link-dot" />
-              <text x="708" y={184 + i * 40} className="sx-svg-value">{t}</text>
-            </g>
-          ))}
-          <line x1="672" y1="278" x2="840" y2="278" className="sx-s-line" />
-          <text x="692" y="300" className="sx-signal-result">↑ Stronger position</text>
-        </g>
       </g>
 
       {/* 06 visitor: result → click → website → qualified visitor */}
       <g className={`sx-layer${stage === 5 ? ' is-on' : ''}`}>
-        <g transform="translate(28 150)">
+        <g transform="translate(24 128)">
           <g className="sx-v-card">
             <rect width="420" height="90" rx="6" className="sx-result-card" />
             <rect width="3" height="90" className="sx-result-bar" />
@@ -301,8 +285,7 @@ function FlowCanvas({ stage }) {
             <path d="M0 0 L0 20 L6 14 L11 25 L15 23 L10 13 L18 13 Z" className="sx-cursor" />
           </g>
         </g>
-        <path d="M456 195 C486 195 490 150 512 150" pathLength="1" className="sx-link-line sx-visit-path" />
-        <text x="512" y="68" className="sx-svg-label is-accent sx-visitor-label">Qualified visitor</text>
+        <path d="M446 173 C449 173 452 173 456 173" pathLength="1" className="sx-link-line sx-visit-path" />
       </g>
     </svg>
   );
@@ -310,10 +293,8 @@ function FlowCanvas({ stage }) {
 
 function SearchFlow() {
   const sectionRef = useRef(null);
-  const railRef = useRef(null);
   const { active: stage, select, hold, release } = useCycle(sectionRef, FLOW.length, FLOW_STEP_MS);
 
-  // After the last stage the canvas settles back in rather than snapping.
   const prevStage = useRef(0);
   const [restarting, setRestarting] = useState(false);
   useEffect(() => {
@@ -325,11 +306,6 @@ function SearchFlow() {
     return () => clearTimeout(t);
   }, [stage]);
 
-  // On narrow screens the stepper scrolls sideways; keep the active step in view.
-  useEffect(() => {
-    const item = railRef.current?.children[stage + 1];
-    item?.scrollIntoView?.({ inline: 'center', block: 'nearest', behavior: 'smooth' });
-  }, [stage]);
   return (
     <section className="sx-flow" id="sx-how" ref={sectionRef}>
       <div className="sx-wrap">
@@ -337,32 +313,29 @@ function SearchFlow() {
           <div className="sx-eyebrow">How search works</div>
           <h2 className="sx-h2">From website to <em>search result</em></h2>
         </header>
-        <div className="sx-flow-rail-wrap">
-          <div className="sx-flow-rail" ref={railRef}>
-            <div className="sx-flow-rail-line"><span style={{ transform: `scaleX(${stage / (FLOW.length - 1)})` }} /></div>
-            {FLOW.map(([name], i) => (
-              <button
-                type="button"
-                key={name}
-                className={`sx-flow-rail-item${i === stage ? ' is-current' : ''}${i < stage ? ' is-past' : ''}`}
-                aria-current={i === stage ? 'step' : undefined}
-                onMouseEnter={() => hold(i)}
-                onMouseLeave={release}
-                onFocus={() => hold(i)}
-                onBlur={release}
-                onClick={() => select(i)}
-              >
-                <span className="sx-flow-rail-dot" />
-                <span className="sx-flow-rail-num">{String(i + 1).padStart(2, '0')}</span>
-                <strong>{name}</strong>
-              </button>
-            ))}
-          </div>
+        <div className="sx-flow-step" key={stage}>
+          <span className="sx-flow-step-num">{String(stage + 1).padStart(2, '0')}</span>
+          <strong className="sx-flow-step-title">{FLOW[stage][0]}</strong>
+          <p className="sx-flow-step-desc">{FLOW[stage][1]}</p>
         </div>
         <div className={`sx-flow-canvas${restarting ? ' is-restarting' : ''}`}><FlowCanvas stage={stage} /></div>
-        <div className="sx-flow-caption" key={stage}>
-          <span className="sx-flow-caption-num">{String(stage + 1).padStart(2, '0')}</span>
-          <p>{FLOW[stage][1]}</p>
+        <div className="sx-flow-nodes">
+          <div className="sx-flow-nodes-line" aria-hidden="true" />
+          {FLOW.map(([name], i) => (
+            <button
+              type="button"
+              key={name}
+              className={`sx-flow-node${i === stage ? ' is-current' : ''}${i < stage ? ' is-past' : ''}`}
+              onClick={() => select(i)}
+              onMouseEnter={() => hold(i)}
+              onMouseLeave={release}
+              aria-current={i === stage ? 'step' : undefined}
+            >
+              <span className="sx-flow-node-dot" aria-hidden="true" />
+              <span className="sx-flow-node-num">{String(i + 1).padStart(2, '0')}</span>
+              <strong className="sx-flow-node-title">{name}</strong>
+            </button>
+          ))}
         </div>
       </div>
     </section>
@@ -372,6 +345,31 @@ function SearchFlow() {
 /* ---------- search strategy ---------- */
 
 function SearchIntent() {
+  const [ref, inView] = useInView(0.18);
+  const reduced = usePrefersReducedMotion();
+  const [active, setActive] = useState(1);
+  const [manualTick, setManualTick] = useState(0);
+  const [queryKey, setQueryKey] = useState(0);
+  const manualRef = useRef(false);
+  const [query, intent, why, match, focus] = INTENT_EXAMPLES[active];
+
+  useEffect(() => {
+    if (!inView || reduced) return undefined;
+    const delay = manualRef.current ? 1500 : 3600;
+    const timer = setTimeout(() => {
+      manualRef.current = false;
+      setActive((current) => (current + 1) % INTENT_EXAMPLES.length);
+    }, delay);
+    return () => clearTimeout(timer);
+  }, [inView, reduced, active, manualTick]);
+
+  const chooseIntent = (index) => {
+    manualRef.current = true;
+    setActive(index);
+    setManualTick((tick) => tick + 1);
+    setQueryKey((key) => key + 1);
+  };
+
   return (
     <section className="sx-section sx-intent">
       <div className="sx-wrap">
@@ -381,33 +379,36 @@ function SearchIntent() {
           <p className="sx-lead">A search query reveals intention. SEO connects that intention to the right page.</p>
         </Reveal>
 
-        <Reveal className="sx-intent-panel" delay={100}>
-          <div className="sx-searchbar" aria-label="Example search query">
+        <div ref={ref} className={`sx-intent-flow${inView ? ' is-in' : ''}`}>
+          <div className="sx-intent-panel">
+          <div className="sx-searchbar" aria-label={`Example search query: ${query}`}>
             <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
               <circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
               <line x1="15.5" y1="15.5" x2="21" y2="21" stroke="currentColor" strokeWidth="1.5" />
             </svg>
-            <span>best CRM software for small business</span>
-            <i className="sx-caret" />
+            <span key={queryKey} className="sx-query-text">{query}</span>
           </div>
           <dl className="sx-facts">
-            {INTENT_FACTS.map(([label, value], i) => (
+            {[["Intent type", intent], ["Why", why], ["Best page match", match], ["Content focus", focus]].map(([label, value], i) => (
               <div key={label} className={i === 0 ? 'is-key' : ''}>
                 <dt>{label}</dt>
                 <dd>{value}</dd>
               </div>
             ))}
           </dl>
-        </Reveal>
+          </div>
 
         <ul className="sx-selector">
-          {INTENTS.map(([name, desc]) => (
-            <li key={name} className={name === 'Commercial' ? 'is-active' : ''} aria-current={name === 'Commercial' ? 'true' : undefined}>
-              <h3>{name}</h3>
-              <p>{desc}</p>
+          {INTENTS.map(([name, desc], i) => (
+            <li key={name} className={i === active ? 'is-active' : ''} aria-current={i === active ? 'true' : undefined}>
+              <button type="button" onClick={() => chooseIntent(i)}>
+                <h3>{name}</h3>
+                <p>{desc}</p>
+              </button>
             </li>
           ))}
         </ul>
+        </div>
       </div>
     </section>
   );
@@ -703,10 +704,7 @@ export default function SEO() {
       description="We improve the technical structure, search relevance and content of your website so the right people can discover it — and take action."
       pageClassName="sp--seo"
       heroActions={
-        <>
-          <a href="/contact" className="sx-btn">Improve My Visibility</a>
-          <a href="#sx-how" className="sx-textlink">Explore our approach ↓</a>
-        </>
+        <a href="/contact" className="sx-btn">Improve My Visibility</a>
       }
       hideWork
       hideCta
