@@ -64,6 +64,15 @@ const STAGES = [
   },
 ];
 
+const TOTAL = STAGES.length;
+const STAGE_MS = 4500;
+
+function stageClass(index, activeIndex, previousIndex) {
+  if (index === activeIndex) return ' is-active';
+  if (index === previousIndex) return ' is-leaving';
+  return '';
+}
+
 function usePrefersReducedMotion() {
   const [reduced, setReduced] = useState(false);
   useEffect(() => {
@@ -76,113 +85,125 @@ function usePrefersReducedMotion() {
   return reduced;
 }
 
-export default function UXDesignFlow() {
-  const sectionRef = useRef(null);
-  const [active, setActive] = useState(0);
-  const [held, setHeld] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const [tabShown, setTabShown] = useState(true);
-  const reduced = usePrefersReducedMotion();
-
+function useInView(ref) {
+  const [inView, setInView] = useState(false);
   useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return undefined;
-    const obs = new IntersectionObserver(([e]) => setVisible(e.isIntersecting), { threshold: 0.15 });
-    obs.observe(el);
+    const node = ref.current;
+    if (!node || !('IntersectionObserver' in window)) { setInView(true); return undefined; }
+    const obs = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.2 });
+    obs.observe(node);
     return () => obs.disconnect();
-  }, []);
+  }, [ref]);
+  return inView;
+}
+
+export default function UXDesignFlow() {
+  const [{ activeIndex, previousIndex }, setStage] = useState({ activeIndex: 0, previousIndex: -1 });
+  const sectionRef = useRef(null);
+  const tabsRef = useRef(null);
+  const reduced = usePrefersReducedMotion();
+  const inView = useInView(sectionRef);
+
+  const goTo = (index) => {
+    if (index === activeIndex) return;
+    setStage({ activeIndex: index, previousIndex: activeIndex });
+  };
 
   useEffect(() => {
-    const h = () => setTabShown(!document.hidden);
-    document.addEventListener('visibilitychange', h);
-    return () => document.removeEventListener('visibilitychange', h);
-  }, []);
-
-  useEffect(() => {
-    if (!visible || !tabShown || held || reduced) return undefined;
-    const t = setTimeout(() => setActive((a) => (a + 1) % STAGES.length), 4500);
+    if (reduced || !inView) return undefined;
+    const t = setTimeout(() => {
+      setStage({ activeIndex: (activeIndex + 1) % TOTAL, previousIndex: activeIndex });
+    }, STAGE_MS);
     return () => clearTimeout(t);
-  }, [visible, tabShown, held, reduced, active]);
+  }, [activeIndex, inView, reduced]);
+
+  useEffect(() => {
+    const list = tabsRef.current;
+    if (!list || list.scrollWidth <= list.clientWidth) return;
+    const item = list.children[activeIndex];
+    if (!item) return;
+    list.scrollTo({
+      left: item.offsetLeft - (list.clientWidth - item.offsetWidth) / 2,
+      behavior: reduced ? 'auto' : 'smooth',
+    });
+  }, [activeIndex, reduced]);
 
   return (
-    <section
-      className="uxf-section"
-      ref={sectionRef}
-      onMouseEnter={() => setHeld(true)}
-      onMouseLeave={() => setHeld(false)}
-    >
-      <div className="uxf-wrap">
+    <section className="uxp-section" ref={sectionRef} aria-labelledby="uxp-title">
+      <div className="uxp-wrap">
 
-        {/* heading */}
-        <header className="uxf-head">
-          <div className="uxf-eyebrow">Our Design Process</div>
-          <h2 className="uxf-h2">
-            How we turn an idea into a<br />
-            <em>polished digital experience</em>
+        <header className="uxp-head">
+          <div className="uxp-eyebrow">Our Design Process</div>
+          <h2 className="uxp-h2" id="uxp-title">
+            How we turn an idea into a<br /><em>polished digital experience</em>
           </h2>
-          <p className="uxf-lead">
+          <p className="uxp-lead">
             A structured process from understanding the problem to refining the final interface.
           </p>
         </header>
 
-        {/* progress nav */}
-        <nav className="uxf-nav" aria-label="Design process steps">
-          <div className="uxf-nav-line" aria-hidden="true" />
-          {STAGES.map((s, i) => (
-            <button
-              key={s.num}
-              type="button"
-              className={`uxf-nav-item${i === active ? ' is-active' : ''}${i < active ? ' is-past' : ''}`}
-              onClick={() => setActive(i)}
-              aria-current={i === active ? 'step' : undefined}
-            >
-              <span className="uxf-nav-dot" aria-hidden="true" />
-              <span className="uxf-nav-num">{s.num}</span>
-              <span className="uxf-nav-label">{s.nav}</span>
-            </button>
-          ))}
-        </nav>
+        <div className="uxp-flow">
 
-        {/* body */}
-        <div className="uxf-body">
-
-          {/* left: step info — all items stacked, crossfade */}
-          <div className="uxf-info" aria-live="polite" aria-atomic="true">
+          {/* Left: stage copy */}
+          <div className="uxp-stages" aria-live="polite" aria-atomic="true">
             {STAGES.map((s, i) => (
               <div
                 key={s.num}
-                className={`uxf-info-item${i === active ? ' is-active' : ''}`}
-                aria-hidden={i !== active}
+                className={`uxp-stage${stageClass(i, activeIndex, previousIndex)}`}
+                aria-hidden={i !== activeIndex}
               >
-                <span className="uxf-num">{s.num}</span>
-                <h3 className="uxf-title">{s.title}</h3>
-                <p className="uxf-subtitle">{s.subtitle}</p>
-                <p className="uxf-body-text">{s.body}</p>
-                <ul className="uxf-points">
+                <span className="uxp-stage-meta"><b>{s.num}</b> {s.nav.toUpperCase()}</span>
+                <h3 className="uxp-stage-heading">{s.title}</h3>
+                <p className="uxp-stage-sub">{s.subtitle.toUpperCase()}</p>
+                <p className="uxp-stage-desc">{s.body}</p>
+                <ul className="uxp-stage-points">
                   {s.points.map((pt) => <li key={pt}>{pt}</li>)}
                 </ul>
               </div>
             ))}
           </div>
 
-          {/* right: image — all items stacked, crossfade */}
-          <div className="uxf-visual">
+          {/* Right: process image */}
+          <div className="uxp-visual">
             {STAGES.map((s, i) => (
               <div
                 key={s.num}
-                className={`uxf-img-wrap${i === active ? ' is-active' : ''}`}
-                aria-hidden={i !== active}
+                className={`uxp-layer${stageClass(i, activeIndex, previousIndex)}`}
+                aria-hidden={i !== activeIndex}
               >
                 <img
                   src={s.image}
                   alt={s.alt}
-                  className="uxf-img"
+                  className="uxp-img"
                   loading="lazy"
                   draggable="false"
                 />
               </div>
             ))}
           </div>
+
+          {/* Step navigation tabs */}
+          <ol
+            className="uxp-tabs"
+            aria-label="Design process steps"
+            ref={tabsRef}
+          >
+            {STAGES.map((s, i) => {
+              const isActive = i === activeIndex;
+              return (
+                <li key={s.num} className={isActive ? 'is-active' : undefined}>
+                  <button
+                    type="button"
+                    aria-current={isActive ? 'step' : undefined}
+                    onClick={() => goTo(i)}
+                  >
+                    <span className="uxp-tab-num">{s.num}</span>
+                    <span className="uxp-tab-name">{s.nav}</span>
+                  </button>
+                </li>
+              );
+            })}
+          </ol>
 
         </div>
       </div>
