@@ -1,34 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import ServicePage from './ServicePage';
+import UXDesignFlow from './UXDesignFlow';
 import heroImg from '../../assets/services/website.jpeg';
-
-const steps = [
-  {
-    title: 'Discover',
-    text: 'We learn the product, audience, business goals and current friction before designing solutions.',
-    deliverables: ['Stakeholder notes', 'User needs', 'Pain points'],
-  },
-  {
-    title: 'Define',
-    text: 'We turn discovery into clear priorities so the interface supports the most important tasks first.',
-    deliverables: ['User groups', 'Key tasks', 'Content priorities'],
-  },
-  {
-    title: 'Structure',
-    text: 'We map how information, actions and screens connect so the product feels predictable.',
-    deliverables: ['User flows', 'Screen map', 'Information hierarchy'],
-  },
-  {
-    title: 'Design',
-    text: 'We create polished interface direction with typography, components, responsive layouts and states.',
-    deliverables: ['High-fidelity screens', 'Component patterns', 'Responsive rules'],
-  },
-  {
-    title: 'Validate',
-    text: 'We review the experience against real tasks and refine details before development handoff.',
-    deliverables: ['Clickable prototype', 'Design QA notes', 'Developer handoff'],
-  },
-];
 
 const designServices = [
   ['websites', 'Websites', 'Clear, responsive experiences for modern businesses.'],
@@ -364,76 +337,6 @@ function Card({ icon, title, text }) {
   );
 }
 
-function Stepper() {
-  const [active, setActive] = useState(0);
-  const tabRefs = useRef([]);
-
-  const focusTab = (index) => {
-    setActive(index);
-    tabRefs.current[index]?.focus();
-  };
-
-  const onKeyDown = (event, index) => {
-    if (event.key === 'ArrowRight') {
-      event.preventDefault();
-      focusTab((index + 1) % steps.length);
-    }
-    if (event.key === 'ArrowLeft') {
-      event.preventDefault();
-      focusTab((index - 1 + steps.length) % steps.length);
-    }
-    if (event.key === 'Home') {
-      event.preventDefault();
-      focusTab(0);
-    }
-    if (event.key === 'End') {
-      event.preventDefault();
-      focusTab(steps.length - 1);
-    }
-  };
-
-  return (
-    <div className="ux2-stepper">
-      <div className="ux2-tabs" role="tablist" aria-label="UI/UX design process">
-        {steps.map((step, index) => (
-          <button
-            ref={(node) => { tabRefs.current[index] = node; }}
-            type="button"
-            role="tab"
-            id={`ux2-tab-${index}`}
-            aria-selected={active === index}
-            aria-controls={`ux2-panel-${index}`}
-            tabIndex={active === index ? 0 : -1}
-            className="ux2-tab"
-            onClick={() => setActive(index)}
-            onKeyDown={(event) => onKeyDown(event, index)}
-            key={step.title}
-          >
-            <span>{String(index + 1).padStart(2, '0')}</span>
-            {step.title}
-          </button>
-        ))}
-      </div>
-
-      {steps.map((step, index) => (
-        <div
-          role="tabpanel"
-          id={`ux2-panel-${index}`}
-          aria-labelledby={`ux2-tab-${index}`}
-          hidden={active !== index}
-          className="ux2-panel"
-          key={step.title}
-        >
-          <p>{step.text}</p>
-          <ul aria-label={`${step.title} deliverables`}>
-            {step.deliverables.map((item) => <li key={item}>{item}</li>)}
-          </ul>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 function FlowDiagram() {
   return (
     <div className="ux2-flow" aria-label="Experience flow from entry to completion">
@@ -587,13 +490,7 @@ export default function UIUXDesign() {
     >
       <style>{PAGE_CSS}</style>
 
-      <Section
-        eyebrow="Process"
-        title="A focused path from problem to polished interface."
-        text="Each phase reduces uncertainty: first we understand the work, then we shape the flow, design the interface and validate the result."
-      >
-        <Stepper />
-      </Section>
+      <UXDesignFlow />
 
       <Section
         eyebrow="Structure"

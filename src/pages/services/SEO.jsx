@@ -125,7 +125,7 @@ function SiteMock({ className = '' }) {
       <line x1="0" y1="24" x2="400" y2="24" className="sx-s-line" />
       {[14, 26, 38].map((x) => <circle key={x} cx={x} cy="12" r="3" className="sx-s-dot" />)}
       <rect x="60" y="6" width="190" height="12" rx="6" className="sx-s-line" />
-      <image href="/images/services/crm.jpeg" x="1" y="25" width="398" height="217" preserveAspectRatio="xMidYMid meet" />
+      <image href="/images/services/crm.png" x="1" y="25" width="398" height="217" preserveAspectRatio="xMidYMid meet" />
     </g>
   );
 }
@@ -656,6 +656,7 @@ function Outcome() {
           <div className="sx-eyebrow">The outcome</div>
           <h2 className="sx-h2 sx-h2--xl">Better SEO should create <em>real business momentum.</em></h2>
         </Reveal>
+
         <div className={`sx-momentum${inView ? ' is-in' : ''}`} ref={ref}>
           <div className="sx-momentum-line"><span /></div>
           <ol>
@@ -688,7 +689,7 @@ function FinalCta() {
         </div>
         <div className="sx-cta-side">
           <p>Tell us where you want to grow and we’ll identify where search can create the strongest opportunity.</p>
-          <a href="/contact" className="sx-btn">Start an SEO Conversation →</a>
+          <a href="/contact" className="sx-btn">Start an SEO Conversation</a>
         </div>
       </Reveal>
     </section>
