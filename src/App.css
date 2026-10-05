@@ -1620,16 +1620,7 @@ button.danger,
 .sp--ai-automation .sp-inner { max-width: 1152px; }
 .sp--custom-business-software .sp-inner { max-width: 1152px; }
 .sp--seo .sp-inner { max-width: 1152px; }
-.sp--custom-business-software .sp-header {
-  padding: calc(72px + 88px) 0 72px;
-  background: #f6f1ea;
-}
-.sp--custom-business-software .sp-title {
-  color: #1f2428;
-}
-.sp--custom-business-software .sp-desc {
-  color: #555;
-}
+/* sp--custom-business-software hero overrides moved to cbs.css */
 .sp--seo .sp-header {
   padding: calc(72px + 88px) 0 72px;
   background: #f6f1ea;
