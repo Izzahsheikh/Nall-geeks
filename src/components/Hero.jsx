@@ -179,8 +179,8 @@ export default function Hero() {
                 marginBottom: '2.5rem',
               }}
             >
-              NallGeeks takes your product from architecture to deployment —
-              web, mobile, and cloud. Built for founders who can't afford
+              NallGeeks takes your product from architecture to deployment 
+              Web, Mobile, and Cloud. Built for founders who can't afford
               to ship twice.
             </p>
 
