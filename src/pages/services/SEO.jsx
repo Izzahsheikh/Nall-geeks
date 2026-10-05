@@ -137,9 +137,9 @@ const CRAWL_NODES = [[28, 49], [20, 110], [110, 95], [110, 172], [335, 172], [28
 const CRAWL_GAP = 0.5;
 
 const UNDERSTAND_ROWS = [
-  ['Page title', 'Custom CRM Software | NallGeeks', 78],
-  ['H1', 'Custom CRM Software for Growing Teams', 104],
-  ['Content', 'Features, workflows, who it is for', 189],
+  ['Page title', 'Custom CRM Software | NallGeeks', 66],
+  ['H1', 'Custom CRM Software for Growing Teams', 146],
+  ['Content', 'Features, workflows, who it is for', 226],
 ];
 const UNDERSTAND_META = [
   ['Internal links', '/services/custom-business-software'],
@@ -158,12 +158,12 @@ const SERP_RESULTS = [
 const RANK_FROM = [2, 0, 1];
 
 const SITE_POSITIONS = [
-  'translate(80px, 20px) scale(1.65)',     // 0: Website — large, fills most of canvas
-  'translate(80px, 20px) scale(1.65)',     // 1: Crawl — matches Website so crawl overlay aligns
-  'translate(10px, 68px) scale(1.21)',     // 2: Understand — 55% width, annotations right
-  'translate(44px, 95px) scale(0.9)',      // 3: Index — smaller left, index panel right
-  'translate(446px, 70px) scale(1.05)',    // 4: Rank — right side, SERP on left
-  'translate(446px, 70px) scale(1.05)',    // 5: Visitor — same right position as Rank
+  'translate(200px, 18px) scale(1.65)',    // 0: Website — centred in wider 1060 canvas
+  'translate(200px, 18px) scale(1.65)',    // 1: Crawl — matches Website
+  'translate(10px,  18px) scale(1.65)',    // 2: Understand — full scale, annotations right
+  'translate(10px,  78px) scale(0.92)',    // 3: Index — small left, panel right
+  'translate(540px, 46px) scale(1.18)',    // 4: Rank — right side, larger than before
+  'translate(540px, 46px) scale(1.18)',    // 5: Visitor — same as Rank
 ];
 
 function FlowCanvas({ stage }) {
@@ -173,7 +173,7 @@ function FlowCanvas({ stage }) {
     .join(' ');
 
   return (
-    <svg className="sx-flow-svg" viewBox="0 0 880 440" role="img" aria-label="Animated diagram: a website is crawled, understood, indexed, ranked and visited.">
+    <svg className="sx-flow-svg" viewBox="0 0 1060 440" role="img" aria-label="Animated diagram: a website is crawled, understood, indexed, ranked and visited.">
       {/* persistent website */}
       <g className={wrapClass} style={{ transform: SITE_POSITIONS[stage] }}>
         <g className="sx-site-nudge">
@@ -182,7 +182,7 @@ function FlowCanvas({ stage }) {
       </g>
 
       {/* 02 crawl: a crawler follows links between a few meaningful points */}
-      <g transform="translate(80 20) scale(1.65)">
+      <g transform="translate(200 18) scale(1.65)">
         <g className={`sx-layer${stage === 1 ? ' is-on' : ''}`}>
           {CRAWL_NODES.slice(1).map(([x, y], i) => {
             const [px, py] = CRAWL_NODES[i];
@@ -208,44 +208,44 @@ function FlowCanvas({ stage }) {
       {/* 03 understand — 3 connector rows + 2 metadata rows without connectors */}
       <g className={`sx-layer${stage === 2 ? ' is-on' : ''}`}>
         {UNDERSTAND_ROWS.map(([label, value, fromY], i) => {
-          const y = 58 + i * 88;
+          const y = 58 + i * 80;
           const delay = 0.2 + i * 0.45;
           return (
             <g key={label}>
-              <path d={`M432 ${fromY} C462 ${fromY} 462 ${y + 8} 514 ${y + 8}`} pathLength="1" className="sx-link-line sx-u-line" style={{ animationDelay: `${delay}s` }} />
-              <circle cx="514" cy={y + 8} r="3.5" className="sx-link-dot sx-u-dot" style={{ animationDelay: `${delay + 0.35}s` }} />
+              <path d={`M580 ${fromY} C635 ${fromY} 690 ${y + 8} 700 ${y + 8}`} pathLength="1" className="sx-link-line sx-u-line" style={{ animationDelay: `${delay}s` }} />
+              <circle cx="700" cy={y + 8} r="3.5" className="sx-link-dot sx-u-dot" style={{ animationDelay: `${delay + 0.35}s` }} />
               <g className="sx-u-text" style={{ transitionDelay: `${delay + 0.4}s` }}>
-                <text x="532" y={y + 2} className="sx-svg-label">{label}</text>
-                <text x="532" y={y + 22} className="sx-svg-value">{value}</text>
+                <text x="716" y={y + 2} className="sx-svg-label">{label}</text>
+                <text x="716" y={y + 22} className="sx-svg-value">{value}</text>
               </g>
             </g>
           );
         })}
         {UNDERSTAND_META.map(([label, value], i) => {
-          const y = 58 + UNDERSTAND_ROWS.length * 88 + i * 72;
+          const y = 58 + UNDERSTAND_ROWS.length * 80 + i * 66;
           const delay = 0.2 + UNDERSTAND_ROWS.length * 0.45 + i * 0.3 + 0.4;
           return (
             <g key={label} className="sx-u-text" style={{ transitionDelay: `${delay}s` }}>
-              <text x="532" y={y + 2} className="sx-svg-label">{label}</text>
-              <text x="532" y={y + 22} className="sx-svg-value">{value}</text>
+              <text x="716" y={y + 2} className="sx-svg-label">{label}</text>
+              <text x="716" y={y + 22} className="sx-svg-value">{value}</text>
             </g>
           );
         })}
       </g>
 
-      {/* 04 index */}
+      {/* 04 index — CRM right edge at ~378; panel starts at x=460 */}
       <g className={`sx-layer${stage === 3 ? ' is-on' : ''}`}>
-        <path d="M402 220 C435 220 458 220 488 220" className="sx-link-line sx-flow-arrow" />
-        <path d="M477 214 L486 220 L477 226" className="sx-link-line" />
-        <rect x="500" y="66" width="350" height="238" rx="8" className="sx-s-frame" />
-        <text x="522" y="96" className="sx-svg-label">Search index</text>
-        <line x1="500" y1="112" x2="850" y2="112" className="sx-s-line" />
+        <path d="M378 220 C418 220 448 220 460 220" className="sx-link-line sx-flow-arrow" />
+        <path d="M449 214 L458 220 L449 226" className="sx-link-line" />
+        <rect x="470" y="60" width="380" height="258" rx="8" className="sx-s-frame" />
+        <text x="492" y="90" className="sx-svg-label">Search index</text>
+        <line x1="470" y1="106" x2="850" y2="106" className="sx-s-line" />
         {INDEX_ROWS.map((row, i) => {
           const isNew = i === 2;
           return (
             <g key={row} className="sx-index-row" style={{ transitionDelay: `${0.25 + i * 0.14}s` }}>
-              {isNew && <rect x="508" y={120 + i * 42} width="334" height="36" rx="5" className="sx-index-hl" />}
-              <text x="524" y={144 + i * 42} className={`sx-svg-value${isNew ? ' sx-index-new-text' : ''}`}>{row}</text>
+              {isNew && <rect x="480" y={114 + i * 42} width="362" height="36" rx="5" className="sx-index-hl" />}
+              <text x="496" y={138 + i * 42} className={`sx-svg-value${isNew ? ' sx-index-new-text' : ''}`}>{row}</text>
             </g>
           );
         })}
@@ -296,7 +296,7 @@ function FlowCanvas({ stage }) {
             <path d="M0 0 L0 20 L6 14 L11 25 L15 23 L10 13 L18 13 Z" className="sx-cursor" />
           </g>
         </g>
-        <path d="M444 173 L462 173" pathLength="1" className="sx-link-line sx-visit-path" />
+        <path d="M444 173 L538 173" pathLength="1" className="sx-link-line sx-visit-path" />
       </g>
     </svg>
   );

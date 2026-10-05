@@ -69,7 +69,7 @@
 /* ---------- how search works ---------- */
 .sx-flow { padding: 60px 0 68px; background: var(--sx-paper); color: var(--sx-ink); }
 .sx-flow-head { margin-bottom: 28px; text-align: center; }
-.sx-flow-body { display: grid; grid-template-columns: 30fr 70fr; gap: 44px; align-items: center; margin-bottom: 20px; }
+.sx-flow-body { display: grid; grid-template-columns: 28fr 72fr; gap: 44px; align-items: center; margin-bottom: 20px; }
 .sx-flow-info { display: grid; }
 .sx-flow-info-item { grid-area: 1 / 1; opacity: 0; visibility: hidden; transform: translateY(10px); transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0.5s; }
 .sx-flow-info-item.is-active { opacity: 1; visibility: visible; transform: none; transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.1s, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.1s, visibility 0s; }
@@ -204,8 +204,8 @@
 
 /* site wrap — transitions position between stages */
 .sx-site-wrap { transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1); }
-.sx-site-wrap.is-understand { opacity: 0.85; }
-.sx-site-wrap.is-index { opacity: 0.8; }
+.sx-site-wrap.is-understand { opacity: 1; }
+.sx-site-wrap.is-index { opacity: 0.9; }
 .sx-site-wrap.is-hidden { opacity: 0; }
 .sx-site-wrap.is-visitor { opacity: 1; transition-duration: 0.6s; }
 
