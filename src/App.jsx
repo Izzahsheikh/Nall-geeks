@@ -7,7 +7,6 @@ import Services from './components/Services';
 import ServiceStrips from './components/ServiceStrips';
 import Projects from './components/Projects';
 import About from './components/About';
-import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
 import Careers from './components/Careers';
 import CareerJob from './components/careers/CareerJob';
@@ -68,7 +67,6 @@ export default function App() {
           <Hero />
           <Services />
           <ServiceStrips />
-          <Testimonials />
           <FAQ />
         </>
       )}

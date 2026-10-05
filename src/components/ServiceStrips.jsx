@@ -21,7 +21,7 @@ export default function ServiceStrips() {
               initial build to production launch, we focus on responsive execution, lean codebases, and long-term
               maintainability.
             </p>
-            <a href="/projects" className="btn-ghost">View projects →</a>
+            <a href="/projects" className="btn-ghost">View projects</a>
           </div>
           <div className="strip-visual">
             <img src={webImg} alt="Web Development" className="strip-img" />
@@ -41,7 +41,7 @@ export default function ServiceStrips() {
               UI design with solid system architecture, we deliver apps that launch fast, run smoothly, and adapt to
               every screen size.
             </p>
-            <a href="/projects" className="btn-ghost">View projects →</a>
+            <a href="/projects" className="btn-ghost">View projects</a>
           </div>
           <div className="strip-visual">
             <img src={mobileImg} alt="Mobile Apps" className="strip-img" />
@@ -61,7 +61,7 @@ export default function ServiceStrips() {
               into intuitive user journeys, building unified design systems that reduce user friction and elevate
               product usability.
             </p>
-            <a href="/projects" className="btn-ghost">View projects →</a>
+            <a href="/projects" className="btn-ghost">View projects</a>
           </div>
           <div className="strip-visual">
             <img src={uiImg} alt="UI/UX Design" className="strip-img" />

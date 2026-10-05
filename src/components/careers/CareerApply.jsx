@@ -82,7 +82,7 @@ export default function CareerApply({ jobId }) {
   const [fileErrors, setFileErrors] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
 
-  useDocumentTitle(job ? `Apply — ${job.title} — ${COMPANY.name} Careers` : null);
+  useDocumentTitle(null);
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const handleChange = (e) => {

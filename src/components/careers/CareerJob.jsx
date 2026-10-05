@@ -6,7 +6,7 @@ import { BackLink, CompanyLogo, RoleDescription, useDocumentTitle } from './part
 export default function CareerJob({ jobId }) {
   const job = getPosition(jobId);
 
-  useDocumentTitle(job ? `${job.title} — ${COMPANY.name} Careers` : null);
+  useDocumentTitle(null);
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   return (

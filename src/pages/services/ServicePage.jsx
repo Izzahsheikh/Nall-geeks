@@ -8,6 +8,8 @@ import WebsiteBuildProcess from './WebsiteBuildProcess';
  * can reserve space). When projects are supplied, only project/photo pairs are rendered so the grid never leaves empty slots.
  */
 function renderServiceTitle(title) {
+  if (typeof title !== 'string') return title;
+
   const words = title.trim().split(/\s+/);
 
   if (words.length < 2) return title;
@@ -23,6 +25,7 @@ function renderServiceTitle(title) {
 
 export default function ServicePage({
   title,
+  eyebrow = 'Services',
   description,
   children = null,
   photos = [],
@@ -49,7 +52,7 @@ export default function ServicePage({
       <section className="sp-header" data-nav-hero>
         <div className={`sp-inner sp-hero-layout${heroAside ? ' sp-hero-layout--split' : ''}`}>
           <div className="sp-hero-copy">
-            <div className="sp-eyebrow">Services</div>
+            <div className="sp-eyebrow">{eyebrow}</div>
             <h1 className="sp-title">{renderServiceTitle(title)}</h1>
             <p className="sp-desc">{description}</p>
             {heroActions && <div className="sp-hero-actions">{heroActions}</div>}

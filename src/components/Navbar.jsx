@@ -20,6 +20,7 @@ const SCROLL_THRESHOLD = 50;
 
 export default function Navbar() {
   const hideBookingCta = false;
+  const isServicePage = window.location.pathname.startsWith('/services/');
   const [scrolled, setScrolled] = useState(false);
   const [glass, setGlass] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -146,7 +147,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className={`navbar${scrolled ? ' scrolled' : ''}${glass ? ' glass' : ''}`}>
+      <nav className={`navbar${scrolled ? ' scrolled' : ''}${glass ? ' glass' : ''}${isServicePage ? ' navbar--service' : ''}`}>
         <div className="navbar-inner">
           <a href="/" className="navbar-logo" onClick={(e) => handleNavClick(e, '/')}>
             <span className="navbar-logo-mark">

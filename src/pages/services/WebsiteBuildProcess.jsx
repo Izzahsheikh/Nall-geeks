@@ -14,31 +14,31 @@ const STAGES = [
     label: 'Discovery',
     heading: 'Understanding The Client',
     sentence: 'We learn about the business, its audience and what the website needs to achieve.',
-    duration: 4600,
+    duration: 3800,
   },
   {
     label: 'Design',
     heading: 'Shaping The Experience',
     sentence: 'We turn those insights into a clear structure, visual direction and interface.',
-    duration: 4800,
+    duration: 3800,
   },
   {
     label: 'Development',
     heading: 'Building The Website',
     sentence: 'We turn the approved design into a fast, responsive and functional website.',
-    duration: 4800,
+    duration: 3800,
   },
   {
     label: 'Testing',
     heading: 'Refining Every Detail',
     sentence: 'We test the experience across devices and polish every important interaction.',
-    duration: 5000,
+    duration: 3900,
   },
   {
     label: 'Launch',
     heading: 'Taking It Live',
     sentence: 'After final checks, the finished website is ready for real customers.',
-    duration: 5200,
+    duration: 4200,
   },
 ];
 
@@ -247,7 +247,7 @@ export default function WebsiteBuildProcess() {
                 aria-hidden={index !== activeIndex}
                 key={stage.label}
               >
-                <span className="build-stage-meta"><b>{pad(index + 1)}</b> — {stage.label}</span>
+                <span className="build-stage-meta"><b>{pad(index + 1)}</b> {stage.label}</span>
                 <h3>{stage.heading}</h3>
                 <p>{stage.sentence}</p>
               </div>

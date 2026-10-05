@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import heroBg from '../assets/services/heroForHomePage.jpeg';
+import heroBg from '../assets/services/heroForHomePage@2x.jpeg';
 
-const WORDS = ['High Performance.', 'Pixel Perfect.', 'Production Ready.', 'Scalable.'];
+const WORDS = ['High Performance', 'Pixel Perfect', 'Production Ready', 'Scalable'];
 const TICKER_ITEMS = [
   { label: 'NgPartitions', url: 'https://ngpartitions.co.uk/' },
   { label: 'GogoTyres',    url: 'https://www.gogotyre.co.uk/' },
@@ -101,8 +101,8 @@ export default function Hero() {
             inset: 0,
             background: [
               // Bottom stop stays dark so the hero still joins the #171717 ticker strip without a seam.
-              'linear-gradient(180deg, rgba(23,23,23,0.2) 0%, rgba(23,23,23,0.08) 35%, rgba(23,23,23,0.9) 100%)',
-              'linear-gradient(90deg, rgba(23,23,23,0.55) 0%, rgba(23,23,23,0.34) 38%, rgba(23,23,23,0.1) 68%, rgba(23,23,23,0.03) 100%)',
+              'linear-gradient(180deg, rgba(23,23,23,0.12) 0%, rgba(23,23,23,0.02) 40%, rgba(23,23,23,0.9) 100%)',
+              'linear-gradient(90deg, rgba(23,23,23,0.5) 0%, rgba(23,23,23,0.28) 38%, rgba(23,23,23,0.06) 68%, rgba(23,23,23,0) 100%)',
             ].join(', '),
             zIndex: 1,
           }}
@@ -199,7 +199,7 @@ export default function Hero() {
                   letterSpacing: '0.01em',
                 }}
               >
-                {'Start a Project \u2192'}
+                Start a Project
               </a>
 
               {/* Secondary — now visually clear: solid white border + legible text */}
