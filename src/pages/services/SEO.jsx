@@ -57,12 +57,42 @@ function Reveal({ as: Tag = 'div', delay = 0, className = '', children, ...rest 
 /* ---------- data ---------- */
 
 const FLOW = [
-  ['Website', 'Your website is the foundation of your search presence.'],
-  ['Crawl', 'Search engines discover your pages and content.'],
-  ['Understand', 'Search engines analyze and understand your content.'],
-  ['Index', 'Relevant pages are stored and made searchable.'],
-  ['Rank', 'Your pages compete for visibility in search results.'],
-  ['Visitor', 'Better visibility brings the right visitors to your site.'],
+  {
+    num: '01',
+    label: 'Website',
+    heading: 'Your website is the starting point',
+    desc: 'Every search result traces back to a website. The structure, content, and accessibility of your site determine how search engines read and interpret it.',
+  },
+  {
+    num: '02',
+    label: 'Crawl',
+    heading: 'Search engines discover your pages',
+    desc: 'Automated crawlers follow links across your site, reading each page in turn. The cleaner your structure, the more thoroughly your content gets found.',
+  },
+  {
+    num: '03',
+    label: 'Understand',
+    heading: 'Content is analysed in depth',
+    desc: 'Crawlers read your page title, headings, and body copy — identifying the topic, intent, and how each page connects to the rest of your site.',
+  },
+  {
+    num: '04',
+    label: 'Index',
+    heading: 'Pages are stored and made searchable',
+    desc: 'Pages that meet quality signals are added to the search index. Only indexed pages are eligible to appear in results — the rest are invisible to search.',
+  },
+  {
+    num: '05',
+    label: 'Rank',
+    heading: 'Your pages compete for visibility',
+    desc: 'When someone searches, the engine matches intent to indexed pages and ranks them. Relevance, authority, and experience are the deciding factors.',
+  },
+  {
+    num: '06',
+    label: 'Visitor',
+    heading: 'Better rankings bring the right people',
+    desc: 'A higher position means more clicks from people already searching for what you offer. That intent makes organic search one of the strongest acquisition channels.',
+  },
 ];
 
 const INTENTS = [
@@ -116,6 +146,13 @@ const OUTCOME_STEPS = [
 ];
 
 /* ---------- how search works ---------- */
+
+function stageClass(i, active, prev) {
+  if (i === active) return ' is-active';
+  if (i === prev) return ' is-leaving';
+  return '';
+}
+
 /* ---------- signature flow ---------- */
 
 function SiteMock({ className = '' }) {
@@ -304,17 +341,23 @@ function FlowCanvas({ stage }) {
 
 function SearchFlow() {
   const sectionRef = useRef(null);
+  const tabsRef = useRef(null);
   const { active: stage, select, hold, release } = useCycle(sectionRef, FLOW.length, FLOW_STEP_MS);
+  const [prevStage, setPrevStage] = useState(-1);
+  const prevRef = useRef(-1);
 
-  const prevStage = useRef(0);
-  const [restarting, setRestarting] = useState(false);
   useEffect(() => {
-    const wrapped = prevStage.current === FLOW.length - 1 && stage === 0;
-    prevStage.current = stage;
-    if (!wrapped) return undefined;
-    setRestarting(true);
-    const t = setTimeout(() => setRestarting(false), 900);
-    return () => clearTimeout(t);
+    const prev = prevRef.current;
+    if (prev !== stage) {
+      setPrevStage(prev);
+      prevRef.current = stage;
+    }
+  }, [stage]);
+
+  useEffect(() => {
+    if (!tabsRef.current) return;
+    const tab = tabsRef.current.children[stage];
+    if (tab) tab.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   }, [stage]);
 
   return (
@@ -324,45 +367,44 @@ function SearchFlow() {
           <div className="sx-eyebrow">How search works</div>
           <h2 className="sx-h2">From website to <em>search result</em></h2>
         </header>
-        <div className="sx-flow-body">
-          {/* left: active step info */}
-          <div className="sx-flow-info" aria-live="polite" aria-atomic="true">
-            {FLOW.map(([name, desc], i) => (
+        <div className="sx-flow-grid">
+          {/* left: stage copy */}
+          <div className="sx-flow-stages" aria-live="polite">
+            {FLOW.map((s, i) => (
               <div
-                key={name}
-                className={`sx-flow-info-item${i === stage ? ' is-active' : ''}`}
+                key={s.num}
+                className={`sx-flow-stage${stageClass(i, stage, prevStage)}`}
                 aria-hidden={i !== stage}
               >
-                <div className="sx-flow-info-label">
-                  <span className="sx-flow-info-num">{String(i + 1).padStart(2, '0')}</span>
-                  <strong className="sx-flow-info-title">{name}</strong>
-                </div>
-                <p className="sx-flow-info-desc">{desc}</p>
+                <span className="sx-flow-stage-meta">
+                  <b>{s.num}</b> {s.label.toUpperCase()}
+                </span>
+                <h3 className="sx-flow-stage-heading">{s.heading}</h3>
+                <p className="sx-flow-stage-desc">{s.desc}</p>
               </div>
             ))}
           </div>
           {/* right: animated diagram */}
-          <div className={`sx-flow-canvas${restarting ? ' is-restarting' : ''}`}>
+          <div className="sx-flow-canvas">
             <FlowCanvas stage={stage} />
           </div>
-        </div>
-        <div className="sx-flow-nodes">
-          <div className="sx-flow-nodes-line" aria-hidden="true" />
-          {FLOW.map(([name], i) => (
-            <button
-              type="button"
-              key={name}
-              className={`sx-flow-node${i === stage ? ' is-current' : ''}${i < stage ? ' is-past' : ''}`}
-              onClick={() => select(i)}
-              onMouseEnter={() => hold(i)}
-              onMouseLeave={release}
-              aria-current={i === stage ? 'step' : undefined}
-            >
-              <span className="sx-flow-node-dot" aria-hidden="true" />
-              <span className="sx-flow-node-num">{String(i + 1).padStart(2, '0')}</span>
-              <strong className="sx-flow-node-title">{name}</strong>
-            </button>
-          ))}
+          {/* bottom: rectangular tabs */}
+          <ol className="sx-flow-tabs" ref={tabsRef}>
+            {FLOW.map((s, i) => (
+              <li key={s.num} className={i === stage ? 'is-active' : undefined}>
+                <button
+                  type="button"
+                  onClick={() => select(i)}
+                  onMouseEnter={() => hold(i)}
+                  onMouseLeave={release}
+                  aria-current={i === stage ? 'step' : undefined}
+                >
+                  <span className="sx-flow-tab-num">{s.num}</span>
+                  <span className="sx-flow-tab-name">{s.label}</span>
+                </button>
+              </li>
+            ))}
+          </ol>
         </div>
       </div>
     </section>
