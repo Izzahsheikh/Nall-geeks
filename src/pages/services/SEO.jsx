@@ -122,10 +122,12 @@ function SiteMock({ className = '' }) {
   return (
     <g className={`sx-site ${className}`}>
       <rect width="400" height="244" rx="8" className="sx-s-frame" />
-      <line x1="0" y1="24" x2="400" y2="24" className="sx-s-line" />
-      {[14, 26, 38].map((x) => <circle key={x} cx={x} cy="12" r="3" className="sx-s-dot" />)}
-      <rect x="60" y="6" width="190" height="12" rx="6" className="sx-s-line" />
-      <image href="/images/services/crm.png" x="1" y="25" width="398" height="217" preserveAspectRatio="xMidYMid meet" />
+      <image href="/images/services/crm.png" x="2" y="2" width="396" height="240" preserveAspectRatio="xMidYMid slice" clipPath="url(#siteClip)" />
+      <defs>
+        <clipPath id="siteClip">
+          <rect x="2" y="2" width="396" height="240" rx="7" />
+        </clipPath>
+      </defs>
     </g>
   );
 }
@@ -138,11 +140,11 @@ const UNDERSTAND_ROWS = [
   ['Page title', 'Custom CRM Software | NallGeeks', 128],
   ['H1', 'Custom CRM Software for Growing Teams', 150],
   ['Content', 'Features, workflows, who it is for', 196],
-  ['Internal links', '→ /services/custom-business-software', 238],
-  ['Intent', 'Commercial — comparing solutions', 262],
+  ['Internal links', '→ /services/custom-business-software', 230],
+  ['Intent', 'Commercial — comparing solutions', 248],
 ];
 
-const INDEX_ROWS = ['/', '/about', '/services/web-development', '/services/custom-crm', '/contact'];
+const INDEX_ROWS = ['about', 'services/web-development', 'services/custom-crm', 'contact'];
 
 const SERP_RESULTS = [
   { id: 0, client: true, url: 'yourbusiness.com › crm', title: 'Custom CRM for small business teams' },
@@ -224,20 +226,15 @@ function FlowCanvas({ stage }) {
       <g className={`sx-layer${stage === 3 ? ' is-on' : ''}`}>
         <path d="M262 225 L336 225" className="sx-link-line sx-flow-arrow" />
         <path d="M328 218 L338 225 L328 232" className="sx-link-line" />
-        <rect x="350" y="50" width="490" height="340" rx="10" className="sx-s-frame" />
+        <rect x="350" y="50" width="490" height="270" rx="10" className="sx-s-frame" />
         <text x="374" y="86" className="sx-svg-label">Search index</text>
         <line x1="350" y1="104" x2="840" y2="104" className="sx-s-line" />
         {INDEX_ROWS.map((row, i) => {
-          const isNew = i === 3;
+          const isNew = i === 2;
           return (
-            <g key={row} className="sx-index-row" style={{ transitionDelay: `${0.25 + i * 0.12}s` }}>
-              {isNew && <rect x="358" y={118 + i * 54} width="474" height="44" rx="6" className="sx-index-hl" />}
-              <text x="378" y={146 + i * 54} className={`sx-svg-value${isNew ? ' sx-index-new-text' : ''}`}>{row}</text>
-              {isNew ? (
-                <text x="820" y={146 + i * 54} textAnchor="end" className="sx-svg-label is-accent sx-index-stamp">Indexed</text>
-              ) : (
-                <text x="820" y={146 + i * 54} textAnchor="end" className="sx-svg-label">✓</text>
-              )}
+            <g key={row} className="sx-index-row" style={{ transitionDelay: `${0.25 + i * 0.14}s` }}>
+              {isNew && <rect x="358" y={116 + i * 48} width="474" height="40" rx="5" className="sx-index-hl" />}
+              <text x="378" y={141 + i * 48} className={`sx-svg-value${isNew ? ' sx-index-new-text' : ''}`}>{row}</text>
             </g>
           );
         })}
