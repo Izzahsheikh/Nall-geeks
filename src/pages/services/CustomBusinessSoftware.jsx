@@ -46,60 +46,16 @@ const ROLE_NODES = [
 ];
 const ROLE_FLOWS = ['Enquiry', 'Quote / Order', 'Fulfilment', 'Invoice'];
 
-const ARCH_LAYERS = [
-  { id: 'people', label: '01  PEOPLE',
-    nodes: [
-      { id: 'customer', label: 'Customer' },
-      { id: 'staff',    label: 'Staff'    },
-      { id: 'manager',  label: 'Manager'  },
-      { id: 'admin',    label: 'Admin'    },
-    ]
-  },
-  { id: 'exp', label: '02  EXPERIENCE',
-    nodes: [
-      { id: 'cportal',   label: 'Customer Portal'    },
-      { id: 'pos-exp',   label: 'POS Interface'      },
-      { id: 'dash',      label: 'Internal Dashboard' },
-      { id: 'admpanel',  label: 'Admin Panel'        },
-    ]
-  },
-  { id: 'core', label: '03  CORE SYSTEM', isCore: true,
-    nodes: [
-      { id: 'crm',    label: 'CRM',       prime: true },
-      { id: 'pos',    label: 'POS',       prime: true },
-      { id: 'erp',    label: 'ERP',       prime: true },
-      { id: 'sales',  label: 'Sales'  },
-      { id: 'orders', label: 'Orders' },
-      { id: 'inv',    label: 'Inventory' },
-      { id: 'fin',    label: 'Finance'   },
-    ]
-  },
-  { id: 'data', label: '04  DATA',
-    nodes: [
-      { id: 'dc', label: 'Customers' },
-      { id: 'dp', label: 'Products'  },
-      { id: 'do', label: 'Orders'    },
-      { id: 'dy', label: 'Payments'  },
-      { id: 'di', label: 'Inventory' },
-      { id: 'da', label: 'Activity'  },
-    ]
-  },
-  { id: 'integr', label: '05  INTEGRATIONS',
-    nodes: [
-      { id: 'ip',  label: 'Payments'   },
-      { id: 'ia',  label: 'Accounting' },
-      { id: 'ie',  label: 'Email'      },
-      { id: 'iap', label: 'APIs'       },
-      { id: 'ian', label: 'Analytics'  },
-    ]
-  },
+const SYS_MODULES = [
+  { id: 'crm',    label: 'CRM',            cx: 162, cy: 148,
+    items: ['Customers', 'Leads', 'Follow-ups'] },
+  { id: 'pos',    label: 'POS',            cx: 738, cy: 148,
+    items: ['Sales', 'Payments', 'Receipts'] },
+  { id: 'erp',    label: 'ERP',            cx: 162, cy: 368,
+    items: ['Inventory', 'Purchasing', 'Finance'] },
+  { id: 'custom', label: 'Custom Modules', cx: 738, cy: 368,
+    items: ['Workflows', 'Approvals', 'Reporting'] },
 ];
-
-const ARCH_FOCUS = {
-  crm: ['customer', 'cportal', 'crm', 'sales', 'dc', 'ie'],
-  pos: ['staff', 'pos-exp', 'pos', 'orders', 'dy', 'di', 'ip'],
-  erp: ['manager', 'dash', 'erp', 'inv', 'fin', 'dp', 'ia', 'ian'],
-};
 
 const ORBIT_CORE = { cx: 550, cy: 270 };
 const ORBIT_NODES = [
@@ -292,60 +248,97 @@ function BusinessDiscovery() {
   );
 }
 
-/* ── Section 2: System Architecture ── */
-function SystemArchitecture() {
+/* ── Section 2: System Blocks (CRM / POS / ERP / Custom) ── */
+function SystemBlocks() {
   const [ref, inView] = useInView(0.08);
-  const [focus, setFocus] = useState(null);
-  const related = focus ? new Set(ARCH_FOCUS[focus] || []) : null;
+  const [focused, setFocused] = useState(null);
 
-  const nodeClass = (id) => {
-    if (!related) return 'cbs-an';
-    if (related.has(id)) return 'cbs-an is-lit';
-    return 'cbs-an is-dim';
+  /* SVG geometry */
+  const MW = 204, MH = 155;          /* module rect size */
+  const CX = 450, CY = 248;          /* core center */
+  const CW = 156, CH = 56;           /* core rect size */
+
+  /* Connection endpoints: inner edge of module → nearest corner of core */
+  const lineFor = (m) => {
+    const ex = m.cx < CX ? m.cx + MW / 2 : m.cx - MW / 2;   /* module inner edge x */
+    const cx = m.cx < CX ? CX - CW / 2  : CX + CW / 2;      /* core x corner */
+    const cy = m.cy < CY ? CY - CH / 2  : CY + CH / 2;      /* core y corner */
+    return { x1: ex, y1: m.cy, x2: cx, y2: cy };
   };
 
   return (
     <section className="cbs-section" ref={ref}>
       <div className="cbs-wrap">
-        <div className={`cbs-arch-head cbs-reveal${inView ? ' is-in' : ''}`}>
-          <span className="cbs-eyebrow">System Design</span>
-          <h2 className="cbs-h2">We design the system before<br />we design the screens.</h2>
-          <p className="cbs-lead">Before development begins, we define how users, workflows, data, permissions, business rules and integrations work together.</p>
+        <div className={`cbs-sblk-head cbs-reveal${inView ? ' is-in' : ''}`}>
+          <span className="cbs-eyebrow">System Architecture</span>
+          <h2 className="cbs-h2">CRM, POS, ERP — and everything<br />the business needs around them.</h2>
+          <p className="cbs-lead">Each system module is built around the business logic that belongs to it, connected through one central platform.</p>
         </div>
-      </div>
-      <div
-        className={`cbs-arch-diagram${inView ? ' is-in' : ''}${focus ? ` focus-${focus}` : ''}`}
-        onMouseLeave={() => setFocus(null)}
-        aria-label="System architecture diagram"
-      >
-        <div className="cbs-wrap">
-          {ARCH_LAYERS.map((layer, li) => (
-            <div key={layer.id}
-              className={`cbs-al${layer.isCore ? ' is-core' : ''}`}
-              style={{ animationDelay: inView ? `${li * 0.07}s` : '0s' }}
-            >
-              <span className="cbs-al-label">{layer.label}</span>
-              <div className="cbs-al-nodes">
-                {layer.nodes.map(n => (
-                  <button
-                    key={n.id}
-                    className={`${nodeClass(n.id)}${n.prime ? ' is-prime' : ''}`}
-                    onMouseEnter={() => n.id in ARCH_FOCUS ? setFocus(n.id) : null}
-                    onFocus={() => n.id in ARCH_FOCUS ? setFocus(n.id) : null}
-                    tabIndex={n.id in ARCH_FOCUS ? 0 : -1}
-                    aria-label={n.label}
-                  >
-                    {n.label}
-                  </button>
+        <div className={`cbs-sblk-canvas${inView ? ' is-in' : ''}`}>
+          <svg viewBox="0 0 900 500" className="cbs-sblk-svg"
+            onMouseLeave={() => setFocused(null)}
+            aria-label="System architecture: CRM, POS, ERP and Custom Modules connected to Core Platform"
+          >
+            {/* Connection lines */}
+            {SYS_MODULES.map(m => {
+              const l = lineFor(m);
+              return (
+                <line key={m.id + '-ln'}
+                  x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2}
+                  className={`cbs-sln${focused === m.id ? ' is-on' : ''}`}
+                />
+              );
+            })}
+            {/* Small dots at core corners where lines meet */}
+            {SYS_MODULES.map(m => {
+              const l = lineFor(m);
+              return <circle key={m.id + '-dot'} cx={l.x2} cy={l.y2} r={3}
+                className={`cbs-scn${focused === m.id ? ' is-on' : ''}`} />;
+            })}
+
+            {/* Core platform block */}
+            <rect x={CX - CW / 2} y={CY - CH / 2} width={CW} height={CH} rx={3}
+              className="cbs-sblk-core" />
+            <text x={CX} y={CY - 9} className="cbs-sblk-core-sub">CONNECTED PLATFORM</text>
+            <text x={CX} y={CY + 15} className="cbs-sblk-core-name">Core System</text>
+
+            {/* System module blocks */}
+            {SYS_MODULES.map((m, mi) => (
+              <g key={m.id}
+                role="button"
+                tabIndex={0}
+                aria-label={m.label}
+                className={`cbs-smod${focused === m.id ? ' is-on' : ''}`}
+                onMouseEnter={() => setFocused(m.id)}
+                onFocus={() => setFocused(m.id)}
+                style={{ animationDelay: inView ? `${mi * 0.12}s` : '0s' }}
+              >
+                {/* Module card */}
+                <rect x={m.cx - MW / 2} y={m.cy - MH / 2} width={MW} height={MH} rx={3}
+                  className="cbs-smod-bg" />
+                {/* Title bar separator */}
+                <line x1={m.cx - MW / 2 + 16} y1={m.cy - MH / 2 + 52}
+                  x2={m.cx + MW / 2 - 16} y2={m.cy - MH / 2 + 52}
+                  className="cbs-smod-div" />
+                {/* Label (module type) */}
+                <text x={m.cx} y={m.cy - MH / 2 + 22} className="cbs-smod-tag">
+                  {['CRM','POS','ERP','CUSTOM'][mi]}
+                </text>
+                {/* Title */}
+                <text x={m.cx} y={m.cy - MH / 2 + 41} className="cbs-smod-title">{m.label}</text>
+                {/* Sub-items */}
+                {m.items.map((item, ii) => (
+                  <g key={item}>
+                    <circle cx={m.cx - MW / 2 + 24} cy={m.cy - MH / 2 + 72 + ii * 28} r={2.5}
+                      className="cbs-smod-bullet" />
+                    <text x={m.cx - MW / 2 + 35} y={m.cy - MH / 2 + 77 + ii * 28}
+                      className="cbs-smod-item">{item}</text>
+                  </g>
                 ))}
-              </div>
-            </div>
-          ))}
-          <p className="cbs-arch-hint">
-            {focus
-              ? `${focus.toUpperCase()} — showing dependency path`
-              : 'HOVER CRM, POS OR ERP TO TRACE A DEPENDENCY PATH'}
-          </p>
+              </g>
+            ))}
+          </svg>
+          <p className="cbs-sblk-note">HOVER ANY MODULE TO HIGHLIGHT ITS CONNECTION</p>
         </div>
       </div>
     </section>
@@ -794,7 +787,7 @@ export default function CustomBusinessSoftware() {
     >
       <div className="cbs-root">
         <BusinessDiscovery />
-        <SystemArchitecture />
+        <SystemBlocks />
         <ConnectedBusiness />
         <ConnectedWorkflow />
         <HowWeBuild />
