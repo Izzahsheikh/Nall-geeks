@@ -91,9 +91,6 @@ export default function Hero() {
             backgroundSize: 'cover',
             backgroundPosition: 'center 30%',
             zIndex: 0,
-            // Increase contrast and pull down brightness to reduce screen glare/washed-out look.
-            // saturate slightly below 1 to suppress the warm-grey bleed, keeping the orange accents in the UI clean.
-            filter: 'contrast(1.22) brightness(0.86) saturate(0.92)',
           }}
         />
 
@@ -105,8 +102,7 @@ export default function Hero() {
             background: [
               // Bottom stop stays dark so the hero still joins the #171717 ticker strip without a seam.
               'linear-gradient(180deg, rgba(23,23,23,0.12) 0%, rgba(23,23,23,0.02) 40%, rgba(23,23,23,0.9) 100%)',
-              // Right-side overlay reduced (was 0.06 at 68%) so the monitor shows through with less darkening.
-              'linear-gradient(90deg, rgba(23,23,23,0.5) 0%, rgba(23,23,23,0.28) 38%, rgba(23,23,23,0.02) 65%, rgba(23,23,23,0) 100%)',
+              'linear-gradient(90deg, rgba(23,23,23,0.5) 0%, rgba(23,23,23,0.28) 38%, rgba(23,23,23,0.06) 68%, rgba(23,23,23,0) 100%)',
             ].join(', '),
             zIndex: 1,
           }}

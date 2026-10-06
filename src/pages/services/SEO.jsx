@@ -60,38 +60,38 @@ const FLOW = [
   {
     num: '01',
     label: 'Website',
-    heading: 'Your website is the starting point',
-    desc: 'Every search result traces back to a website. The structure, content, and accessibility of your site determine how search engines read and interpret it.',
+    heading: 'Your Website Is the Starting Point',
+    desc: 'Your pages, content and structure create the foundation of your search presence.',
   },
   {
     num: '02',
     label: 'Crawl',
-    heading: 'Search engines discover your pages',
-    desc: 'Automated crawlers follow links across your site, reading each page in turn. The cleaner your structure, the more thoroughly your content gets found.',
+    heading: 'Search Engines Discover Your Website',
+    desc: 'Search engines explore your pages and follow links to discover your content.',
   },
   {
     num: '03',
     label: 'Understand',
-    heading: 'Content is analysed in depth',
-    desc: 'Crawlers read your page title, headings, and body copy — identifying the topic, intent, and how each page connects to the rest of your site.',
+    heading: 'Your Content Is Understood',
+    desc: 'Search engines analyse each page to understand its topic, purpose and relevance.',
   },
   {
     num: '04',
     label: 'Index',
-    heading: 'Pages are stored and made searchable',
-    desc: 'Pages that meet quality signals are added to the search index. Only indexed pages are eligible to appear in results — the rest are invisible to search.',
+    heading: 'Relevant Pages Enter the Index',
+    desc: 'Useful pages are organised and stored so they can appear in relevant searches.',
   },
   {
     num: '05',
     label: 'Rank',
-    heading: 'Your pages compete for visibility',
-    desc: 'When someone searches, the engine matches intent to indexed pages and ranks them. Relevance, authority, and experience are the deciding factors.',
+    heading: 'Your Pages Compete for Visibility',
+    desc: 'Search engines evaluate relevance, quality and authority to decide where pages appear.',
   },
   {
     num: '06',
     label: 'Visitor',
-    heading: 'Better rankings bring the right people',
-    desc: 'A higher position means more clicks from people already searching for what you offer. That intent makes organic search one of the strongest acquisition channels.',
+    heading: 'The Right Person Finds You',
+    desc: 'A relevant search connects a potential customer with the right page on your website.',
   },
 ];
 
@@ -120,8 +120,8 @@ const TECH_ITEMS = [
 
 // Where each connector lands on the screenshot, as a fraction of its height.
 const TECH_TARGETS = [0.17, 0.47, 0.79, 0.21, 0.5, 0.79];
-const STEP_MS = 2800;
-const FLOW_STEP_MS = 4500;
+const STEP_MS = 2500;
+const FLOW_STEP_MS = 3500;
 
 // Dashboard panel each factor points at, as % of the screenshot: [left, top, width, height].
 const TECH_PANELS = [
@@ -153,189 +153,153 @@ function stageClass(i, active, prev) {
   return '';
 }
 
-/* ---------- signature flow ---------- */
-
-function SiteMock({ className = '' }) {
-  return (
-    <g className={`sx-site ${className}`}>
-      <rect width="400" height="244" rx="8" className="sx-s-frame" />
-      <image href="/images/services/crm.png" x="2" y="2" width="396" height="240" preserveAspectRatio="xMidYMid slice" clipPath="url(#siteClip)" />
-      <defs>
-        <clipPath id="siteClip">
-          <rect x="2" y="2" width="396" height="240" rx="7" />
-        </clipPath>
-      </defs>
-    </g>
-  );
-}
-
-// Crawler route through the CRM: home → deals → pipeline → leads → activity → revenue (coordinates in the site frame).
+// Crawl discovery points mapped to the CRM interface layout (400×244 space)
 const CRAWL_NODES = [[28, 49], [20, 110], [110, 95], [110, 172], [335, 172], [283, 95]];
-const CRAWL_GAP = 0.5;
+const CRAWL_GAP_S = 0.38;
 
-const UNDERSTAND_ROWS = [
-  ['Page title', 'Custom CRM Software | NallGeeks', 66],
-  ['H1', 'Custom CRM Software for Growing Teams', 146],
-  ['Content', 'Features, workflows, who it is for', 226],
-];
-const UNDERSTAND_META = [
-  ['Internal links', '/services/custom-business-software'],
-  ['Intent', 'Commercial — comparing solutions'],
-];
-
-const INDEX_ROWS = ['about', 'services/web-development', 'services/custom-crm', 'contact'];
-
-const SERP_RESULTS = [
-  { id: 0, client: true, url: 'yourbusiness.com › crm', title: 'Custom CRM for small business teams' },
-  { id: 1, url: 'competitor-one.com › software', title: 'Top 10 CRM tools compared' },
-  { id: 2, url: 'competitor-two.com › crm', title: 'CRM software pricing guide' },
-];
-
-// Row each result starts in before the client page moves up (client, competitor A, competitor B).
-const RANK_FROM = [2, 0, 1];
-
-const SITE_POSITIONS = [
-  'translate(200px, 18px) scale(1.65)',    // 0: Website — centred in wider 1060 canvas
-  'translate(200px, 18px) scale(1.65)',    // 1: Crawl — matches Website
-  'translate(10px,  18px) scale(1.65)',    // 2: Understand — full scale, annotations right
-  'translate(10px,  78px) scale(0.92)',    // 3: Index — small left, panel right
-  'translate(540px, 46px) scale(1.18)',    // 4: Rank — right side, larger than before
-  'translate(540px, 46px) scale(1.18)',    // 5: Visitor — same as Rank
-];
-
-function FlowCanvas({ stage }) {
-  const rowY = (row) => 112 + row * 100;
-  const wrapClass = ['sx-site-wrap', stage === 2 && 'is-understand', stage === 3 && 'is-index', stage === 5 && 'is-visitor']
-    .filter(Boolean)
-    .join(' ');
+function SearchFlowOverlay({ stage, prevStage }) {
+  const on = (s) => stage === s;
+  const leaving = (s) => prevStage === s && stage !== s;
+  const cls = (s) =>
+    `sx-ov-layer${on(s) ? ' is-on' : leaving(s) ? ' is-leaving' : ''}`;
 
   return (
-    <svg className="sx-flow-svg" viewBox="0 0 1060 440" role="img" aria-label="Animated diagram: a website is crawled, understood, indexed, ranked and visited.">
-      {/* persistent website */}
-      <g className={wrapClass} style={{ transform: SITE_POSITIONS[stage] }}>
-        <g className="sx-site-nudge">
-          <SiteMock />
-        </g>
-      </g>
-
-      {/* 02 crawl: a crawler follows links between a few meaningful points */}
-      <g transform="translate(200 18) scale(1.65)">
-        <g className={`sx-layer${stage === 1 ? ' is-on' : ''}`}>
-          {CRAWL_NODES.slice(1).map(([x, y], i) => {
-            const [px, py] = CRAWL_NODES[i];
-            return (
-              <path
-                key={`s${i}`}
-                d={`M${px} ${py} L${x} ${y}`}
-                pathLength="1"
-                className="sx-crawl-seg"
-                style={{ animationDelay: `${0.3 + i * CRAWL_GAP}s` }}
-              />
-            );
-          })}
-          {CRAWL_NODES.map(([x, y], i) => (
-            <g key={`n${i}`} className="sx-crawl-node" style={{ animationDelay: `${0.15 + i * CRAWL_GAP}s` }}>
-              <circle cx={x} cy={y} r="6.5" className="sx-crawl-ring" />
-              <circle cx={x} cy={y} r="2.8" className="sx-crawl-dot" />
-            </g>
-          ))}
-        </g>
-      </g>
-
-      {/* 03 understand — 3 connector rows + 2 metadata rows without connectors */}
-      <g className={`sx-layer${stage === 2 ? ' is-on' : ''}`}>
-        {UNDERSTAND_ROWS.map(([label, value, fromY], i) => {
-          const y = 58 + i * 80;
-          const delay = 0.2 + i * 0.45;
+    <svg
+      className="sx-ov"
+      viewBox="0 0 400 244"
+      preserveAspectRatio="xMidYMin slice"
+      aria-hidden="true"
+    >
+      {/* 02 Crawl — thin discovery lines through website structure */}
+      <g className={cls(1)}>
+        {CRAWL_NODES.slice(1).map(([x, y], i) => {
+          const [px, py] = CRAWL_NODES[i];
           return (
-            <g key={label}>
-              <path d={`M580 ${fromY} C635 ${fromY} 690 ${y + 8} 700 ${y + 8}`} pathLength="1" className="sx-link-line sx-u-line" style={{ animationDelay: `${delay}s` }} />
-              <circle cx="700" cy={y + 8} r="3.5" className="sx-link-dot sx-u-dot" style={{ animationDelay: `${delay + 0.35}s` }} />
-              <g className="sx-u-text" style={{ transitionDelay: `${delay + 0.4}s` }}>
-                <text x="716" y={y + 2} className="sx-svg-label">{label}</text>
-                <text x="716" y={y + 22} className="sx-svg-value">{value}</text>
-              </g>
-            </g>
+            <path
+              key={i}
+              d={`M${px} ${py} L${x} ${y}`}
+              pathLength="1"
+              className="sx-ov-crawl-path"
+              style={{ animationDelay: `${0.35 + i * CRAWL_GAP_S}s` }}
+            />
           );
         })}
-        {UNDERSTAND_META.map(([label, value], i) => {
-          const y = 58 + UNDERSTAND_ROWS.length * 80 + i * 66;
-          const delay = 0.2 + UNDERSTAND_ROWS.length * 0.45 + i * 0.3 + 0.4;
-          return (
-            <g key={label} className="sx-u-text" style={{ transitionDelay: `${delay}s` }}>
-              <text x="716" y={y + 2} className="sx-svg-label">{label}</text>
-              <text x="716" y={y + 22} className="sx-svg-value">{value}</text>
-            </g>
-          );
-        })}
-      </g>
-
-      {/* 04 index — CRM right edge at ~378; panel starts at x=460 */}
-      <g className={`sx-layer${stage === 3 ? ' is-on' : ''}`}>
-        <path d="M378 220 C418 220 448 220 460 220" className="sx-link-line sx-flow-arrow" />
-        <path d="M449 214 L458 220 L449 226" className="sx-link-line" />
-        <rect x="470" y="60" width="380" height="258" rx="8" className="sx-s-frame" />
-        <text x="492" y="90" className="sx-svg-label">Search index</text>
-        <line x1="470" y1="106" x2="850" y2="106" className="sx-s-line" />
-        {INDEX_ROWS.map((row, i) => {
-          const isNew = i === 2;
-          return (
-            <g key={row} className="sx-index-row" style={{ transitionDelay: `${0.25 + i * 0.14}s` }}>
-              {isNew && <rect x="480" y={114 + i * 42} width="362" height="36" rx="5" className="sx-index-hl" />}
-              <text x="496" y={138 + i * 42} className={`sx-svg-value${isNew ? ' sx-index-new-text' : ''}`}>{row}</text>
-            </g>
-          );
-        })}
-      </g>
-
-      {/* 05 rank — SERP left column (x 14–436), CRM right via SITE_POSITIONS[4] */}
-      <g className={`sx-layer${stage === 4 ? ' is-on' : ''}`}>
-        <rect x="14" y="18" width="422" height="44" rx="22" className="sx-s-frame sx-serp-bar" />
-        <circle cx="42" cy="40" r="7" className="sx-s-line" />
-        <line x1="47" y1="45" x2="54" y2="52" className="sx-s-line" />
-        <text x="66" y="48" className="sx-svg-value">best CRM software for small business</text>
-        {SERP_RESULTS.map((r, i) => (
-          <g
-            key={r.id}
-            className={`sx-result${r.client ? ' is-client' : ''}`}
-            style={{ '--from': `${rowY(RANK_FROM[r.id])}px`, '--to': `${rowY(r.id)}px` }}
-          >
-            <g className="sx-result-in" style={{ animationDelay: `${0.25 + i * 0.25}s` }}>
-              <line x1="14" y1="-8" x2="436" y2="-8" className="sx-s-line sx-result-rule" />
-              {r.client && (
-                <g className="sx-result-hl">
-                  <rect x="14" y="-8" width="422" height="90" rx="4" className="sx-result-tint" />
-                  <rect x="14" y="-8" width="3" height="90" className="sx-result-bar" />
-                </g>
-              )}
-              <text x="14" y="14" className="sx-svg-label sx-rank-num">{r.id + 1}</text>
-              <text x="38" y="14" className="sx-svg-label">{r.url}</text>
-              <text x="38" y="42" className="sx-result-title">{r.title}</text>
-              <rect x="38" y="56" width="360" height="6" rx="3" className="sx-s-fill" />
-              <rect x="38" y="68" width="270" height="6" rx="3" className="sx-s-fill" />
-            </g>
+        {CRAWL_NODES.map(([x, y], i) => (
+          <g key={i} className="sx-ov-crawl-node" style={{ animationDelay: `${0.22 + i * CRAWL_GAP_S}s` }}>
+            <circle cx={x} cy={y} r="7" className="sx-ov-node-ring" />
+            <circle cx={x} cy={y} r="2.5" className="sx-ov-node-dot" />
           </g>
         ))}
       </g>
 
-      {/* 06 visitor: result → click → website → qualified visitor */}
-      <g className={`sx-layer${stage === 5 ? ' is-on' : ''}`}>
-        <g transform="translate(24 128)">
-          <g className="sx-v-card">
-            <rect width="420" height="90" rx="6" className="sx-result-card" />
-            <rect width="3" height="90" className="sx-result-bar" />
-            <text x="22" y="26" className="sx-svg-label">yourbusiness.com › crm</text>
-            <text x="22" y="54" className="sx-result-title">Custom CRM for small business teams</text>
-            <rect x="22" y="68" width="220" height="6" rx="3" className="sx-s-fill" />
-          </g>
-          <circle cx="330" cy="62" r="14" className="sx-click-ring" />
-          <g className="sx-cursor-move">
-            <path d="M0 0 L0 20 L6 14 L11 25 L15 23 L10 13 L18 13 Z" className="sx-cursor" />
+      {/* 03 Understand — external pointer labels with thin lines */}
+      <g className={cls(2)}>
+        {/* PAGE TITLE */}
+        <circle cx={95} cy={13} r={6} className="sx-ov-ud-glow" style={{ animationDelay: '0.05s' }} />
+        <circle cx={95} cy={13} r={2.5} className="sx-ov-ud-dot" style={{ animationDelay: '0.1s' }} />
+        <line x1={98} y1={13} x2={237} y2={13} className="sx-ov-ud-line" style={{ animationDelay: '0.12s' }} />
+        <rect x={237} y={6} width={52} height={14} rx={2} className="sx-ov-ud-lbg" style={{ animationDelay: '0.28s' }} />
+        <text x={241} y={16} className="sx-ov-ud-label" style={{ animationDelay: '0.3s' }}>PAGE TITLE</text>
+        {/* CONTENT */}
+        <circle cx={130} cy={98} r={6} className="sx-ov-ud-glow" style={{ animationDelay: '0.6s' }} />
+        <circle cx={130} cy={98} r={2.5} className="sx-ov-ud-dot" style={{ animationDelay: '0.65s' }} />
+        <line x1={133} y1={97} x2={237} y2={80} className="sx-ov-ud-line" style={{ animationDelay: '0.68s' }} />
+        <rect x={237} y={73} width={44} height={14} rx={2} className="sx-ov-ud-lbg" style={{ animationDelay: '0.82s' }} />
+        <text x={241} y={83} className="sx-ov-ud-label" style={{ animationDelay: '0.84s' }}>CONTENT</text>
+        {/* INTERNAL LINKS */}
+        <circle cx={80} cy={210} r={6} className="sx-ov-ud-glow" style={{ animationDelay: '1.15s' }} />
+        <circle cx={80} cy={210} r={2.5} className="sx-ov-ud-dot" style={{ animationDelay: '1.2s' }} />
+        <line x1={83} y1={210} x2={237} y2={206} className="sx-ov-ud-line" style={{ animationDelay: '1.22s' }} />
+        <rect x={237} y={199} width={72} height={14} rx={2} className="sx-ov-ud-lbg" style={{ animationDelay: '1.36s' }} />
+        <text x={241} y={209} className="sx-ov-ud-label" style={{ animationDelay: '1.38s' }}>INTERNAL LINKS</text>
+      </g>
+
+      {/* 04 Index — compact panel on right side */}
+      <g className={cls(3)}>
+        <rect x={262} y={12} width={130} height={158} rx={4} className="sx-ov-panel" />
+        <text x={270} y={26} className="sx-ov-panel-hd">Search index</text>
+        <line x1={262} y1={33} x2={392} y2={33} className="sx-ov-panel-rule" />
+        {['/about', '/services/web-dev', '/services/crm', '/contact'].map((url, i) => {
+          const isNew = i === 2;
+          const rowY = 38 + i * 32;
+          return (
+            <g key={url} className={`sx-ov-idx-row${isNew ? ' is-new' : ''}`} style={{ transitionDelay: `${0.1 + i * 0.13}s` }}>
+              {isNew && <rect x={264} y={rowY - 2} width={126} height={22} rx={2} className="sx-ov-idx-hl" />}
+              <text x={270} y={rowY + 12} className="sx-ov-idx-url">{url}</text>
+            </g>
+          );
+        })}
+      </g>
+
+      {/* 05 Rank — narrow SERP, client rises from #3 to #1 */}
+      <g className={cls(4)}>
+        <rect x={5} y={5} width={152} height={222} rx={4} className="sx-ov-panel" />
+        <rect x={10} y={12} width={142} height={17} rx={8} className="sx-ov-serp-input" />
+        <text x={24} y={24} className="sx-ov-serp-query">custom CRM software</text>
+        {/* Competitor A — row 1, drops to row 2 */}
+        <g className="sx-ov-serp-row sx-rank-rival-a" style={{ transitionDelay: '0.3s' }}>
+          <text x={14} y={46} className="sx-ov-serp-rank-num">01</text>
+          <text x={14} y={59} className="sx-ov-serp-url">competitor.com</text>
+          <text x={14} y={73} className="sx-ov-serp-title">CRM Tools for Growing Teams</text>
+          <rect x={14} y={79} width={78} height={3} rx={1.5} className="sx-ov-serp-stub" />
+        </g>
+        {/* Competitor B — row 2, drops to row 3 */}
+        <g className="sx-ov-serp-row sx-rank-rival-b" style={{ transitionDelay: '0.2s' }}>
+          <text x={14} y={104} className="sx-ov-serp-rank-num">02</text>
+          <text x={14} y={117} className="sx-ov-serp-url">reviews.com</text>
+          <text x={14} y={131} className="sx-ov-serp-title">Best CRM Platforms</text>
+          <rect x={14} y={137} width={60} height={3} rx={1.5} className="sx-ov-serp-stub" />
+        </g>
+        {/* Client — row 3, rises to row 1 */}
+        <g className="sx-ov-serp-row is-client sx-rank-client" style={{ transitionDelay: '0.44s' }}>
+          <rect x={7} y={149} width={145} height={58} rx={2} className="sx-ov-serp-hl" />
+          <rect x={7} y={149} width={3} height={58} className="sx-ov-serp-side" />
+          <text x={14} y={162} className="sx-ov-serp-rank-num sx-serp-rank-client">03</text>
+          <text x={14} y={175} className="sx-ov-serp-url">yourbusiness.com › crm</text>
+          <text x={14} y={189} className="sx-ov-serp-title is-client">Custom CRM Software</text>
+          <rect x={14} y={195} width={96} height={3} rx={1.5} className="sx-ov-serp-stub" />
+        </g>
+      </g>
+
+      {/* 06 Visitor — panel fades, cursor clicks, visit arrow */}
+      <g className={cls(5)}>
+        <g className="sx-ov-visitor-panel">
+          <rect x={5} y={5} width={152} height={222} rx={4} className="sx-ov-panel" />
+          <rect x={10} y={12} width={142} height={17} rx={8} className="sx-ov-serp-input" />
+          <g className="sx-ov-visitor-card">
+            <rect x={7} y={35} width={145} height={58} rx={2} className="sx-ov-visitor-result" />
+            <rect x={7} y={35} width={3} height={58} className="sx-ov-serp-side" />
+            <text x={14} y={52} className="sx-ov-serp-url">yourbusiness.com › crm</text>
+            <text x={14} y={66} className="sx-ov-serp-title is-client">Custom CRM Software</text>
+            <rect x={14} y={73} width={96} height={3} rx={1.5} className="sx-ov-serp-stub" />
           </g>
         </g>
-        <path d="M444 173 L538 173" pathLength="1" className="sx-link-line sx-visit-path" />
+        <circle cx={82} cy={63} r={11} className="sx-ov-click-ring" />
+        <path d="M0 0 L0 16 L5 11 L9 20 L12 18 L8 10 L15 10 Z" className="sx-ov-cursor" />
+        <path d="M158 62 H230" pathLength="1" className="sx-ov-visit-path" />
+        <rect x={194} y={47} width={90} height={14} rx={2} className="sx-ov-visit-lbg" />
+        <text x={198} y={57} className="sx-ov-visit-label">QUALIFIED VISITOR</text>
       </g>
     </svg>
+  );
+}
+
+function SearchFlowPreview({ stage, prevStage }) {
+  return (
+    <div className="sx-flow-preview">
+      <div className="sx-flow-preview-bar">yourbusiness.com</div>
+      <div className="sx-flow-preview-canvas">
+        <img
+          src="/images/services/crm.png"
+          alt="Your website — the foundation of your search presence"
+          width="400"
+          height="244"
+          loading="eager"
+          decoding="async"
+        />
+        <SearchFlowOverlay stage={stage} prevStage={prevStage} />
+      </div>
+    </div>
   );
 }
 
@@ -361,11 +325,18 @@ function SearchFlow() {
   }, [stage]);
 
   return (
-    <section className="sx-flow" id="sx-how" ref={sectionRef}>
+    <section
+      className="sx-flow"
+      id="sx-how"
+      ref={sectionRef}
+      onMouseEnter={() => hold(stage)}
+      onMouseLeave={release}
+    >
       <div className="sx-wrap">
         <header className="sx-flow-head">
           <div className="sx-eyebrow">How search works</div>
           <h2 className="sx-h2">From website to <em>search result</em></h2>
+          <p className="sx-flow-head-sub">See how search engines move from discovering a website to showing it to the right visitor.</p>
         </header>
         <div className="sx-flow-grid">
           {/* left: stage copy */}
@@ -384,9 +355,9 @@ function SearchFlow() {
               </div>
             ))}
           </div>
-          {/* right: animated diagram */}
+          {/* right: browser-frame preview with stage animations */}
           <div className="sx-flow-canvas">
-            <FlowCanvas stage={stage} />
+            <SearchFlowPreview stage={stage} prevStage={prevStage} />
           </div>
           {/* bottom: rectangular tabs */}
           <ol className="sx-flow-tabs" ref={tabsRef}>
@@ -396,7 +367,6 @@ function SearchFlow() {
                   type="button"
                   onClick={() => select(i)}
                   onMouseEnter={() => hold(i)}
-                  onMouseLeave={release}
                   aria-current={i === stage ? 'step' : undefined}
                 >
                   <span className="sx-flow-tab-num">{s.num}</span>
