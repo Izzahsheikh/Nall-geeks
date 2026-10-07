@@ -59,7 +59,7 @@ function Reveal({ as: Tag = 'div', delay = 0, className = '', children, ...rest 
 const FLOW = [
   {
     num: '01',
-    label: 'Website',
+    label: 'Discover',
     heading: 'Your Website Is the Starting Point',
     desc: 'Your pages, content and structure create the foundation of your search presence.',
   },
@@ -89,7 +89,7 @@ const FLOW = [
   },
   {
     num: '06',
-    label: 'Visitor',
+    label: 'Reach',
     heading: 'The Right Person Finds You',
     desc: 'A relevant search connects a potential customer with the right page on your website.',
   },
@@ -231,54 +231,75 @@ function SearchFlowOverlay({ stage, prevStage }) {
         })}
       </g>
 
-      {/* 05 Rank — narrow SERP, client rises from #3 to #1 */}
+      {/* 05 Rank — split-screen SERP left, CRM dashboard right, rows clipped to panel */}
       <g className={cls(4)}>
-        <rect x={5} y={5} width={152} height={222} rx={4} className="sx-ov-panel" />
-        <rect x={10} y={12} width={142} height={17} rx={8} className="sx-ov-serp-input" />
-        <text x={24} y={24} className="sx-ov-serp-query">custom CRM software</text>
-        {/* Competitor A — row 1, drops to row 2 */}
-        <g className="sx-ov-serp-row sx-rank-rival-a" style={{ transitionDelay: '0.3s' }}>
-          <text x={14} y={46} className="sx-ov-serp-rank-num">01</text>
-          <text x={14} y={59} className="sx-ov-serp-url">competitor.com</text>
-          <text x={14} y={73} className="sx-ov-serp-title">CRM Tools for Growing Teams</text>
-          <rect x={14} y={79} width={78} height={3} rx={1.5} className="sx-ov-serp-stub" />
-        </g>
-        {/* Competitor B — row 2, drops to row 3 */}
-        <g className="sx-ov-serp-row sx-rank-rival-b" style={{ transitionDelay: '0.2s' }}>
-          <text x={14} y={104} className="sx-ov-serp-rank-num">02</text>
-          <text x={14} y={117} className="sx-ov-serp-url">reviews.com</text>
-          <text x={14} y={131} className="sx-ov-serp-title">Best CRM Platforms</text>
-          <rect x={14} y={137} width={60} height={3} rx={1.5} className="sx-ov-serp-stub" />
-        </g>
-        {/* Client — row 3, rises to row 1 */}
-        <g className="sx-ov-serp-row is-client sx-rank-client" style={{ transitionDelay: '0.44s' }}>
-          <rect x={7} y={149} width={145} height={58} rx={2} className="sx-ov-serp-hl" />
-          <rect x={7} y={149} width={3} height={58} className="sx-ov-serp-side" />
-          <text x={14} y={162} className="sx-ov-serp-rank-num sx-serp-rank-client">03</text>
-          <text x={14} y={175} className="sx-ov-serp-url">yourbusiness.com › crm</text>
-          <text x={14} y={189} className="sx-ov-serp-title is-client">Custom CRM Software</text>
-          <rect x={14} y={195} width={96} height={3} rx={1.5} className="sx-ov-serp-stub" />
-        </g>
-      </g>
-
-      {/* 06 Visitor — panel fades, cursor clicks, visit arrow */}
-      <g className={cls(5)}>
-        <g className="sx-ov-visitor-panel">
-          <rect x={5} y={5} width={152} height={222} rx={4} className="sx-ov-panel" />
-          <rect x={10} y={12} width={142} height={17} rx={8} className="sx-ov-serp-input" />
-          <g className="sx-ov-visitor-card">
-            <rect x={7} y={35} width={145} height={58} rx={2} className="sx-ov-visitor-result" />
-            <rect x={7} y={35} width={3} height={58} className="sx-ov-serp-side" />
-            <text x={14} y={52} className="sx-ov-serp-url">yourbusiness.com › crm</text>
-            <text x={14} y={66} className="sx-ov-serp-title is-client">Custom CRM Software</text>
-            <rect x={14} y={73} width={96} height={3} rx={1.5} className="sx-ov-serp-stub" />
+        <defs>
+          <clipPath id="sx-rk-rows">
+            <rect x={6} y={37} width={168} height={200} />
+          </clipPath>
+        </defs>
+        {/* SERP panel — 42% width */}
+        <rect x={6} y={6} width={168} height={232} rx={4} className="sx-ov-panel" />
+        {/* Website panel frame — 53% width, shows CRM dashboard behind */}
+        <rect x={182} y={6} width={212} height={232} rx={4} className="sx-rank-site-frame" />
+        {/* Search bar */}
+        <rect x={12} y={14} width={156} height={17} rx={8} className="sx-ov-serp-input" />
+        <text x={28} y={24} className="sx-ov-serp-query">custom CRM software</text>
+        {/* Rule below search bar */}
+        <line x1={6} y1={36} x2={174} y2={36} className="sx-ov-panel-rule" />
+        {/* Animated rows — clipped so nothing exits the panel */}
+        <g clipPath="url(#sx-rk-rows)">
+          {/* Competitor A — row 1, drops to row 2 */}
+          <g className="sx-ov-serp-row sx-rank-rival-a" style={{ transitionDelay: '0.3s' }}>
+            <text x={14} y={52} className="sx-ov-serp-rank-num">01</text>
+            <text x={14} y={65} className="sx-ov-serp-url">competitor.com</text>
+            <text x={14} y={77} className="sx-ov-serp-title">CRM Tools for Growing Teams</text>
+            <rect x={14} y={82} width={86} height={2.5} rx={1.5} className="sx-ov-serp-stub" />
+          </g>
+          {/* Competitor B — row 2, drops to row 3 */}
+          <g className="sx-ov-serp-row sx-rank-rival-b" style={{ transitionDelay: '0.2s' }}>
+            <text x={14} y={110} className="sx-ov-serp-rank-num">02</text>
+            <text x={14} y={123} className="sx-ov-serp-url">reviews.com</text>
+            <text x={14} y={135} className="sx-ov-serp-title">Best CRM Platforms</text>
+            <rect x={14} y={140} width={68} height={2.5} rx={1.5} className="sx-ov-serp-stub" />
+          </g>
+          {/* Client — row 3, rises to row 1 (−116px = 2 × 58px row height) */}
+          <g className="sx-ov-serp-row is-client sx-rank-client" style={{ transitionDelay: '0.44s' }}>
+            <rect x={7} y={154} width={166} height={58} rx={2} className="sx-ov-serp-hl" />
+            <rect x={7} y={154} width={3} height={58} className="sx-ov-serp-side" />
+            <text x={14} y={168} className="sx-ov-serp-rank-num sx-serp-rank-client">03</text>
+            <text x={14} y={181} className="sx-ov-serp-url">yourbusiness.com › crm</text>
+            <text x={14} y={193} className="sx-ov-serp-title is-client">Custom CRM Software</text>
+            <rect x={14} y={199} width={104} height={2.5} rx={1.5} className="sx-ov-serp-stub" />
           </g>
         </g>
-        <circle cx={82} cy={63} r={11} className="sx-ov-click-ring" />
+        {/* Subtle orange outline at position 1 — appears when rise completes */}
+        <rect x={7} y={38} width={166} height={58} rx={2} className="sx-rank-winner-frame" />
+      </g>
+
+      {/* 06 Reach — compact card, cursor clicks result, visitor arrives on full dashboard */}
+      <g className={cls(5)}>
+        {/* Compact search result card — fades out at 2.1s leaving full dashboard */}
+        <g className="sx-ov-visitor-panel">
+          <rect x={8} y={8} width={180} height={68} rx={4} className="sx-ov-panel" />
+          <rect x={8} y={8} width={3} height={68} rx={1.5} className="sx-ov-serp-side" />
+          <text x={16} y={24} className="sx-ov-serp-url">yourbusiness.com › crm</text>
+          <text x={16} y={37} className="sx-ov-serp-title is-client">Custom CRM Software</text>
+          <rect x={16} y={43} width={108} height={2.5} rx={1.5} className="sx-ov-serp-stub" />
+          <rect x={16} y={49} width={76} height={2.5} rx={1.5} className="sx-ov-serp-stub" />
+        </g>
+        {/* Click ring — centered on result title */}
+        <circle cx={90} cy={36} r={10} className="sx-ov-click-ring" />
+        {/* Cursor — enters from lower-right, clicks the result */}
         <path d="M0 0 L0 16 L5 11 L9 20 L12 18 L8 10 L15 10 Z" className="sx-ov-cursor" />
-        <path d="M158 62 H230" pathLength="1" className="sx-ov-visit-path" />
-        <rect x={194} y={47} width={90} height={14} rx={2} className="sx-ov-visit-lbg" />
-        <text x={198} y={57} className="sx-ov-visit-label">QUALIFIED VISITOR</text>
+        {/* Visit arc — card edge to dashboard interior */}
+        <path d="M190 38 C228 38 256 85 292 118" pathLength="1" className="sx-ov-visit-path" />
+        {/* Qualified visitor badge — appears then fades before stage advances */}
+        <g className="sx-ov-visit-badge-group">
+          <rect x={8} y={83} width={120} height={17} rx={3} className="sx-ov-visit-lbg" />
+          <circle cx={17} cy={91.5} r={2.5} className="sx-ov-visit-dot" />
+          <text x={23} y={95} className="sx-ov-visit-label">QUALIFIED VISITOR</text>
+        </g>
       </g>
     </svg>
   );

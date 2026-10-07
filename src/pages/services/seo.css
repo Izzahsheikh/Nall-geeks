@@ -399,7 +399,7 @@
 /* 02 Crawl: path lines + node discovery */
 .sx-ov-crawl-path {
   fill: none;
-  stroke: var(--sx-orange);
+  stroke: #2C3035;
   stroke-width: 1.5;
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
@@ -417,7 +417,7 @@
 
 .sx-ov-node-ring {
   fill: none;
-  stroke: var(--sx-orange);
+  stroke: #2C3035;
   stroke-width: 1.2;
   opacity: 0;
   transform-box: fill-box;
@@ -439,7 +439,7 @@
 
 /* 03 Understand: external pointer labels */
 .sx-ov-ud-glow {
-  fill: rgba(201, 94, 24, 0.13);
+  fill: rgba(44, 48, 53, 0.09);
   opacity: 0;
 }
 .sx-ov-layer.is-on .sx-ov-ud-glow { animation: sx-ov-pop 0.4s ease forwards; }
@@ -452,7 +452,7 @@
 
 .sx-ov-ud-line {
   fill: none;
-  stroke: var(--sx-orange);
+  stroke: #3A3E44;
   stroke-width: 0.9;
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
@@ -460,15 +460,15 @@
 .sx-ov-layer.is-on .sx-ov-ud-line { animation: sx-ov-draw 0.35s ease-in-out forwards; }
 
 .sx-ov-ud-lbg {
-  fill: rgba(248, 245, 240, 0.93);
-  stroke: rgba(201, 94, 24, 0.25);
+  fill: rgba(228, 230, 231, 0.95);
+  stroke: rgba(44, 48, 53, 0.18);
   stroke-width: 0.7;
   opacity: 0;
 }
 .sx-ov-layer.is-on .sx-ov-ud-lbg { animation: sx-ov-pop 0.3s ease forwards; }
 
 .sx-ov-ud-label {
-  fill: var(--sx-orange);
+  fill: #3A3E44;
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 7px;
   font-weight: 700;
@@ -480,20 +480,20 @@
 
 /* 04 Index / 05 Rank / 06 Visitor: panel base */
 .sx-ov-panel {
-  fill: rgba(248, 245, 240, 0.95);
-  stroke: rgba(210, 206, 196, 0.85);
-  stroke-width: 1;
+  fill: #E7E9E8;
+  stroke: #B9BEC0;
+  stroke-width: 1.2;
   opacity: 0;
   transition: opacity 0.35s ease;
 }
 .sx-ov-layer.is-on .sx-ov-panel { opacity: 1; }
 
 .sx-ov-panel-hd {
-  fill: #6f6a62;
+  fill: #59636A;
   font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 8px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-size: 7.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   opacity: 0;
   transition: opacity 0.35s ease 0.2s;
@@ -501,8 +501,8 @@
 .sx-ov-layer.is-on .sx-ov-panel-hd { opacity: 1; }
 
 .sx-ov-panel-rule {
-  stroke: #d9d5cc;
-  stroke-width: 0.8;
+  stroke: #B9BEC0;
+  stroke-width: 0.9;
   opacity: 0;
   transition: opacity 0.3s ease 0.25s;
 }
@@ -523,11 +523,11 @@
 .sx-ov-layer.is-on .sx-ov-idx-hl { opacity: 1; }
 
 .sx-ov-idx-url {
-  fill: #1f2124;
+  fill: #25282A;
   font-family: 'Urbanist', 'Inter', sans-serif;
   font-size: 9px;
 }
-.sx-ov-idx-row.is-new .sx-ov-idx-url { fill: var(--sx-orange); font-weight: 600; }
+.sx-ov-idx-row.is-new .sx-ov-idx-url { fill: #E8752A; font-weight: 600; }
 
 /* SERP elements (Rank and Visitor) */
 .sx-ov-serp-input {
@@ -609,6 +609,26 @@
   27%, 100% { transform: translateY(58px); }
 }
 
+/* Rank: right-side website frame */
+.sx-rank-site-frame {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.16);
+  stroke-width: 1;
+  opacity: 0;
+  transition: opacity 0.4s ease 0.1s;
+}
+.sx-ov-layer.is-on .sx-rank-site-frame { opacity: 1; }
+
+/* Rank: subtle orange outline at position 1 after rise completes */
+.sx-rank-winner-frame {
+  fill: none;
+  stroke: var(--sx-orange);
+  stroke-width: 1.2;
+  opacity: 0;
+  transition: opacity 0.45s ease 3.25s;
+}
+.sx-ov-layer.is-on .sx-rank-winner-frame { opacity: 1; }
+
 /* Visitor stage */
 .sx-ov-visitor-panel { }
 .sx-ov-layer.is-on .sx-ov-visitor-panel {
@@ -626,14 +646,14 @@
 .sx-ov-layer.is-on .sx-ov-visitor-card { opacity: 1; }
 
 .sx-ov-visitor-result {
-  fill: rgba(201, 94, 24, 0.07);
-  stroke: rgba(201, 94, 24, 0.35);
+  fill: rgba(44, 48, 53, 0.05);
+  stroke: rgba(44, 48, 53, 0.22);
   stroke-width: 1;
 }
 
 .sx-ov-visit-lbg {
-  fill: rgba(248, 245, 240, 0.93);
-  stroke: rgba(201, 94, 24, 0.3);
+  fill: rgba(228, 230, 231, 0.95);
+  stroke: rgba(44, 48, 53, 0.18);
   stroke-width: 0.7;
   opacity: 0;
   transition: opacity 0.4s ease 2.65s;
@@ -641,7 +661,7 @@
 .sx-ov-layer.is-on .sx-ov-visit-lbg { opacity: 1; }
 
 .sx-ov-visit-label {
-  fill: var(--sx-orange);
+  fill: #3A3E44;
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 7px;
   font-weight: 700;
@@ -654,7 +674,7 @@
 
 .sx-ov-click-ring {
   fill: none;
-  stroke: var(--sx-orange);
+  stroke: #2C3035;
   stroke-width: 1.5;
   opacity: 0;
   transform-box: fill-box;
@@ -678,20 +698,49 @@
   animation: sx-ov-cursor-move 0.85s ease-in-out 0.7s forwards;
 }
 @keyframes sx-ov-cursor-move {
-  from { opacity: 0; transform: translate(140px, 155px); }
+  from { opacity: 0; transform: translate(200px, 170px); }
   28% { opacity: 1; }
-  to { opacity: 1; transform: translate(72px, 56px); }
+  to { opacity: 1; transform: translate(80px, 24px); }
 }
 
 .sx-ov-visit-path {
   fill: none;
-  stroke: var(--sx-orange);
+  stroke: #2C3035;
   stroke-width: 1.5;
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
 }
 .sx-ov-layer.is-on .sx-ov-visit-path {
-  animation: sx-ov-draw 0.5s ease-in-out 2.25s forwards;
+  animation: sx-ov-draw 0.55s ease-in-out 2.2s forwards;
+}
+
+/* Visitor badge group — appears then fades before stage advances */
+.sx-ov-visit-badge-group {
+  opacity: 0;
+}
+.sx-ov-layer.is-on .sx-ov-visit-badge-group {
+  animation: sx-visit-badge 2.1s ease 1.85s forwards;
+}
+@keyframes sx-visit-badge {
+  0%   { opacity: 0; }
+  18%  { opacity: 1; }
+  65%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Children inside badge group are always at full opacity (group controls fade) */
+.sx-ov-visit-badge-group .sx-ov-visit-lbg {
+  opacity: 1;
+  transition: none;
+}
+.sx-ov-visit-badge-group .sx-ov-visit-label {
+  opacity: 1;
+  transition: none;
+}
+
+/* Orange accent dot in visitor badge */
+.sx-ov-visit-dot {
+  fill: var(--sx-orange);
 }
 
 /* Reduced motion — collapse all overlay animations */
@@ -715,7 +764,10 @@
   .sx-rank-client { transform: translateY(-116px) !important; animation: none !important; }
   .sx-rank-rival-a { transform: translateY(58px) !important; animation: none !important; }
   .sx-rank-rival-b { transform: translateY(58px) !important; animation: none !important; }
+  .sx-rank-winner-frame { opacity: 1 !important; transition: none; }
+  .sx-rank-site-frame { opacity: 1 !important; transition: none; }
   .sx-ov-visitor-panel { animation: none !important; }
+  .sx-ov-visit-badge-group { animation: none !important; opacity: 1; }
   .sx-ov-panel,
   .sx-ov-panel-hd,
   .sx-ov-panel-rule,

@@ -527,14 +527,27 @@ app.delete('/api/admin/jobs/:id', requireAdmin, async (req, res) => {
 });
 
 app.post('/api/contact', async (req, res) => {
-  const { firstName, lastName, phone, email, services, message } = req.body || {};
+  const t = (v) => String(v || '').trim();
 
-  if (!firstName || !lastName || !email) {
-    return res.status(400).json({ error: 'Missing required fields' });
+  const cleanFirst   = t(req.body?.firstName).slice(0, 100);
+  const cleanLast    = t(req.body?.lastName).slice(0, 100);
+  const cleanPhone   = t(req.body?.phone).slice(0, 30);
+  const cleanEmail   = t(req.body?.email).slice(0, 254);
+  const cleanMessage = t(req.body?.message).slice(0, 5000);
+
+  if (!cleanFirst || !cleanLast || !cleanEmail) {
+    return res.status(400).json({ error: 'Name and email are required' });
   }
 
-  const cleanServices = Array.isArray(services)
-    ? services.filter((s) => typeof s === 'string' && s.trim()).map((s) => s.trim().slice(0, 100)).slice(0, 20)
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+    return res.status(400).json({ error: 'Please enter a valid email address' });
+  }
+
+  const cleanServices = Array.isArray(req.body?.services)
+    ? req.body.services
+        .filter((s) => typeof s === 'string' && s.trim())
+        .map((s) => s.trim().slice(0, 100))
+        .slice(0, 20)
     : [];
 
   if (cleanServices.length === 0) {
@@ -542,14 +555,15 @@ app.post('/api/contact', async (req, res) => {
   }
 
   const db = await readDb();
+  const name = `${cleanFirst} ${cleanLast}`;
   const savedMessage = {
     id: crypto.randomUUID(),
-    sender: `${firstName} ${lastName}`.trim(),
-    email,
-    phone: phone || '',
+    sender: name,
+    email: cleanEmail,
+    phone: cleanPhone,
     services: cleanServices,
-    subject: `Project inquiry from ${firstName} ${lastName}`,
-    body: message || '',
+    subject: `Project inquiry from ${name}`,
+    body: cleanMessage,
     status: 'Unread',
     date: new Date().toISOString(),
   };
@@ -558,24 +572,77 @@ app.post('/api/contact', async (req, res) => {
   await writeDb(db);
 
   if (resend) {
+    const from      = process.env.RESEND_FROM_EMAIL || 'NallGeeks <onboarding@resend.dev>';
+    const adminTo   = process.env.CONTACT_TO_EMAIL  || 'contact@nallgeeks.com';
+
+    const adminHtml = `
+      <div style="font-family:sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a">
+        <h2 style="margin-bottom:4px">New Website Enquiry</h2>
+        <p style="color:#888;margin-top:0;font-size:14px">Submitted via nallgeeks.com</p>
+        <table style="width:100%;border-collapse:collapse;margin-top:16px">
+          <tr>
+            <td style="padding:10px 0;border-bottom:1px solid #eee;font-weight:600;width:110px;vertical-align:top">Name</td>
+            <td style="padding:10px 0;border-bottom:1px solid #eee">${name}</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 0;border-bottom:1px solid #eee;font-weight:600;vertical-align:top">Email</td>
+            <td style="padding:10px 0;border-bottom:1px solid #eee"><a href="mailto:${cleanEmail}" style="color:#e56b00">${cleanEmail}</a></td>
+          </tr>
+          <tr>
+            <td style="padding:10px 0;border-bottom:1px solid #eee;font-weight:600;vertical-align:top">Phone</td>
+            <td style="padding:10px 0;border-bottom:1px solid #eee">${cleanPhone || '—'}</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 0;border-bottom:1px solid #eee;font-weight:600;vertical-align:top">Services</td>
+            <td style="padding:10px 0;border-bottom:1px solid #eee">${cleanServices.join(', ')}</td>
+          </tr>
+        </table>
+        <div style="margin-top:20px">
+          <p style="font-weight:600;margin-bottom:8px">Message</p>
+          <p style="white-space:pre-wrap;background:#f7f7f7;padding:14px;border-radius:6px;margin:0;line-height:1.6">${cleanMessage || '—'}</p>
+        </div>
+        <p style="margin-top:24px;font-size:13px;color:#888">Hit reply to respond directly to ${cleanFirst}.</p>
+      </div>
+    `;
+
+    const confirmHtml = `
+      <div style="font-family:sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a">
+        <h2>Hi ${cleanFirst},</h2>
+        <p>Thanks for getting in touch.</p>
+        <p>We've received your message and someone from our team will get back to you as soon as possible.</p>
+        ${cleanMessage ? `
+        <div style="margin-top:24px">
+          <p style="font-weight:600;margin-bottom:8px">A copy of your message</p>
+          <p style="white-space:pre-wrap;background:#f7f7f7;padding:14px;border-radius:6px;margin:0;font-style:italic;line-height:1.6">"${cleanMessage}"</p>
+        </div>
+        ` : ''}
+        <p style="margin-top:32px">Best,<br><strong>NallGeeks</strong></p>
+        <hr style="margin-top:40px;border:none;border-top:1px solid #eee">
+        <p style="font-size:12px;color:#aaa;margin-top:12px">NallGeeks · <a href="https://nallgeeks.com" style="color:#aaa">nallgeeks.com</a></p>
+      </div>
+    `;
+
     try {
       await resend.emails.send({
-        from: 'NallGeeks Website <onboarding@resend.dev>',
-        to: process.env.CONTACT_TO_EMAIL || 'contact@nallgeeks.com',
-        replyTo: email,
-        subject: `New inquiry from ${firstName} ${lastName}`,
-        text: [
-          `Name: ${firstName} ${lastName}`,
-          `Email: ${email}`,
-          `Phone: ${phone || '-'}`,
-          `Services: ${cleanServices.join(', ')}`,
-          '',
-          'Message:',
-          message || '-',
-        ].join('\n'),
+        from,
+        to: adminTo,
+        replyTo: cleanEmail,
+        subject: `New Website Enquiry — ${name}`,
+        html: adminHtml,
       });
     } catch (err) {
-      console.error('Resend error:', err);
+      console.error('[Resend] Admin notification failed:', err?.message);
+    }
+
+    try {
+      await resend.emails.send({
+        from,
+        to: cleanEmail,
+        subject: 'We received your message',
+        html: confirmHtml,
+      });
+    } catch (err) {
+      console.error('[Resend] User confirmation failed:', err?.message);
     }
   }
 

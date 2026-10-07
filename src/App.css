@@ -120,7 +120,7 @@
 
 /* ===== Hero ===== */
 .hero { background:var(--warm-bg); background-image: none; min-height: 100vh; padding: 0 5%; display: flex; flex-direction: column; justify-content: center; }
-.hero-left-tint { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(128,114,96,0.14) 0%, rgba(128,114,96,0.29) 40%, rgba(128,114,96,0) 68%); }
+.hero-left-tint { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(128,114,96,0.11) 0%, rgba(128,114,96,0.16) 28%, rgba(128,114,96,0.06) 50%, rgba(128,114,96,0) 68%); }
 .hero-grid { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; gap: 4rem; padding-top: 80px; padding-bottom: 40px; width: 100%; }
 .hero-left { flex: 0 0 52%; min-width: 0; }
 .hero-eyebrow { font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 1.25rem; }
@@ -164,8 +164,8 @@
 .section-head { text-align: center; margin-bottom: 1rem; }
 .section-eyebrow { font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 0.75rem; }
 .section-head h2 { font-size: clamp(36px, 5vw, 60px); line-height: 1.1; color: var(--primary); }
-/* Entrance timeline (starts when the hub scrolls into view): logo 0.8s -> lines draw (delay, dur) -> cards fade up one after another. Below 1200px there are no lines, so the cards follow the logo directly. */
-.services-hub { position: relative; margin-top: 5rem; --svc-lines-delay: 0.4s; --svc-lines-dur: 1.5s; --svc-cards-delay: 0.5s; --svc-stagger: 0.18s; }
+/* Entrance timeline: logo → branches burst out → cards fade in. Full sequence completes in ~1.3s. */
+.services-hub { position: relative; margin-top: 5rem; --svc-lines-delay: 0.1s; --svc-lines-dur: 0.45s; --svc-cards-delay: 0.3s; --svc-stagger: 0.07s; }
 .services-badge-wrap { display: flex; justify-content: center; margin-bottom: 0; position: relative; }
 .services-badge { width: 210px; height: 119px; background: transparent; border: 0; display: flex; align-items: center; justify-content: center; box-shadow: none; position: relative; z-index: 2; padding: 0; opacity: 0; transform: translateY(18px) scale(0.92); transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1); will-change: transform, opacity; }
 .services-hub.is-visible .services-badge { opacity: 1; transform: translateY(0) scale(1); }
@@ -174,12 +174,29 @@
 .services-tree path { fill: none; stroke: rgba(242, 140, 69, 0.25); stroke-width: 1.5; stroke-linecap: butt; }
 /* Each wire is drawn from the logo down to its card (pathLength is normalised to 100, so one dash the length of the path is the whole line). */
 .services-tree path:not(.flow) { stroke-dasharray: 100; stroke-dashoffset: 100; }
-.services-hub.is-visible .services-tree path:not(.flow) { animation: svcDraw var(--svc-lines-dur) ease-in-out var(--svc-lines-delay) forwards; }
+.services-hub.is-visible .services-tree path:not(.flow) { animation: svcDraw var(--svc-lines-dur) cubic-bezier(0.22, 1, 0.36, 1) var(--svc-lines-delay) forwards; }
 @keyframes svcDraw { to { stroke-dashoffset: 0; } }
-/* A short bright dash travels logo → card along a copy of each branch. pathLength=100 keeps the dash size independent of curve length; the gap is longer than the path so only one dash is ever on it. */
-.services-tree path.flow { stroke: #c45e00; stroke-width: 1.5; stroke-dasharray: 6 200; stroke-dashoffset: 6; opacity: 0; }
-.services-hub.is-visible .services-tree path.flow { opacity: 1; animation: svcFlow 3s ease-in-out calc(var(--svc-lines-delay) + var(--svc-lines-dur)) infinite; }
-@keyframes svcFlow { from { stroke-dashoffset: 6; } to { stroke-dashoffset: -100; } }
+/* Vein pulse — cycle math: dasharray 10 94 → cycle = 104 normalized units.
+   Keyframe 0 → -104 in 4.7s: visible on path for 100/104×4.7 = 4.52s (≤5s),
+   gap of 4/104×4.7 = 0.18s, then immediately back to root. Zero start delay. */
+.services-tree path.flow {
+  fill: none;
+  stroke: #c45a00;
+  stroke-opacity: 0.70;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 10 94;
+  stroke-dashoffset: 0;
+  opacity: 0;
+}
+.services-hub.is-visible .services-tree path.flow {
+  opacity: 1;
+  animation: svcVein 4.7s linear 0s infinite;
+}
+@keyframes svcVein {
+  from { stroke-dashoffset: 0; }    /* front edge at root */
+  to   { stroke-dashoffset: -104; } /* one full cycle — 0.18s gap then restart */
+}
 @media (prefers-reduced-motion: reduce) {
   .services-hub.is-visible .services-tree path.flow { animation: none; opacity: 0; }
   .services-tree path:not(.flow) { stroke-dashoffset: 0; animation: none !important; }
@@ -191,9 +208,9 @@
   .svc-row { grid-template-columns: repeat(6, 1fr); }
   .services-tree { display: block; }
   .services-tree-gap { height: 230px; }
-  .services-hub { --svc-cards-delay: 1.8s; }
+  .services-hub { --svc-cards-delay: 0.55s; }
 }
-.svc-card { border-radius: 1rem; padding: 1.75rem 1.5rem; min-height: 176px; transition: opacity 0.7s ease-out calc(var(--svc-cards-delay) + var(--svc-index) * var(--svc-stagger)), transform 0.7s ease-out calc(var(--svc-cards-delay) + var(--svc-index) * var(--svc-stagger)), box-shadow 0.3s ease, border-color 0.3s ease; will-change: transform, opacity; cursor: default; background: #fff; border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(37,41,44,0.04), 0 8px 24px rgba(37,41,44,0.06); opacity: 0; transform: translateY(22px); }
+.svc-card { border-radius: 1rem; padding: 1.75rem 1.5rem; min-height: 176px; transition: opacity 0.38s ease-out calc(var(--svc-cards-delay) + var(--svc-index) * var(--svc-stagger)), transform 0.38s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--svc-cards-delay) + var(--svc-index) * var(--svc-stagger)), box-shadow 0.3s ease, border-color 0.3s ease; will-change: transform, opacity; cursor: default; background: #fff; border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(37,41,44,0.04), 0 8px 24px rgba(37,41,44,0.06); opacity: 0; transform: translateY(16px); }
 .svc-card.is-visible { opacity: 1; transform: translateY(0); }
 .svc-card:hover { background: #fff; border-color: var(--accent); box-shadow: 0 1px 2px rgba(37,41,44,0.05), 0 14px 34px rgba(37,41,44,0.1); transition-delay: 0ms; }
 /* Reduced motion: no entrance at all, the logo and cards are simply there (hover effects stay). Placed after the rules above so it wins. */

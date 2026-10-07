@@ -82,7 +82,8 @@ export default function Hero() {
           paddingBottom: '8rem',
         }}
       >
-        {/* Background image */}
+        {/* Background image — no brightness so the monitor stays clear; mild contrast/saturation
+            keeps the overall image rich without muddying the screen contents. */}
         <div
           style={{
             position: 'absolute',
@@ -90,19 +91,24 @@ export default function Hero() {
             backgroundImage: `url(${heroBg})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center 30%',
+            filter: 'contrast(1.08) saturate(0.92)',
             zIndex: 0,
           }}
         />
 
-        {/* Overlay */}
+        {/* Cinematic overlay — unified dark tone across full width, heavier left for text,
+            barely present on the right so the monitor stays sharp; never drops to 0 so
+            both halves belong to the same composition with no visible boundary. */}
         <div
           style={{
             position: 'absolute',
             inset: 0,
             background: [
-              // Bottom stop stays dark so the hero still joins the #171717 ticker strip without a seam.
-              'linear-gradient(180deg, rgba(23,23,23,0.12) 0%, rgba(23,23,23,0.02) 40%, rgba(23,23,23,0.9) 100%)',
-              'linear-gradient(90deg, rgba(23,23,23,0.5) 0%, rgba(23,23,23,0.28) 38%, rgba(23,23,23,0.06) 68%, rgba(23,23,23,0) 100%)',
+              // Bottom fade joins the #171717 ticker strip cleanly
+              'linear-gradient(180deg, rgba(23,23,23,0.06) 0%, rgba(23,23,23,0) 50%, rgba(23,23,23,0.88) 100%)',
+              // Left-to-right scrim: many stops so opacity bleeds gradually with no perceivable
+              // midpoint — left dark enough for white text, right light enough for the monitor.
+              'linear-gradient(90deg, rgba(0,0,0,0.54) 0%, rgba(0,0,0,0.46) 18%, rgba(0,0,0,0.32) 36%, rgba(0,0,0,0.18) 54%, rgba(0,0,0,0.10) 74%, rgba(0,0,0,0.07) 100%)',
             ].join(', '),
             zIndex: 1,
           }}
