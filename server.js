@@ -572,8 +572,16 @@ app.post('/api/contact', async (req, res) => {
   await writeDb(db);
 
   if (resend) {
-    const from      = process.env.RESEND_FROM_EMAIL || 'NallGeeks <onboarding@resend.dev>';
-    const adminTo   = process.env.CONTACT_TO_EMAIL  || 'contact@nallgeeks.com';
+    const from    = process.env.RESEND_FROM_EMAIL || 'NallGeeks <onboarding@resend.dev>';
+    const adminTo = process.env.CONTACT_TO_EMAIL  || 'contact@nallgeeks.com';
+
+    // Escape user-supplied strings before embedding in HTML.
+    const esc = (s) => String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
 
     const adminHtml = `
       <div style="font-family:sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a">
@@ -582,41 +590,41 @@ app.post('/api/contact', async (req, res) => {
         <table style="width:100%;border-collapse:collapse;margin-top:16px">
           <tr>
             <td style="padding:10px 0;border-bottom:1px solid #eee;font-weight:600;width:110px;vertical-align:top">Name</td>
-            <td style="padding:10px 0;border-bottom:1px solid #eee">${name}</td>
+            <td style="padding:10px 0;border-bottom:1px solid #eee">${esc(name)}</td>
           </tr>
           <tr>
             <td style="padding:10px 0;border-bottom:1px solid #eee;font-weight:600;vertical-align:top">Email</td>
-            <td style="padding:10px 0;border-bottom:1px solid #eee"><a href="mailto:${cleanEmail}" style="color:#e56b00">${cleanEmail}</a></td>
+            <td style="padding:10px 0;border-bottom:1px solid #eee"><a href="mailto:${esc(cleanEmail)}" style="color:#e56b00">${esc(cleanEmail)}</a></td>
           </tr>
           <tr>
             <td style="padding:10px 0;border-bottom:1px solid #eee;font-weight:600;vertical-align:top">Phone</td>
-            <td style="padding:10px 0;border-bottom:1px solid #eee">${cleanPhone || '—'}</td>
+            <td style="padding:10px 0;border-bottom:1px solid #eee">${esc(cleanPhone) || '—'}</td>
           </tr>
           <tr>
             <td style="padding:10px 0;border-bottom:1px solid #eee;font-weight:600;vertical-align:top">Services</td>
-            <td style="padding:10px 0;border-bottom:1px solid #eee">${cleanServices.join(', ')}</td>
+            <td style="padding:10px 0;border-bottom:1px solid #eee">${cleanServices.map(esc).join(', ')}</td>
           </tr>
         </table>
         <div style="margin-top:20px">
           <p style="font-weight:600;margin-bottom:8px">Message</p>
-          <p style="white-space:pre-wrap;background:#f7f7f7;padding:14px;border-radius:6px;margin:0;line-height:1.6">${cleanMessage || '—'}</p>
+          <p style="white-space:pre-wrap;background:#f7f7f7;padding:14px;border-radius:6px;margin:0;line-height:1.6">${esc(cleanMessage) || '—'}</p>
         </div>
-        <p style="margin-top:24px;font-size:13px;color:#888">Hit reply to respond directly to ${cleanFirst}.</p>
+        <p style="margin-top:24px;font-size:13px;color:#888">Hit reply to respond directly to ${esc(cleanFirst)}.</p>
       </div>
     `;
 
     const confirmHtml = `
-      <div style="font-family:sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a">
-        <h2>Hi ${cleanFirst},</h2>
-        <p>Thanks for getting in touch.</p>
-        <p>We've received your message and someone from our team will get back to you as soon as possible.</p>
+      <div style="font-family:sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a;padding:24px 0">
+        <h2 style="margin-bottom:8px">Hi ${esc(cleanFirst)},</h2>
+        <p style="line-height:1.6">Thanks for getting in touch.</p>
+        <p style="line-height:1.6">Your query has been submitted successfully and the NallGeeks team will contact you shortly.</p>
         ${cleanMessage ? `
         <div style="margin-top:24px">
           <p style="font-weight:600;margin-bottom:8px">A copy of your message</p>
-          <p style="white-space:pre-wrap;background:#f7f7f7;padding:14px;border-radius:6px;margin:0;font-style:italic;line-height:1.6">"${cleanMessage}"</p>
+          <p style="white-space:pre-wrap;background:#f7f7f7;padding:14px;border-radius:6px;margin:0;font-style:italic;line-height:1.6">&ldquo;${esc(cleanMessage)}&rdquo;</p>
         </div>
         ` : ''}
-        <p style="margin-top:32px">Best,<br><strong>NallGeeks</strong></p>
+        <p style="margin-top:32px;line-height:1.6">Best regards,<br><strong>NallGeeks Team</strong></p>
         <hr style="margin-top:40px;border:none;border-top:1px solid #eee">
         <p style="font-size:12px;color:#aaa;margin-top:12px">NallGeeks · <a href="https://nallgeeks.com" style="color:#aaa">nallgeeks.com</a></p>
       </div>
@@ -638,7 +646,8 @@ app.post('/api/contact', async (req, res) => {
       await resend.emails.send({
         from,
         to: cleanEmail,
-        subject: 'We received your message',
+        replyTo: adminTo,
+        subject: 'We received your query | NallGeeks',
         html: confirmHtml,
       });
     } catch (err) {
