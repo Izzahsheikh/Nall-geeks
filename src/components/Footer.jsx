@@ -48,8 +48,13 @@ export default function Footer() {
             <p className="footer-tagline">Engineering software for startups, founders, and growing businesses.</p>
             <p className="footer-legal">Legal Entity: NallGeeks (Private) Limited</p>
             <div className="footer-socials">
-              <a href="#" className="footer-social hover-accent">in</a>
-              <a href="#" className="footer-social hover-accent">ig</a>
+              <a
+                href="https://www.linkedin.com/company/nallgeeks/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="footer-social hover-accent"
+              >in</a>
             </div>
           </div>
 
@@ -84,7 +89,7 @@ export default function Footer() {
           <div className="footer-col">
             <div className="footer-col-title">Get In Touch</div>
             <span>contact@nallgeeks.com</span>
-            <span>+92-51-0000000</span>
+            <a href="tel:+923339976619">+923339976619</a>
             <span>Islamabad, Pakistan</span>
           </div>
         </div>
