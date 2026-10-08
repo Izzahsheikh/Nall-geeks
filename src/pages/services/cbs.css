@@ -183,7 +183,6 @@
   align-items: flex-start;
   gap: 20px;
   padding: 16px 0;
-  border-bottom: 1px solid var(--cbs-line);
   opacity: 0;
   transform: translateX(-8px);
   transition: opacity 0.45s ease, transform 0.45s ease;
@@ -261,6 +260,217 @@
   letter-spacing: 0.07em;
   text-anchor: middle;
 }
+
+/* ─────────────────────────────────────
+   DISCOVERY DIAGRAM (new)
+   SVG coordinate space: 700 × 580
+───────────────────────────────────── */
+.ddiag-wrap {
+  position: relative;
+  aspect-ratio: 700 / 580;
+  width: 100%;
+}
+.ddiag-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: visible;
+}
+
+/* SVG path lines */
+.dln { fill: none; stroke-width: 1.4; vector-effect: non-scaling-stroke; }
+.dln-t { stroke: #6ba39e; }
+.dln-o { stroke: #c2610c; }
+.dln-s { stroke: #8fa3b0; }
+.dln-dash { stroke-dasharray: 5 4; }
+
+/* Animated flow dots */
+.ddot-t { fill: #527c78; }
+.ddot-o { fill: #c2610c; }
+.ddot-s { fill: #75838d; }
+
+/* Pill labels */
+.dpill-t { fill: #eaf2f1; stroke: #6ba39e; stroke-width: 0.8; }
+.dpill-o { fill: #fff4e9; stroke: #c2610c; stroke-width: 0.8; }
+.dpill-s { fill: #eef2f5; stroke: #8fa3b0; stroke-width: 0.8; }
+.dptxt {
+  fill: #3d6863;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 7.5px;
+  font-weight: 700;
+  text-anchor: middle;
+  letter-spacing: 0.03em;
+}
+.dptxt-o { fill: #a3551a; }
+.dptxt-s { fill: #4d6470; }
+
+/* ── Cards (HTML, absolutely positioned) ── */
+.dcard {
+  position: absolute;
+  box-sizing: border-box;
+  background: #fff;
+  border: 1px solid #e3ded8;
+  border-radius: 8px;
+  box-shadow: 0 3px 12px rgba(31,33,36,.07), 0 1px 3px rgba(31,33,36,.04);
+  padding: 10px 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* Card header */
+.dcard-hd {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+}
+.dcard-hd b {
+  display: block;
+  color: #1f2124;
+  font-size: clamp(0.56rem, 1.3vw, 0.72rem);
+  font-weight: 700;
+  line-height: 1.25;
+}
+.dcard-hd em {
+  display: block;
+  font-style: normal;
+  color: #9a938c;
+  font-size: clamp(0.48rem, 1vw, 0.6rem);
+  line-height: 1.2;
+  margin-top: 1px;
+}
+
+/* Icon circle */
+.dcard-ico {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dcard-ico-t { background: rgba(82,124,120,.12); color: #527c78; }
+.dcard-ico-o { background: rgba(194,97,12,.10); color: #c2610c; }
+.dcard-ico-s { background: rgba(117,131,141,.12); color: #75838d; }
+
+/* Card list */
+.dcard ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.dcard ul li {
+  color: #6a7278;
+  font-size: clamp(0.48rem, 1vw, 0.62rem);
+  line-height: 1.3;
+  padding-left: 9px;
+  position: relative;
+}
+.dcard ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 5px;
+  width: 3.5px;
+  height: 3.5px;
+  border-radius: 50%;
+  background: #bfbab4;
+}
+
+/* Operations card — dark center */
+.dcard-ops {
+  background: #272b2e;
+  border-color: #272b2e;
+  box-shadow: 0 8px 24px rgba(31,33,36,.20), 0 2px 6px rgba(31,33,36,.12);
+  align-items: center;
+  text-align: center;
+  gap: 5px;
+  padding: 12px 10px 10px;
+}
+.dops-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(194,97,12,.22);
+  color: #e4823a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.dops-title {
+  color: #fff;
+  font-size: clamp(0.6rem, 1.3vw, 0.78rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+.dops-sub {
+  color: rgba(255,255,255,.45);
+  font-family: var(--cbs-mono);
+  font-size: clamp(0.42rem, 0.9vw, 0.55rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.dops-rows {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 2px;
+}
+.dops-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: rgba(255,255,255,.07);
+  border-radius: 5px;
+  color: rgba(255,255,255,.80);
+  font-size: clamp(0.48rem, 1vw, 0.62rem);
+  font-weight: 500;
+  text-align: left;
+}
+.dops-row > svg { flex-shrink: 0; color: rgba(255,255,255,.45); }
+
+/* Friction card */
+.dcard-friction {
+  border-left: 2px solid rgba(194,97,12,.7);
+  background: #fffaf5;
+  border-color: rgba(194,97,12,.25);
+}
+.dcard-friction ul li::before { background: rgba(194,97,12,.5); }
+
+/* Opportunity card */
+.dcard-opportunity {
+  border-left: 2px solid rgba(82,124,120,.7);
+  background: #f5faf9;
+  border-color: rgba(82,124,120,.25);
+}
+.dcard-opportunity ul li::before { background: rgba(82,124,120,.5); }
+
+/* Insight header (Friction / Opportunity) */
+.dins-hd {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.dins-hd b {
+  font-size: clamp(0.56rem, 1.2vw, 0.68rem);
+  font-weight: 700;
+}
+.dins-hd-friction { color: #c2610c; }
+.dins-hd-opp { color: #527c78; }
+.dins-hd > svg { flex-shrink: 0; }
 
 /* ─────────────────────────────────────
    SYSTEM ARCHITECTURE
@@ -940,6 +1150,7 @@
   }
   .cbs-disc-grid { grid-template-columns: 1fr; gap: 48px; }
   .cbs-disc-left { max-width: none; }
+  .ddiag-wrap { max-width: 680px; margin: 0 auto; }
   .cbs-build-layout { grid-template-columns: 1fr; gap: 0; }
   .cbs-build-canvas-wrap { display: none; }
   .cbs-build-step { opacity: 1; }
@@ -957,6 +1168,7 @@
   .cbs-sys-depts { grid-template-columns: 1fr 1fr; }
   .cbs-al { flex-direction: column; align-items: flex-start; gap: 12px; }
   .cbs-al-label { width: auto; }
+  .ddiag-wrap { max-width: 560px; }
 }
 
 @media (max-width: 540px) {
@@ -964,6 +1176,22 @@
   .sp--custom-business-software .sp-hero-aside { display: none; }
   .cbs-sys-depts { grid-template-columns: 1fr; }
   .cbs-dept { border-right: 0; }
+  /* Mobile: hide SVG paths/labels, show diagram in scrollable container */
+  .ddiag-svg { display: none; }
+  .ddiag-wrap {
+    aspect-ratio: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    gap: 8px;
+  }
+  .dcard {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+  }
+  .dcard-ops { grid-column: 1 / -1; }
+  .dcard-friction,.dcard-opportunity { grid-column: span 1; }
 }
 
 /* ─────────────────────────────────────
@@ -972,7 +1200,6 @@
 @media (prefers-reduced-motion: reduce) {
   .cbs-reveal,
   .cbs-disc-right,
-  .cbs-business-map,
   .cbs-orb-wrap,
   .cbs-sys-flow {
     opacity: 1; transform: none; transition: none;
@@ -985,4 +1212,5 @@
   .cbs-al { opacity: 1; transform: none; }
   .cbs-wf-prog { transition: none; }
   .cbs-wfn-s,.cbs-build-tags li,.cbs-orbn-bg,.cbs-orbn-t,.cbs-spoke { transition: none; }
+  .ddot-t,.ddot-o,.ddot-s { display: none; }
 }

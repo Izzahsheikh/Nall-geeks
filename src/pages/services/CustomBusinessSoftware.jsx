@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Users, ShoppingCart, Package, Settings, BarChart3, Database, Truck, AlertCircle, Zap } from 'lucide-react';
 import ServicePage from './ServicePage';
 import './cbs.css';
 
@@ -37,14 +38,14 @@ const DISCOVERY_ITEMS = [
   { label: 'Data & Tools',       note: 'What information the business relies on' },
 ];
 
-const ROLE_NODES = [
-  { id: 'cust', label: 'Customer',   cx: 90,  cy: 100 },
-  { id: 'sale', label: 'Sales',      cx: 255, cy: 100 },
-  { id: 'ops',  label: 'Operations', cx: 448, cy: 100 },
-  { id: 'inv',  label: 'Inventory',  cx: 630, cy: 100 },
-  { id: 'fin',  label: 'Finance',    cx: 812, cy: 100 },
+const DISCOVERY_MAP_CARDS = [
+  { id: 'customer', title: 'Customer', items: ['New Enquiry', 'Product Questions', 'Support Requests'], place: 'customer' },
+  { id: 'sales', title: 'Sales & Orders', items: ['Create Quote', 'Manage Orders', 'Track Pipeline'], place: 'sales' },
+  { id: 'inventory', title: 'Inventory & Resources', items: ['Check Stock', 'Manage Inventory', 'Purchase Orders'], place: 'inventory' },
+  { id: 'operations', title: 'Business Operations', items: ['Fulfillment & Delivery', 'Team Coordination', 'Process Management'], place: 'operations' },
+  { id: 'finance', title: 'Finance & Reporting', items: ['Generate Invoice', 'Track Payments', 'Reports & Analytics'], place: 'finance' },
+  { id: 'tools', title: 'Data & Tools', items: ['CRM / ERP', 'Accounting Tools', 'Other Internal Systems'], place: 'tools' },
 ];
-const ROLE_FLOWS = ['Enquiry', 'Quote / Order', 'Fulfilment', 'Invoice'];
 
 const SYS_MODULES = [
   { id: 'crm',    label: 'CRM',            cx: 162, cy: 148,
@@ -175,25 +176,164 @@ function HeroBg() {
   );
 }
 
+/* ── Discovery Diagram ── */
+/* SVG viewBox: 700 × 580. Card HTML positions are % of this coordinate space. */
+function DiscoveryDiagram({ inView, reduced }) {
+  const P = {
+    enquiry:   'M150,85 H550',
+    quoteOrder:'M624,166 V213 H446',
+    stockReq:  'M254,283 H150',
+    stockAvail:'M150,301 H254',
+    invoice:   'M446,283 H550',
+    payment:   'M550,301 H446',
+    opData:    'M348,382 V432',
+    dataUp:    'M356,432 V382',
+  };
+
+  return (
+    <div className="ddiag-wrap">
+      {/* SVG connections — behind cards */}
+      <svg className="ddiag-svg" viewBox="0 0 700 580" aria-hidden="true">
+        <defs>
+          <marker id="dda-t" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M0 1L6 4L0 7" fill="none" stroke="#6ba39e" strokeWidth="1.5" strokeLinejoin="round"/>
+          </marker>
+          <marker id="dda-o" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M0 1L6 4L0 7" fill="none" stroke="#c2610c" strokeWidth="1.5" strokeLinejoin="round"/>
+          </marker>
+          <marker id="dda-s" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M0 1L6 4L0 7" fill="none" stroke="#8fa3b0" strokeWidth="1.5" strokeLinejoin="round"/>
+          </marker>
+        </defs>
+
+        {/* Paths */}
+        <path d={P.enquiry}    className="dln dln-t"         markerEnd="url(#dda-t)" />
+        <path d={P.quoteOrder} className="dln dln-o dln-dash" markerEnd="url(#dda-o)" />
+        <path d={P.stockReq}   className="dln dln-s"         markerEnd="url(#dda-s)" />
+        <path d={P.stockAvail} className="dln dln-t"         markerEnd="url(#dda-t)" />
+        <path d={P.invoice}    className="dln dln-t"         markerEnd="url(#dda-t)" />
+        <path d={P.payment}    className="dln dln-s dln-dash" markerEnd="url(#dda-s)" />
+        <path d={P.opData}     className="dln dln-s"         markerEnd="url(#dda-s)" />
+        <path d={P.dataUp}     className="dln dln-t"         markerEnd="url(#dda-t)" />
+
+        {/* Animated flow dots */}
+        {!reduced && <>
+          <circle className="ddot ddot-t" r="3"><animateMotion dur="3s" repeatCount="indefinite" path={P.enquiry} /></circle>
+          <circle className="ddot ddot-o" r="3"><animateMotion dur="2.8s" begin="0.9s" repeatCount="indefinite" path={P.quoteOrder} /></circle>
+          <circle className="ddot ddot-s" r="3"><animateMotion dur="2.5s" begin="0.4s" repeatCount="indefinite" path={P.stockReq} /></circle>
+          <circle className="ddot ddot-t" r="3"><animateMotion dur="2.5s" begin="1.7s" repeatCount="indefinite" path={P.stockAvail} /></circle>
+          <circle className="ddot ddot-t" r="3"><animateMotion dur="2.6s" begin="0.7s" repeatCount="indefinite" path={P.invoice} /></circle>
+          <circle className="ddot ddot-s" r="3"><animateMotion dur="3s" begin="2.1s" repeatCount="indefinite" path={P.opData} /></circle>
+        </>}
+
+        {/* Pill labels */}
+        <g>
+          <rect x="324" y="67" width="52" height="16" rx="8" className="dpill dpill-t"/>
+          <text x="350" y="79" className="dptxt">Enquiry</text>
+        </g>
+        <g>
+          <rect x="562" y="198" width="76" height="16" rx="8" className="dpill dpill-o"/>
+          <text x="600" y="210" className="dptxt dptxt-o">Quote / Order</text>
+        </g>
+        <g>
+          <rect x="165" y="265" width="78" height="16" rx="8" className="dpill dpill-s"/>
+          <text x="204" y="277" className="dptxt dptxt-s">Stock Update</text>
+        </g>
+        <g>
+          <rect x="462" y="265" width="52" height="16" rx="8" className="dpill dpill-t"/>
+          <text x="488" y="277" className="dptxt">Invoice</text>
+        </g>
+        <g>
+          <rect x="362" y="396" width="90" height="16" rx="8" className="dpill dpill-s"/>
+          <text x="407" y="408" className="dptxt dptxt-s">Operational Data</text>
+        </g>
+
+        {/* Manual handoff indicator */}
+        <g transform="translate(490,36)">
+          <rect x="-56" y="-10" width="112" height="20" rx="3" fill="#fff4e9" stroke="#c2610c" strokeWidth="1"/>
+          <circle cx="-44" cy="0" r="3.5" fill="#c2610c" opacity="0.85"/>
+          <text x="-35" y="5" fontFamily="'JetBrains Mono',monospace" fontSize="7.5" fontWeight="700" letterSpacing="0.04em" fill="#a3551a">Manual handoff identified</text>
+        </g>
+      </svg>
+
+      {/* ── Cards ── */}
+      {/* Customer */}
+      <div className="dcard" style={{left:'0.29%',top:'0.69%',width:'21.4%',height:'27.9%'}}>
+        <div className="dcard-hd">
+          <span className="dcard-ico dcard-ico-t"><Users size={13}/></span>
+          <div><b>Customer</b><em>Enquiries &amp; Support</em></div>
+        </div>
+        <ul><li>New enquiry</li><li>Product questions</li><li>Support requests</li></ul>
+      </div>
+
+      {/* Sales & Orders */}
+      <div className="dcard" style={{left:'78.6%',top:'0.69%',width:'21.4%',height:'27.9%'}}>
+        <div className="dcard-hd">
+          <span className="dcard-ico dcard-ico-o"><ShoppingCart size={13}/></span>
+          <div><b>Sales &amp; Orders</b><em>Quotes &amp; Conversions</em></div>
+        </div>
+        <ul><li>Create quote</li><li>Manage orders</li><li>Track pipeline</li></ul>
+      </div>
+
+      {/* Inventory */}
+      <div className="dcard" style={{left:'0.29%',top:'37.9%',width:'21.4%',height:'27.9%'}}>
+        <div className="dcard-hd">
+          <span className="dcard-ico dcard-ico-s"><Package size={13}/></span>
+          <div><b>Inventory &amp; Resources</b><em>Stock &amp; Procurement</em></div>
+        </div>
+        <ul><li>Check stock</li><li>Manage inventory</li><li>Purchase orders</li></ul>
+      </div>
+
+      {/* Business Operations — dark center */}
+      <div className="dcard dcard-ops" style={{left:'36.3%',top:'37.9%',width:'27.4%',height:'27.9%'}}>
+        <div className="dops-icon"><Settings size={16}/></div>
+        <div className="dops-title">Business Operations</div>
+        <div className="dops-sub">Core Processes</div>
+        <div className="dops-rows">
+          <div className="dops-row"><Truck size={10}/><span>Fulfilment &amp; Delivery</span></div>
+          <div className="dops-row"><Users size={10}/><span>Team Coordination</span></div>
+          <div className="dops-row"><Settings size={10}/><span>Process Management</span></div>
+        </div>
+      </div>
+
+      {/* Finance */}
+      <div className="dcard" style={{left:'78.6%',top:'37.9%',width:'21.4%',height:'27.9%'}}>
+        <div className="dcard-hd">
+          <span className="dcard-ico dcard-ico-t"><BarChart3 size={13}/></span>
+          <div><b>Finance &amp; Reporting</b><em>Invoices &amp; Insights</em></div>
+        </div>
+        <ul><li>Generate invoice</li><li>Track payments</li><li>Reports &amp; analytics</li></ul>
+      </div>
+
+      {/* Data & Tools */}
+      <div className="dcard" style={{left:'36.3%',top:'74.5%',width:'27.4%',height:'20.3%'}}>
+        <div className="dcard-hd">
+          <span className="dcard-ico dcard-ico-s"><Database size={13}/></span>
+          <div><b>Data &amp; Tools</b><em>Systems &amp; Integrations</em></div>
+        </div>
+        <ul><li>CRM / ERP</li><li>Accounting tools</li><li>Other internal systems</li></ul>
+      </div>
+
+      {/* Common Friction */}
+      <div className="dcard dcard-friction" style={{left:'0.29%',top:'74.5%',width:'21.4%',height:'20.3%'}}>
+        <div className="dins-hd dins-hd-friction"><AlertCircle size={11}/><b>Common Friction</b></div>
+        <ul><li>Manual data entry</li><li>Delayed information</li><li>Lack of visibility</li></ul>
+      </div>
+
+      {/* Opportunity */}
+      <div className="dcard dcard-opportunity" style={{left:'78.6%',top:'74.5%',width:'21.4%',height:'20.3%'}}>
+        <div className="dins-hd dins-hd-opp"><Zap size={11}/><b>Opportunity</b></div>
+        <ul><li>Automate handoffs</li><li>Connect business data</li><li>Real-time insights</li></ul>
+      </div>
+    </div>
+  );
+}
+
 /* ── Section 1: Business Discovery ── */
 function BusinessDiscovery() {
   const [ref, inView] = useInView(0.15);
   const reduced = usePrefersReducedMotion();
-  const [step, setStep] = useState(-1);
 
-  useEffect(() => {
-    if (!inView || reduced) return;
-    const t = setTimeout(() => setStep(0), 400);
-    return () => clearTimeout(t);
-  }, [inView, reduced]);
-
-  useEffect(() => {
-    if (step < 0 || step >= ROLE_NODES.length - 1 || reduced) return;
-    const t = setTimeout(() => setStep(s => s + 1), 480);
-    return () => clearTimeout(t);
-  }, [step, reduced]);
-
-  const RW = 116, RH = 38;
   return (
     <section className="cbs-section cbs-section--soft" ref={ref}>
       <div className="cbs-wrap">
@@ -217,30 +357,7 @@ function BusinessDiscovery() {
           </div>
           <div className={`cbs-disc-right${inView ? ' is-in' : ''}`}>
             <p className="cbs-disc-map-label">HOW INFORMATION MOVES THROUGH THE BUSINESS</p>
-            <svg viewBox="0 0 900 200" className="cbs-roles-svg" aria-label="Business workflow map">
-              {ROLE_NODES.slice(0, -1).map((n, i) => {
-                const nx = ROLE_NODES[i + 1];
-                return (
-                  <g key={n.id + '-conn'}>
-                    <line x1={n.cx + RW / 2} y1={n.cy} x2={nx.cx - RW / 2} y2={nx.cy}
-                      className={`cbs-rl${step > i ? ' is-on' : ''}`} />
-                    <text x={(n.cx + nx.cx) / 2} y={n.cy - 18}
-                      className="cbs-rfl"
-                      style={{ opacity: step > i ? 1 : 0, transition: 'opacity 0.35s ease' }}
-                    >{ROLE_FLOWS[i]}</text>
-                  </g>
-                );
-              })}
-              {ROLE_NODES.map((n, i) => (
-                <g key={n.id} className={`cbs-rn${step >= i ? ' is-on' : ''}`}
-                  style={{ transition: `opacity 0.4s ease ${0.1 + i * 0.06}s` }}
-                >
-                  <rect x={n.cx - RW / 2} y={n.cy - RH / 2} width={RW} height={RH} rx={2}
-                    className="cbs-rb" />
-                  <text x={n.cx} y={n.cy + 6} className="cbs-rt">{n.label}</text>
-                </g>
-              ))}
-            </svg>
+            <DiscoveryDiagram inView={inView} reduced={reduced} />
           </div>
         </div>
       </div>
