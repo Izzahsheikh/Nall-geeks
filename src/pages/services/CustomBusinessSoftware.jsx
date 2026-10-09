@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Users, ShoppingCart, Package, Settings, BarChart3, Database, Truck, AlertCircle, Zap } from 'lucide-react';
+import { Users, ShoppingCart, Package, Settings, BarChart3, Database, Truck } from 'lucide-react';
 import ServicePage from './ServicePage';
 import './cbs.css';
 
@@ -30,13 +30,6 @@ function useInView(threshold = 0.18) {
 }
 
 /* ── data ── */
-const DISCOVERY_ITEMS = [
-  { label: 'Business Goals',     note: 'What the company is trying to achieve' },
-  { label: 'People & Roles',     note: 'Who does what and how they interact' },
-  { label: 'Current Workflow',   note: 'How work actually moves today' },
-  { label: 'Pain Points',        note: 'Where things break down or slow down' },
-  { label: 'Data & Tools',       note: 'What information the business relies on' },
-];
 
 const DISCOVERY_MAP_CARDS = [
   { id: 'customer', title: 'Customer', items: ['New Enquiry', 'Product Questions', 'Support Requests'], place: 'customer' },
@@ -178,35 +171,28 @@ function HeroBg() {
 
 /* ── Discovery Diagram ── */
 /*
- * SVG viewBox: 700 × 580  (same coordinate space, bigger cards)
- *
- * New card boundaries — side cards 168×178, ops 218×178, bottom 168–218×120:
- *   Customer:   x=2–170,  y=4–182,   cx=(87,93)
- *   Sales:      x=530–698,y=4–182,   cx=(614,93),  bottom=182
- *   Inventory:  x=2–170,  y=228–406, cx=(87,317)
- *   Operations: x=238–456,y=228–406, cx=(347,317), bottom=406
- *   Finance:    x=530–698,y=228–406, cx=(614,317)
- *   Data:       x=238–456,y=448–568, cx=(347,508)
- *   Friction:   x=2–170,  y=448–568
- *   Opportunity:x=530–698,y=448–568
- *
- * Inter-column gaps: x=170–238 (68), x=456–530 (74)
- * Inter-row gaps:    y=182–228 (46), y=406–448 (42)
+ * Shared 900 × 850 coordinate space for cards, connectors and labels.
+ * Operations: (300,280), 300 × 330. Side cards: x=0/700, 200 wide.
+ * The center has 100-unit side lanes and a 90-unit data lane below.
  */
 function DiscoveryDiagram({ reduced }) {
+  const cardBox = (x, y, width, height) => ({
+    left: `${x / 900 * 100}%`, top: `${y / 850 * 100}%`,
+    width: `${width / 900 * 100}%`, height: `${height / 850 * 100}%`,
+  });
   const P = {
-    enquiry:    'M170,93 H530',
-    quoteOrder: 'M614,182 C614,216 456,216 456,276',
-    stockReq:   'M238,302 H170',
-    stockAvail: 'M170,322 H238',
-    invoice:    'M456,302 H530',
-    opData:     'M337,406 V448',
-    dataUp:     'M357,448 V406',
+    enquiry:    'M200,102 H700',
+    quoteOrder: 'M800,196 V228 Q800,240 788,240 H462 Q450,240 450,252 V280',
+    stockReq:   'M300,400 H200',
+    stockAvail: 'M200,440 H300',
+    invoice:    'M600,420 H700',
+    opData:     'M437,610 V700',
+    dataUp:     'M463,700 V610',
   };
 
   return (
     <div className="ddiag-wrap">
-      <svg className="ddiag-svg" viewBox="0 0 700 580" aria-hidden="true">
+      <svg className="ddiag-svg" viewBox="0 0 900 850" preserveAspectRatio="none" aria-hidden="true">
         <defs>
           <marker id="dda-t" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="5" markerHeight="5" orient="auto">
             <path d="M0 1L6 4L0 7" fill="none" stroke="#6ba39e" strokeWidth="1.5" strokeLinejoin="round"/>
@@ -219,111 +205,86 @@ function DiscoveryDiagram({ reduced }) {
           </marker>
         </defs>
 
-        <path d={P.enquiry}    className="dln dln-t"          markerEnd="url(#dda-t)" />
-        <path d={P.quoteOrder} className="dln dln-o dln-dash"  markerEnd="url(#dda-o)" />
-        <path d={P.stockReq}   className="dln dln-s"           markerEnd="url(#dda-s)" />
-        <path d={P.stockAvail} className="dln dln-t"           markerEnd="url(#dda-t)" />
-        <path d={P.invoice}    className="dln dln-t"           markerEnd="url(#dda-t)" />
-        <path d={P.opData}     className="dln dln-s"           markerEnd="url(#dda-s)" />
-        <path d={P.dataUp}     className="dln dln-t"           markerEnd="url(#dda-t)" />
+        <path d={P.enquiry}    className="dln dln-t"           markerEnd="url(#dda-t)" />
+        <path d={P.quoteOrder} className="dln dln-o dln-dash"   markerEnd="url(#dda-o)" />
+        <path d={P.stockReq}   className="dln dln-s"            markerEnd="url(#dda-s)" />
+        <path d={P.stockAvail} className="dln dln-t"            markerEnd="url(#dda-t)" />
+        <path d={P.invoice}    className="dln dln-t"            markerEnd="url(#dda-t)" />
+        <path d={P.opData}     className="dln dln-s"            markerEnd="url(#dda-s)" />
+        <path d={P.dataUp}     className="dln dln-t"            markerEnd="url(#dda-t)" />
 
         {!reduced && <>
-          <circle className="ddot ddot-t" r="3"><animateMotion dur="3s"   repeatCount="indefinite" path={P.enquiry} /></circle>
-          <circle className="ddot ddot-o" r="3"><animateMotion dur="2.8s" begin="0.9s" repeatCount="indefinite" path={P.quoteOrder} /></circle>
-          <circle className="ddot ddot-s" r="3"><animateMotion dur="2.5s" begin="0.4s" repeatCount="indefinite" path={P.stockReq} /></circle>
-          <circle className="ddot ddot-t" r="3"><animateMotion dur="2.5s" begin="1.7s" repeatCount="indefinite" path={P.stockAvail} /></circle>
-          <circle className="ddot ddot-t" r="3"><animateMotion dur="2.6s" begin="0.7s" repeatCount="indefinite" path={P.invoice} /></circle>
-          <circle className="ddot ddot-s" r="3"><animateMotion dur="3s"   begin="2.1s" repeatCount="indefinite" path={P.opData} /></circle>
-          <circle className="ddot ddot-t" r="3"><animateMotion dur="3s"   begin="1.2s" repeatCount="indefinite" path={P.dataUp} /></circle>
+          <circle className="ddot ddot-t" r="3.5"><animateMotion dur="3s"   repeatCount="indefinite" path={P.enquiry} /></circle>
+          <circle className="ddot ddot-o" r="3.5"><animateMotion dur="2.8s" begin="0.9s" repeatCount="indefinite" path={P.quoteOrder} /></circle>
+          <circle className="ddot ddot-s" r="3.5"><animateMotion dur="2.5s" begin="0.4s" repeatCount="indefinite" path={P.stockReq} /></circle>
+          <circle className="ddot ddot-t" r="3.5"><animateMotion dur="2.5s" begin="1.7s" repeatCount="indefinite" path={P.stockAvail} /></circle>
+          <circle className="ddot ddot-t" r="3.5"><animateMotion dur="2.6s" begin="0.7s" repeatCount="indefinite" path={P.invoice} /></circle>
+          <circle className="ddot ddot-s" r="3.5"><animateMotion dur="3s"   begin="2.1s" repeatCount="indefinite" path={P.opData} /></circle>
+          <circle className="ddot ddot-t" r="3.5"><animateMotion dur="3s"   begin="1.2s" repeatCount="indefinite" path={P.dataUp} /></circle>
         </>}
 
-        {/* Labels — positioned in clear gaps away from all lines */}
-        {/* "Enquiry": above enquiry path (y=93) at its midpoint x=350 */}
-        <text x="350" y="82" className="dptxt">Enquiry</text>
-        {/* "Confirmed Order": gap column (x 456–530), inter-row gap, above bezier */}
-        <text x="491" y="202" className="dptxt">Confirmed Order</text>
-        {/* "Manual handoff identified": below Sales bottom (y=182), Sales column */}
-        <text x="614" y="196" className="dptxt">Manual handoff identified</text>
-        {/* "Stock Request": above Ops→Inventory path (y=302), in gap x=170–238 */}
-        <text x="204" y="291" className="dptxt">Stock Request</text>
-        {/* "Availability": below Inventory→Ops path (y=322), same gap */}
-        <text x="204" y="337" className="dptxt">Availability</text>
-        {/* "Invoice": above Ops→Finance path (y=302), gap column x=456–530 */}
-        <text x="493" y="291" className="dptxt">Invoice</text>
-        {/* "Operational Data": right of vertical path, inter-gap y=406–448 */}
-        <text x="365" y="430" textAnchor="start" className="dptxt">Operational Data</text>
+        {/* Labels occupy separate lanes with explicit SVG text anchors. */}
+        <text x="450" y="80" className="dptxt">Enquiry</text>
+        <text x="625" y="219" className="dptxt">Confirmed Order</text>
+        <text x="625" y="266" className="dptxt">Manual handoff</text>
+        <text x="250" y="381" className="dptxt">Stock Request</text>
+        <text x="250" y="464" className="dptxt">Availability</text>
+        <text x="650" y="401" className="dptxt">Invoice</text>
+        <text x="487" y="659" className="dptxt dptxt-start">Operational Data</text>
       </svg>
 
-      {/* ── Cards ── percentages derived from 700×580 viewBox */}
 
-      {/* Customer: x=2–170 (24.3%), y=4–182 (30.7%) */}
-      <div className="dcard" style={{left:'0.29%',top:'0.69%',width:'24.3%',height:'30.7%'}}>
+      <div className="dcard" style={cardBox(0, 8, 200, 188)}>
         <div className="dcard-hd">
-          <span className="dcard-ico dcard-ico-t"><Users size={14}/></span>
+          <span className="dcard-ico dcard-ico-t"><Users size={17}/></span>
           <div><b>Customer</b><em>Enquiries &amp; Support</em></div>
         </div>
         <ul><li>New enquiry</li><li>Product questions</li><li>Support requests</li></ul>
       </div>
 
-      {/* Sales & Orders: x=530–698 (75.7%), y=4–182 (30.7%) */}
-      <div className="dcard" style={{left:'75.7%',top:'0.69%',width:'24.3%',height:'30.7%'}}>
+      <div className="dcard" style={cardBox(700, 8, 200, 188)}>
         <div className="dcard-hd">
-          <span className="dcard-ico dcard-ico-o"><ShoppingCart size={14}/></span>
+          <span className="dcard-ico dcard-ico-o"><ShoppingCart size={17}/></span>
           <div><b>Sales &amp; Orders</b><em>Quotes &amp; Conversions</em></div>
         </div>
         <ul><li>Create quote</li><li>Manage orders</li><li>Track pipeline</li></ul>
       </div>
 
-      {/* Inventory: x=2–170 (24.3%), y=228–406 (39.3%–70%) */}
-      <div className="dcard" style={{left:'0.29%',top:'39.3%',width:'24.3%',height:'30.7%'}}>
+      <div className="dcard" style={cardBox(0, 345, 200, 188)}>
         <div className="dcard-hd">
-          <span className="dcard-ico dcard-ico-s"><Package size={14}/></span>
+          <span className="dcard-ico dcard-ico-s"><Package size={17}/></span>
           <div><b>Inventory &amp; Resources</b><em>Stock &amp; Procurement</em></div>
         </div>
         <ul><li>Check stock</li><li>Manage inventory</li><li>Purchase orders</li></ul>
       </div>
 
-      {/* Business Operations: x=238–456 (34%–65.1%), y=228–406 (39.3%–70%) */}
-      <div className="dcard dcard-ops" style={{left:'34%',top:'39.3%',width:'31.1%',height:'30.7%'}}>
-        <div className="dops-icon"><Settings size={18}/></div>
+      <div className="dcard dcard-ops" style={cardBox(300, 280, 300, 330)}>
+        <div className="dops-icon"><Settings size={26}/></div>
         <div className="dops-title">Business Operations</div>
         <div className="dops-sub">Core Processes</div>
         <div className="dops-rows">
-          <div className="dops-row"><Truck size={11}/><span>Fulfilment &amp; Delivery</span></div>
-          <div className="dops-row"><Users size={11}/><span>Team Coordination</span></div>
-          <div className="dops-row"><Settings size={11}/><span>Process Management</span></div>
+          <div className="dops-row"><Truck size={17}/><span>Fulfilment &amp; Delivery</span></div>
+          <div className="dops-row"><Users size={17}/><span>Team Coordination</span></div>
+          <div className="dops-row"><Settings size={17}/><span>Process Management</span></div>
         </div>
       </div>
 
-      {/* Finance: x=530–698 (75.7%), y=228–406 (39.3%–70%) */}
-      <div className="dcard" style={{left:'75.7%',top:'39.3%',width:'24.3%',height:'30.7%'}}>
+      <div className="dcard" style={cardBox(700, 345, 200, 188)}>
         <div className="dcard-hd">
-          <span className="dcard-ico dcard-ico-t"><BarChart3 size={14}/></span>
+          <span className="dcard-ico dcard-ico-t"><BarChart3 size={17}/></span>
           <div><b>Finance &amp; Reporting</b><em>Invoices &amp; Insights</em></div>
         </div>
         <ul><li>Generate invoice</li><li>Track payments</li><li>Reports &amp; analytics</li></ul>
       </div>
 
-      {/* Data & Tools: x=238–456 (34%–65.1%), y=448–568 (77.2%–97.9%) */}
-      <div className="dcard" style={{left:'34%',top:'77.2%',width:'31.1%',height:'20.7%'}}>
+      <div className="dcard dcard-tools" style={cardBox(325, 700, 250, 142)}>
         <div className="dcard-hd">
-          <span className="dcard-ico dcard-ico-s"><Database size={14}/></span>
+          <span className="dcard-ico dcard-ico-s"><Database size={17}/></span>
           <div><b>Data &amp; Tools</b><em>Systems &amp; Integrations</em></div>
         </div>
         <ul><li>CRM / ERP</li><li>Accounting tools</li><li>Other internal systems</li></ul>
       </div>
 
-      {/* Common Friction: x=2–170 (0.29%), y=448–568 (77.2%) */}
-      <div className="dcard dcard-friction" style={{left:'0.29%',top:'77.2%',width:'24.3%',height:'20.7%'}}>
-        <div className="dins-hd dins-hd-friction"><AlertCircle size={12}/><b>Common Friction</b></div>
-        <ul><li>Manual data entry</li><li>Delayed information</li><li>Lack of visibility</li></ul>
-      </div>
-
-      {/* Opportunity: x=530–698 (75.7%), y=448–568 (77.2%) */}
-      <div className="dcard dcard-opportunity" style={{left:'75.7%',top:'77.2%',width:'24.3%',height:'20.7%'}}>
-        <div className="dins-hd dins-hd-opp"><Zap size={12}/><b>Opportunity</b></div>
-        <ul><li>Automate handoffs</li><li>Connect business data</li><li>Real-time insights</li></ul>
-      </div>
     </div>
   );
 }
@@ -336,33 +297,14 @@ function BusinessDiscovery() {
   return (
     <section className="cbs-section cbs-section--soft" ref={ref}>
       <div className="cbs-wrap">
-        {/* ── Centered top: eyebrow + heading + intro ── */}
         <div className={`cbs-disc-top cbs-reveal${inView ? ' is-in' : ''}`}>
           <span className="cbs-eyebrow">Business Discovery</span>
           <h2 className="cbs-h2">We understand the business before designing the software.</h2>
           <p className="cbs-lead">Before any technical decisions, we study how the company actually operates — the people, the workflows, the data and the friction.</p>
         </div>
-
-        {/* ── Two-column body: list (left) + diagram (right) ── */}
-        <div className="cbs-disc-grid">
-          <div className={`cbs-disc-left${inView ? ' is-in' : ''}`}>
-            <ol className="cbs-disc-list">
-              {DISCOVERY_ITEMS.map(({ label, note }, i) => (
-                <li key={label} className="cbs-disc-item"
-                  style={{ transitionDelay: inView ? `${0.25 + i * 0.09}s` : '0s' }}>
-                  <span className="cbs-disc-num">{String(i + 1).padStart(2, '0')}</span>
-                  <div>
-                    <strong>{label}</strong>
-                    <span>{note}</span>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
-          <div className={`cbs-disc-right${inView ? ' is-in' : ''}`}>
-            <p className="cbs-disc-map-label">HOW INFORMATION MOVES THROUGH THE BUSINESS</p>
-            <DiscoveryDiagram reduced={reduced} />
-          </div>
+        <div className={`cbs-disc-right${inView ? ' is-in' : ''}`}>
+          <p className="cbs-disc-map-label">HOW INFORMATION MOVES THROUGH THE BUSINESS</p>
+          <DiscoveryDiagram reduced={reduced} />
         </div>
       </div>
     </section>

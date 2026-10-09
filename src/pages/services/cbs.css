@@ -175,11 +175,11 @@
 
 .cbs-disc-grid {
   display: grid;
-  grid-template-columns: 1fr 1.6fr;
+  grid-template-columns: 1fr 2fr;
   gap: 52px;
   align-items: start;
 }
-.cbs-disc-left { max-width: 400px; }
+.cbs-disc-left { max-width: 400px; padding-top: 0; }
 .cbs-disc-list {
   list-style: none;
   margin: 0;
@@ -222,13 +222,16 @@
 
 /* Discovery map */
 .cbs-disc-right {
+  max-width: 960px;
+  margin: 0 auto;
   opacity: 0;
   transform: translateY(10px);
   transition: opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s;
 }
 .cbs-disc-right.is-in { opacity: 1; transform: none; }
 .cbs-disc-map-label {
-  margin: 0 0 20px;
+  margin: 0 0 24px;
+  text-align: center;
   color: #b0aba3;
   font-family: var(--cbs-mono);
   font-size: 0.62rem;
@@ -272,11 +275,11 @@
 
 /* ─────────────────────────────────────
    DISCOVERY DIAGRAM (new)
-   SVG coordinate space: 700 × 580
+   SVG coordinate space: 900 × 850
 ───────────────────────────────────── */
 .ddiag-wrap {
   position: relative;
-  aspect-ratio: 700 / 580;
+  aspect-ratio: 900 / 850;
   width: 100%;
 }
 .ddiag-svg {
@@ -304,11 +307,12 @@
 .dptxt {
   fill: #171717;
   font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 7.5px;
+  font-size: 9.5px;
   font-weight: 700;
   text-anchor: middle;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
 }
+.dptxt-start { text-anchor: start; }
 .dptxt-o { fill: #171717; }
 .dptxt-s { fill: #171717; }
 
@@ -318,12 +322,12 @@
   box-sizing: border-box;
   background: #fff;
   border: 1px solid #e3ded8;
-  border-radius: 8px;
-  box-shadow: 0 3px 12px rgba(31,33,36,.07), 0 1px 3px rgba(31,33,36,.04);
-  padding: 12px 12px 10px;
+  border-radius: 10px;
+  box-shadow: 0 3px 14px rgba(31,33,36,.08), 0 1px 3px rgba(31,33,36,.04);
+  padding: 12px 14px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   z-index: 1;
   overflow: hidden;
 }
@@ -337,25 +341,25 @@
 .dcard-hd b {
   display: block;
   color: #1a1a1a;
-  font-size: clamp(0.68rem, 1.4vw, 0.84rem);
+  font-size: 1rem;
   font-weight: 700;
-  line-height: 1.25;
+  line-height: 1.35;
 }
 .dcard-hd em {
   display: block;
   font-style: normal;
-  color: #6a6460;
-  font-size: clamp(0.58rem, 1.1vw, 0.68rem);
-  line-height: 1.2;
-  margin-top: 1px;
+  color: #514e4a;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  margin-top: 4px;
 }
 
 /* Icon circle */
 .dcard-ico {
   flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  border-radius: 7px;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -371,12 +375,12 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 .dcard ul li {
-  color: #3e4347;
-  font-size: clamp(0.6rem, 1.15vw, 0.72rem);
-  line-height: 1.3;
+  color: #30363a;
+  font-size: 0.875rem;
+  line-height: 1.5;
   padding-left: 9px;
   position: relative;
 }
@@ -384,44 +388,45 @@
   content: '';
   position: absolute;
   left: 0;
-  top: 5px;
+  top: .6em;
   width: 3.5px;
   height: 3.5px;
   border-radius: 50%;
-  background: #bfbab4;
+  background: #827d76;
 }
 
 /* Operations card — dark center */
 .dcard-ops {
   background: #272b2e;
   border-color: #272b2e;
-  box-shadow: 0 8px 24px rgba(31,33,36,.20), 0 2px 6px rgba(31,33,36,.12);
+  box-shadow: 0 8px 28px rgba(31,33,36,.22), 0 2px 8px rgba(31,33,36,.14);
   align-items: center;
   text-align: center;
-  gap: 7px;
-  padding: 14px 12px 12px;
+  gap: 10px;
+  padding: 24px 22px;
+  justify-content: center;
 }
 .dops-icon {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background: rgba(194,97,12,.22);
-  color: #e4823a;
+  background: #f1c5a0;
+  color: #a64b16;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 .dops-title {
-  color: #fff;
-  font-size: clamp(0.72rem, 1.4vw, 0.88rem);
+  color: #faf7f2;
+  font-size: 1.25rem;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.4;
 }
 .dops-sub {
-  color: rgba(255,255,255,.45);
+  color: #d6d2cc;
   font-family: var(--cbs-mono);
-  font-size: clamp(0.52rem, 1vw, 0.62rem);
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -430,52 +435,25 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  margin-top: 2px;
+  gap: 8px;
+  margin-top: 8px;
+  flex-shrink: 0;
 }
 .dops-row {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 10px;
+  padding: 8px 10px;
   background: rgba(255,255,255,.07);
   border-radius: 5px;
-  color: rgba(255,255,255,.88);
-  font-size: clamp(0.6rem, 1.15vw, 0.72rem);
-  font-weight: 500;
+  color: #faf7f2;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.5;
   text-align: left;
 }
-.dops-row > svg { flex-shrink: 0; color: rgba(255,255,255,.45); }
-
-/* Friction card */
-.dcard-friction {
-  border-left: 2px solid rgba(194,97,12,.7);
-  background: #fffaf5;
-  border-color: rgba(194,97,12,.25);
-}
-.dcard-friction ul li::before { background: rgba(194,97,12,.5); }
-
-/* Opportunity card */
-.dcard-opportunity {
-  border-left: 2px solid rgba(82,124,120,.7);
-  background: #f5faf9;
-  border-color: rgba(82,124,120,.25);
-}
-.dcard-opportunity ul li::before { background: rgba(82,124,120,.5); }
-
-/* Insight header (Friction / Opportunity) */
-.dins-hd {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-.dins-hd b {
-  font-size: clamp(0.68rem, 1.3vw, 0.78rem);
-  font-weight: 700;
-}
-.dins-hd-friction { color: #c2610c; }
-.dins-hd-opp { color: #527c78; }
-.dins-hd > svg { flex-shrink: 0; }
+.dops-row > svg { flex-shrink: 0; color: #a64b16; background: #f1c5a0; border-radius: 4px; padding: 2px; box-sizing: content-box; stroke-width: 2.25; }
+.dcard-tools { padding: 10px 12px; gap: 8px; }
 
 /* ─────────────────────────────────────
    SYSTEM ARCHITECTURE
@@ -1154,9 +1132,7 @@
     opacity: 0.5;
   }
   .cbs-disc-top { margin-bottom: 40px; }
-  .cbs-disc-grid { grid-template-columns: 1fr; gap: 40px; }
-  .cbs-disc-left { max-width: none; }
-  .ddiag-wrap { max-width: 680px; margin: 0 auto; }
+  .ddiag-wrap { max-width: 700px; margin: 0 auto; }
   .cbs-build-layout { grid-template-columns: 1fr; gap: 0; }
   .cbs-build-canvas-wrap { display: none; }
   .cbs-build-step { opacity: 1; }
@@ -1182,14 +1158,28 @@
   .sp--custom-business-software .sp-hero-aside { display: none; }
   .cbs-sys-depts { grid-template-columns: 1fr; }
   .cbs-dept { border-right: 0; }
-  /* Mobile: hide SVG paths/labels, show diagram in scrollable container */
+
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .ddiag-wrap { aspect-ratio: 900 / 1020; }
+  .dcard:not(.dcard-ops) { padding: 8px 10px; gap: 8px; }
+  .dcard-hd b { font-size: .875rem; }
+  .dcard-hd em { font-size: .75rem; }
+  .dcard-ico { width: 24px; height: 24px; border-radius: 6px; }
+  .dcard ul { gap: 5px; }
+  .dcard ul li { font-size: .8125rem; line-height: 1.45; }
+}
+
+@media (max-width: 768px) {
+  /* Preserve content height when the spatial map no longer fits. */
   .ddiag-svg { display: none; }
   .ddiag-wrap {
     aspect-ratio: auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto;
-    gap: 8px;
+    gap: 20px;
   }
   .dcard {
     position: static !important;
@@ -1197,7 +1187,7 @@
     height: auto !important;
   }
   .dcard-ops { grid-column: 1 / -1; }
-  .dcard-friction,.dcard-opportunity { grid-column: span 1; }
+
 }
 
 /* ─────────────────────────────────────
