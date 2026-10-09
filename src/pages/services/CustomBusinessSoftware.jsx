@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Users, ShoppingCart, Package, Settings, BarChart3, Database, Truck } from 'lucide-react';
 import ServicePage from './ServicePage';
 import './cbs.css';
+import { SoftwareArchitecture, SoftwareWorkflow, SoftwareBenefits, SoftwareProcess, SoftwareCta } from './BusinessSoftwareSections';
 
 /* ── hooks ── */
 function usePrefersReducedMotion() {
@@ -312,267 +313,10 @@ function BusinessDiscovery() {
 }
 
 /* ── Section 2: System Blocks (CRM / POS / ERP / Custom) ── */
-function SystemBlocks() {
-  const [ref, inView] = useInView(0.08);
-  const [focused, setFocused] = useState(null);
+function SystemBlocks() { return <SoftwareArchitecture />; }
 
-  /* SVG geometry */
-  const MW = 204, MH = 155;          /* module rect size */
-  const CX = 450, CY = 248;          /* core center */
-  const CW = 156, CH = 56;           /* core rect size */
+function ConnectedWorkflow() { return <SoftwareWorkflow />; }
 
-  /* Connection endpoints: inner edge of module → nearest corner of core */
-  const lineFor = (m) => {
-    const ex = m.cx < CX ? m.cx + MW / 2 : m.cx - MW / 2;   /* module inner edge x */
-    const cx = m.cx < CX ? CX - CW / 2  : CX + CW / 2;      /* core x corner */
-    const cy = m.cy < CY ? CY - CH / 2  : CY + CH / 2;      /* core y corner */
-    return { x1: ex, y1: m.cy, x2: cx, y2: cy };
-  };
-
-  return (
-    <section className="cbs-section" ref={ref}>
-      <div className="cbs-wrap">
-        <div className={`cbs-sblk-head cbs-reveal${inView ? ' is-in' : ''}`}>
-          <span className="cbs-eyebrow">System Architecture</span>
-          <h2 className="cbs-h2">CRM, POS, ERP — and everything<br />the business needs around them.</h2>
-          <p className="cbs-lead">Each system module is built around the business logic that belongs to it, connected through one central platform.</p>
-        </div>
-        <div className={`cbs-sblk-canvas${inView ? ' is-in' : ''}`}>
-          <svg viewBox="0 0 900 500" className="cbs-sblk-svg"
-            onMouseLeave={() => setFocused(null)}
-            aria-label="System architecture: CRM, POS, ERP and Custom Modules connected to Core Platform"
-          >
-            {/* Connection lines */}
-            {SYS_MODULES.map(m => {
-              const l = lineFor(m);
-              return (
-                <line key={m.id + '-ln'}
-                  x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2}
-                  className={`cbs-sln${focused === m.id ? ' is-on' : ''}`}
-                />
-              );
-            })}
-            {/* Small dots at core corners where lines meet */}
-            {SYS_MODULES.map(m => {
-              const l = lineFor(m);
-              return <circle key={m.id + '-dot'} cx={l.x2} cy={l.y2} r={3}
-                className={`cbs-scn${focused === m.id ? ' is-on' : ''}`} />;
-            })}
-
-            {/* Core platform block */}
-            <rect x={CX - CW / 2} y={CY - CH / 2} width={CW} height={CH} rx={3}
-              className="cbs-sblk-core" />
-            <text x={CX} y={CY - 9} className="cbs-sblk-core-sub">CONNECTED PLATFORM</text>
-            <text x={CX} y={CY + 15} className="cbs-sblk-core-name">Core System</text>
-
-            {/* System module blocks */}
-            {SYS_MODULES.map((m, mi) => (
-              <g key={m.id}
-                role="button"
-                tabIndex={0}
-                aria-label={m.label}
-                className={`cbs-smod${focused === m.id ? ' is-on' : ''}`}
-                onMouseEnter={() => setFocused(m.id)}
-                onFocus={() => setFocused(m.id)}
-                style={{ animationDelay: inView ? `${mi * 0.12}s` : '0s' }}
-              >
-                {/* Module card */}
-                <rect x={m.cx - MW / 2} y={m.cy - MH / 2} width={MW} height={MH} rx={3}
-                  className="cbs-smod-bg" />
-                {/* Title bar separator */}
-                <line x1={m.cx - MW / 2 + 16} y1={m.cy - MH / 2 + 52}
-                  x2={m.cx + MW / 2 - 16} y2={m.cy - MH / 2 + 52}
-                  className="cbs-smod-div" />
-                {/* Label (module type) */}
-                <text x={m.cx} y={m.cy - MH / 2 + 22} className="cbs-smod-tag">
-                  {['CRM','POS','ERP','CUSTOM'][mi]}
-                </text>
-                {/* Title */}
-                <text x={m.cx} y={m.cy - MH / 2 + 41} className="cbs-smod-title">{m.label}</text>
-                {/* Sub-items */}
-                {m.items.map((item, ii) => (
-                  <g key={item}>
-                    <circle cx={m.cx - MW / 2 + 24} cy={m.cy - MH / 2 + 72 + ii * 28} r={2.5}
-                      className="cbs-smod-bullet" />
-                    <text x={m.cx - MW / 2 + 35} y={m.cy - MH / 2 + 77 + ii * 28}
-                      className="cbs-smod-item">{item}</text>
-                  </g>
-                ))}
-              </g>
-            ))}
-          </svg>
-          <p className="cbs-sblk-note">HOVER ANY MODULE TO HIGHLIGHT ITS CONNECTION</p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ── Section 3: One Connected Business (Orbital) ── */
-function ConnectedBusiness() {
-  const [ref, inView] = useInView(0.1);
-  const reduced = usePrefersReducedMotion();
-  const [step, setStep] = useState(-1);
-
-  useEffect(() => {
-    if (!inView || reduced) return;
-    const t0 = setTimeout(() => setStep(0), 600);
-    return () => clearTimeout(t0);
-  }, [inView, reduced]);
-
-  useEffect(() => {
-    if (step < 0 || reduced) return;
-    const t = setTimeout(() => setStep(s => (s + 1) % ORBIT_SEQ.length), 620);
-    return () => clearTimeout(t);
-  }, [step, reduced]);
-
-  const activeId = ORBIT_SEQ[step];
-
-  const NW_PRIME = 96, NH_PRIME = 40;
-  const NW_STD = 90, NH_STD = 32;
-  const CW = 148, CH = 52;
-
-  return (
-    <section className="cbs-section cbs-section--soft" ref={ref}>
-      <div className="cbs-wrap">
-        <div className={`cbs-orb-head cbs-reveal${inView ? ' is-in' : ''}`}>
-          <span className="cbs-eyebrow">One Connected Business</span>
-          <h2 className="cbs-h2">Different departments.<br />One source of truth.</h2>
-          <p className="cbs-lead">Every part of the business can work from the same underlying system instead of relying on disconnected tools and repeated data entry.</p>
-        </div>
-      </div>
-      <div className={`cbs-orb-wrap${inView ? ' is-in' : ''}`}>
-        <svg viewBox="0 0 1100 560" className="cbs-orb-svg"
-          aria-label="Connected business system diagram">
-          {/* Spoke lines */}
-          {ORBIT_NODES.map(n => (
-            <line key={n.id + '-sp'}
-              x1={ORBIT_CORE.cx} y1={ORBIT_CORE.cy}
-              x2={n.cx} y2={n.cy}
-              className={`cbs-spoke${n.id === activeId ? ' is-on' : ''}`}
-            />
-          ))}
-          {/* Core */}
-          <rect x={ORBIT_CORE.cx - CW / 2} y={ORBIT_CORE.cy - CH / 2}
-            width={CW} height={CH} rx={3} className="cbs-orb-core" />
-          <text x={ORBIT_CORE.cx} y={ORBIT_CORE.cy - 8} className="cbs-orb-core-sub">ONE SYSTEM</text>
-          <text x={ORBIT_CORE.cx} y={ORBIT_CORE.cy + 13} className="cbs-orb-core-name">BUSINESS</text>
-          {/* Orbit nodes */}
-          {ORBIT_NODES.map(n => {
-            const w = n.prime ? NW_PRIME : NW_STD;
-            const h = n.prime ? NH_PRIME : NH_STD;
-            return (
-              <g key={n.id} className={`cbs-orbn${n.id === activeId ? ' is-on' : ''} cbs-drift-${n.id}`}>
-                <rect x={n.cx - w / 2} y={n.cy - h / 2} width={w} height={h} rx={2}
-                  className="cbs-orbn-bg" />
-                <text x={n.cx} y={n.cy + 5} className={`cbs-orbn-t${n.prime ? ' is-prime' : ''}`}>
-                  {n.label}
-                </text>
-              </g>
-            );
-          })}
-        </svg>
-      </div>
-    </section>
-  );
-}
-
-/* ── Section 4: Connected Workflow ── */
-function ConnectedWorkflow() {
-  const [ref, inView] = useInView(0.12);
-  const reduced = usePrefersReducedMotion();
-  const [step, setStep] = useState(-1);
-  const total = WF_MAIN.length + WF_BRANCH.length;
-
-  useEffect(() => {
-    if (!inView || reduced) return;
-    const timers = Array.from({ length: total }, (_, i) =>
-      setTimeout(() => setStep(i), 500 + i * 560)
-    );
-    return () => timers.forEach(clearTimeout);
-  }, [inView, reduced]);
-
-  const NW = 146, NH = 38;
-  const BW = 150, BH = 34;
-
-  const mainProgress = step < 0 ? 0 : Math.min(1, (step + 0.9) / WF_MAIN.length);
-  const branchStarted = step >= WF_MAIN.length - 1;
-
-  return (
-    <section className="cbs-section" ref={ref}>
-      <div className="cbs-wrap">
-        <div className={`cbs-wf-head cbs-reveal${inView ? ' is-in' : ''}`}>
-          <span className="cbs-eyebrow">Connected Workflow</span>
-          <h2 className="cbs-h2">See how one action moves<br />through the business.</h2>
-          <p className="cbs-lead">One customer action can automatically update multiple parts of the system — no manual re-entry, no disconnected records.</p>
-        </div>
-      </div>
-      <div className={`cbs-wf-canvas${inView ? ' is-in' : ''}`}>
-        <div className="cbs-wrap">
-          <div className="cbs-wf-scroll">
-            <svg viewBox="0 0 1120 220" className="cbs-wf-svg"
-              aria-label="Workflow: customer enquiry to CRM, quote, order, sale, then inventory, finance and reporting">
-              {/* Main path track */}
-              <path d={WF_MAIN_PATH} className="cbs-wf-track" />
-              {/* Main path progress */}
-              <path d={WF_MAIN_PATH} className="cbs-wf-prog" pathLength="1"
-                style={{ strokeDashoffset: Math.max(0, 1 - mainProgress) }} />
-              {/* Branch stem track */}
-              <path d={WF_TO_BRANCH} className="cbs-wf-track" />
-              {branchStarted && <path d={WF_TO_BRANCH} className="cbs-wf-prog" pathLength="1"
-                style={{ strokeDashoffset: 0 }} />}
-              {/* Branch verticals */}
-              {WF_BRANCH.map((b, i) => {
-                const active = step >= WF_MAIN.length + i;
-                return (
-                  <g key={b.id}>
-                    <line x1={845} y1={52} x2={b.x - BW / 2} y2={b.y}
-                      className="cbs-wf-track" />
-                    {active && (
-                      <line x1={845} y1={52} x2={b.x - BW / 2} y2={b.y}
-                        className="cbs-wf-prog" />
-                    )}
-                  </g>
-                );
-              })}
-              {/* Main nodes */}
-              {WF_MAIN.map((n, i) => (
-                <g key={n.id} className={`cbs-wfn${i <= step ? ' is-on' : ''}${i === step ? ' is-active' : ''}`}>
-                  <rect x={n.x - NW / 2} y={n.y - NH / 2} width={NW} height={NH} rx={2}
-                    className="cbs-wfn-bg" />
-                  <text x={n.x} y={n.y + 6} className="cbs-wfn-t">{n.label}</text>
-                  {i <= step && (
-                    <text x={n.x} y={n.y + NH / 2 + 17} className="cbs-wfn-s">{n.status}</text>
-                  )}
-                </g>
-              ))}
-              {/* Branch nodes */}
-              {WF_BRANCH.map((n, i) => {
-                const active = step >= WF_MAIN.length + i;
-                return (
-                  <g key={n.id} className={`cbs-wfn is-branch${active ? ' is-on' : ''}`}>
-                    <rect x={n.x - BW / 2} y={n.y - BH / 2} width={BW} height={BH} rx={2}
-                      className="cbs-wfn-bg" />
-                    <text x={n.x} y={n.y + 6} className="cbs-wfn-t cbs-wfn-t--sm">{n.label}</text>
-                    {active && (
-                      <text x={n.x} y={n.y + BH / 2 + 15} className="cbs-wfn-s">{n.status}</text>
-                    )}
-                  </g>
-                );
-              })}
-              {/* Branch dot at junction */}
-              {branchStarted && (
-                <circle cx={845} cy={52} r={4} className="cbs-wf-junc" />
-              )}
-            </svg>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ── Step canvas illustrations ── */
 function StepCanvas({ step }) {
   const views = [
     /* 01 Understand */
@@ -660,98 +404,10 @@ function StepCanvas({ step }) {
 }
 
 /* ── Section 5: How We Build ── */
-function HowWeBuild() {
-  const [ref, inView] = useInView(0.05);
-  const [activeStep, setActiveStep] = useState(0);
-  const stepRefs = useRef([]);
+function HowWeBuild() { return <SoftwareProcess />; }
 
-  useEffect(() => {
-    if (!inView) return;
-    const observers = PROCESS_STEPS.map((_, i) => {
-      const el = stepRefs.current[i];
-      if (!el) return null;
-      const obs = new IntersectionObserver(
-        ([e]) => { if (e.isIntersecting) setActiveStep(i); },
-        { threshold: 0.55, rootMargin: '0px 0px -15% 0px' }
-      );
-      obs.observe(el);
-      return obs;
-    });
-    return () => observers.forEach(o => o && o.disconnect());
-  }, [inView]);
+function WhatWeBuild() { return <SoftwareBenefits />; }
 
-  return (
-    <section className="cbs-section cbs-section--soft cbs-build-section" ref={ref}>
-      <div className="cbs-wrap">
-        <div className={`cbs-build-head cbs-reveal${inView ? ' is-in' : ''}`}>
-          <span className="cbs-eyebrow">How We Build</span>
-          <h2 className="cbs-h2">From understanding the business<br />to running the business.</h2>
-          <p className="cbs-lead">We understand how the company works, map the dependencies, design the system and build software that fits the organisation.</p>
-        </div>
-        <div className="cbs-build-layout">
-          <ol className="cbs-build-steps">
-            {PROCESS_STEPS.map(({ num, title, desc, keywords }, i) => (
-              <li key={num}
-                ref={el => stepRefs.current[i] = el}
-                className={`cbs-build-step${i === activeStep ? ' is-active' : i < activeStep ? ' is-past' : ''}`}
-                onClick={() => setActiveStep(i)}
-              >
-                <div className="cbs-build-marker">
-                  <span className="cbs-build-num">{num}</span>
-                </div>
-                <div className="cbs-build-copy">
-                  <h3 className="cbs-build-title">{title}</h3>
-                  <p className="cbs-build-desc">{desc}</p>
-                  <ul className="cbs-build-tags">
-                    {keywords.map(k => <li key={k}>{k}</li>)}
-                  </ul>
-                </div>
-              </li>
-            ))}
-          </ol>
-          <div className="cbs-build-canvas-wrap">
-            <div className="cbs-build-canvas">
-              <div className="cbs-build-canvas-label">
-                {PROCESS_STEPS[activeStep].num} — {PROCESS_STEPS[activeStep].title}
-              </div>
-              <StepCanvas step={activeStep} />
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ── Section 6: What We Build ── */
-function WhatWeBuild() {
-  const [ref, inView] = useInView(0.1);
-  return (
-    <section className="cbs-section" ref={ref}>
-      <div className="cbs-wrap">
-        <div className={`cbs-what-head cbs-reveal${inView ? ' is-in' : ''}`}>
-          <span className="cbs-eyebrow">Built Around Your Operations</span>
-          <h2 className="cbs-h2">Not another off-the-shelf tool.</h2>
-          <p className="cbs-lead">Every system we build is designed from scratch around how the business actually operates.</p>
-        </div>
-        <div className="cbs-what-grid">
-          {WHAT_WE_BUILD.map(({ tag, title, desc }, i) => (
-            <div key={tag}
-              className={`cbs-what-item cbs-reveal${inView ? ' is-in' : ''}`}
-              style={{ transitionDelay: inView ? `${0.05 + i * 0.07}s` : '0s' }}
-            >
-              <span className="cbs-what-tag">{tag}</span>
-              <h3 className="cbs-what-title">{title}</h3>
-              <p className="cbs-what-desc">{desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ── Section 7: Systems Working Together ── */
 function SystemsWorking() {
   const [ref, inView] = useInView(0.12);
   const reduced = usePrefersReducedMotion();
@@ -815,27 +471,8 @@ function SystemsWorking() {
 }
 
 /* ── Final CTA ── */
-function FinalCta() {
-  const [ref, inView] = useInView(0.2);
-  return (
-    <section className="cbs-cta" ref={ref}>
-      <div className="cbs-wrap">
-        <div className={`cbs-cta-inner cbs-reveal${inView ? ' is-in' : ''}`}>
-          <div className="cbs-cta-left">
-            <span className="cbs-eyebrow">Custom Software</span>
-            <h2 className="cbs-cta-h2">Your workflow shouldn't have to fit<br />someone else's software.</h2>
-          </div>
-          <div className="cbs-cta-right">
-            <p>Tell us how your business operates. We'll help define the system that should support it.</p>
-            <a href="/contact" className="cbs-btn">Discuss Your System</a>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
+function FinalCta() { return <SoftwareCta />; }
 
-/* ── Page ── */
 export default function CustomBusinessSoftware() {
   return (
     <ServicePage
@@ -850,13 +487,14 @@ export default function CustomBusinessSoftware() {
     >
       <div className="cbs-root">
         <BusinessDiscovery />
+        <div className="cbs-post-discovery">
         <SystemBlocks />
-        <ConnectedBusiness />
         <ConnectedWorkflow />
-        <HowWeBuild />
         <WhatWeBuild />
+        <HowWeBuild />
         <SystemsWorking />
         <FinalCta />
+        </div>
       </div>
     </ServicePage>
   );
