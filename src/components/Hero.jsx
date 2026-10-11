@@ -210,7 +210,7 @@ export default function Hero() {
 
               {/* Secondary — now visually clear: solid white border + legible text */}
               <a
-                href="#projects"
+                href="/projects"
                 className="btn-outline"
                 style={{
                   fontFamily: "'Inter', sans-serif",
