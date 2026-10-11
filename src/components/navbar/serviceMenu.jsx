@@ -6,7 +6,7 @@
  * "View all services" link and the "Services" nav item itself go to.
  */
 
-export const SERVICES_HREF = '/#services';
+export const SERVICES_HREF = '/services/web-development';
 
 // The icons are the exact glyphs the homepage service cards use (the `icon` values in Services.jsx: plain characters and emoji), so the
 // dropdown and the cards match. Sized to sit inside the orange tile; `color` only affects the text glyphs (</> and ⊞), emoji keep their own.

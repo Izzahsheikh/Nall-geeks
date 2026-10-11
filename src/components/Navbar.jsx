@@ -3,7 +3,7 @@ import { SERVICE_MENU, SERVICES_HREF, ChevronDown, ArrowRight } from './navbar/s
 
 const LINKS = [
   { href: '/', label: 'Home' },
-  { href: '/#services', label: 'Services', hasMenu: true },
+  { href: SERVICES_HREF, label: 'Services', hasMenu: true },
   { href: '/projects', label: 'Projects' },
   { href: '/about', label: 'About' },
   { href: '/careers', label: 'Career' },
@@ -33,7 +33,7 @@ export default function Navbar() {
     if (window.location.pathname === '/contact') return '/contact';
     if (window.location.pathname === '/projects') return '/projects';
     if (window.location.pathname.startsWith('/careers')) return '/careers';
-    if (window.location.pathname.startsWith('/services/')) return '/#services';
+    if (window.location.pathname === '/services' || window.location.pathname.startsWith('/services/')) return SERVICES_HREF;
     return window.location.hash ? `/${window.location.hash}` : '/';
   });
 
@@ -110,7 +110,7 @@ export default function Navbar() {
 
     if (closeMobile) setMobileOpen(false);
 
-    if (href === '/about' || href === '/contact' || href === '/projects' || href === '/careers') {
+    if (href === '/about' || href === '/contact' || href === '/projects' || href === '/careers' || href === SERVICES_HREF) {
       if (window.location.pathname === href) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
@@ -254,16 +254,25 @@ export default function Navbar() {
           {LINKS.map((l) =>
             l.hasMenu ? (
               <div key={l.href} className="mob-group">
-                <button
-                  type="button"
-                  className={`mob-toggle${mobileServicesOpen ? ' open' : ''}`}
-                  aria-expanded={mobileServicesOpen}
-                  aria-controls="mob-services"
-                  onClick={() => setMobileServicesOpen((v) => !v)}
-                >
-                  {l.label}
-                  <span className="mob-chevron"><ChevronDown /></span>
-                </button>
+                <div className={`mob-toggle${mobileServicesOpen ? ' open' : ''}`}>
+                  <a
+                    href={SERVICES_HREF}
+                    className="mob-services-link"
+                    onClick={(e) => handleNavClick(e, SERVICES_HREF, true)}
+                  >
+                    {l.label}
+                  </a>
+                  <button
+                    type="button"
+                    className="mob-chevron"
+                    aria-label={`${mobileServicesOpen ? 'Hide' : 'Show'} service links`}
+                    aria-expanded={mobileServicesOpen}
+                    aria-controls="mob-services"
+                    onClick={() => setMobileServicesOpen((v) => !v)}
+                  >
+                    <ChevronDown />
+                  </button>
+                </div>
                 <div id="mob-services" className={`mob-sub${mobileServicesOpen ? ' open' : ''}`} inert={!mobileServicesOpen}>
                   <div className="mob-sub-inner">
                     <ul className="mob-sub-list">

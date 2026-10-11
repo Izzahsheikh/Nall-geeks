@@ -91,9 +91,11 @@
 .nav-dd-list li:hover::before, .nav-dd-list li:hover + li::before, .nav-dd-list li:focus-within::before, .nav-dd-list li:focus-within + li::before { opacity: 0; }
 
 /* ===== "Services" inside the mobile menu: tap to expand / collapse the same list ===== */
-.mob-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 1rem 0.25rem; font-family: inherit; font-size: 1.05rem; font-weight: 500; letter-spacing: 0.04em; text-align: left; color: rgba(255, 255, 255, 0.68); background: none; border: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.07); cursor: pointer; transition: color 0.2s ease; }
+.mob-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 1rem 0.25rem; font-family: inherit; font-size: 1.05rem; font-weight: 500; letter-spacing: 0.04em; text-align: left; color: rgba(255, 255, 255, 0.68); background: none; border: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.07); transition: color 0.2s ease; }
 .mob-toggle:hover, .mob-toggle.open { color: #fff; }
-.mob-chevron { display: grid; place-items: center; transition: transform 0.3s ease; }
+.mob-menu a.mob-services-link { color: inherit; text-decoration: none; }
+.mob-menu a.mob-services-link:hover { color: #fff; }
+.mob-chevron { display: grid; place-items: center; padding: 0; color: inherit; background: none; border: 0; cursor: pointer; transition: transform 0.3s ease; }
 .mob-toggle.open .mob-chevron { transform: rotate(180deg); }
 .mob-sub { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 0.3s ease, opacity 0.25s ease; }
 .mob-sub.open { grid-template-rows: 1fr; opacity: 1; }
@@ -210,7 +212,7 @@
   .services-tree-gap { height: 230px; }
   .services-hub { --svc-cards-delay: 0.55s; }
 }
-.svc-card { border-radius: 1rem; padding: 1.75rem 1.5rem; min-height: 176px; transition: opacity 0.38s ease-out calc(var(--svc-cards-delay) + var(--svc-index) * var(--svc-stagger)), transform 0.38s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--svc-cards-delay) + var(--svc-index) * var(--svc-stagger)), box-shadow 0.3s ease, border-color 0.3s ease; will-change: transform, opacity; cursor: default; background: #fff; border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(37,41,44,0.04), 0 8px 24px rgba(37,41,44,0.06); opacity: 0; transform: translateY(16px); }
+.svc-card { display: block; color: inherit; text-decoration: none; border-radius: 1rem; padding: 1.75rem 1.5rem; min-height: 176px; transition: opacity 0.38s ease-out calc(var(--svc-cards-delay) + var(--svc-index) * var(--svc-stagger)), transform 0.38s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--svc-cards-delay) + var(--svc-index) * var(--svc-stagger)), box-shadow 0.3s ease, border-color 0.3s ease; will-change: transform, opacity; cursor: pointer; background: #fff; border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(37,41,44,0.04), 0 8px 24px rgba(37,41,44,0.06); opacity: 0; transform: translateY(16px); }
 .svc-card.is-visible { opacity: 1; transform: translateY(0); }
 .svc-card:hover { background: #fff; border-color: var(--accent); box-shadow: 0 1px 2px rgba(37,41,44,0.05), 0 14px 34px rgba(37,41,44,0.1); transition-delay: 0ms; }
 /* Reduced motion: no entrance at all, the logo and cards are simply there (hover effects stay). Placed after the rules above so it wins. */
@@ -3282,11 +3284,12 @@ button.danger,
 .sp--ai-automation .sp-desc,
 .sp--seo .sp-desc {
   max-width: 650px;
-  color: #c9c6c0;
+  color: #ffffff;
   font-family: 'Inter', sans-serif;
   font-size: clamp(0.95rem, 1.4vw, 1.1rem);
   font-weight: 400;
   line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
 }
 @media (max-width: 768px) {
   .sp .sp-header,
@@ -3365,8 +3368,9 @@ button.danger,
 }
 .ux2-page .sp-desc {
   max-width: 58ch;
-  color: #ddd8cf;
+  color: #ffffff;
   font-size: clamp(1rem, 1.4vw, 1.125rem);
+  -webkit-font-smoothing: antialiased;
 }
 .sp-hero-actions {
   display: flex;
@@ -3910,34 +3914,37 @@ button.danger,
   }
 }
 
-/* Shared image treatment for every individual service-page hero. */
+/* Shared image treatment for every individual service-page hero.
+   The image lives on ::after so filter:blur() only affects the photo —
+   not the gradient overlays, text, or any other foreground element.
+   inset:-6px + overflow:hidden on .sp-header hides the blurred edges. */
 .sp .sp-header {
   isolation: isolate;
   background-color: #292825;
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.58)),
-    url('/servicesHero.jpeg');
+}
+.sp .sp-header::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  z-index: -1;
+  background-image: url('/servicesHero.jpeg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  filter: blur(1.5px);
+  pointer-events: none;
 }
 .sp .sp-header::before {
   position: absolute;
   z-index: 0;
   inset: 0;
   background:
-    radial-gradient(
-      ellipse at 40% 50%,
-      rgba(165, 165, 165, 0.18) 0%,
-      rgba(115, 115, 115, 0.11) 32%,
-      rgba(65, 65, 65, 0.06) 52%,
-      rgba(0, 0, 0, 0) 72%
-    ),
+    linear-gradient(rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.28)),
     linear-gradient(
       90deg,
-      rgba(0, 0, 0, 0.72) 0%,
-      rgba(0, 0, 0, 0.58) 45%,
-      rgba(0, 0, 0, 0.42) 100%
+      rgba(0, 0, 0, 0.42) 0%,
+      rgba(0, 0, 0, 0.20) 55%,
+      rgba(0, 0, 0, 0.06) 100%
     );
   content: '';
   pointer-events: none;

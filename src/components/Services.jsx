@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { SERVICE_MENU } from './navbar/serviceMenu';
 
 const SERVICES = [
   { num: '01', icon: '</>', title: 'Web Development', desc: 'We write lean, fast code. No plugin bloat — just clean builds that load instantly.' },
@@ -8,6 +9,8 @@ const SERVICES = [
   { num: '05', icon: '🔍', title: 'Search Engine Optimization', desc: 'Rank higher, get found faster — we optimize your site for search engines that matter.' },
   { num: '06', icon: '🤖', title: 'AI & Automation', desc: 'Eliminate the repetitive. Build AI into your product or process.' },
 ];
+
+const SERVICE_HREFS = Object.fromEntries(SERVICE_MENU.map(({ title, href }) => [title, href]));
 
 /*
  * Where the branches leave the logo, as fractions of the logo image: horizontally centred, on the
@@ -146,8 +149,9 @@ export default function Services() {
 
           <div className="svc-row">
             {SERVICES.map((s, i) => (
-              <div
+              <a
                 key={s.num}
+                href={SERVICE_HREFS[s.title]}
                 ref={(el) => { cardRefs.current[i] = el; }}
                 className={`svc-card${isVisible ? ' is-visible' : ''}`}
                 style={{ '--svc-index': i }}
@@ -158,7 +162,7 @@ export default function Services() {
                 </div>
                 <div className="svc-title">{s.title}</div>
                 <div className="svc-desc">{s.desc}</div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
