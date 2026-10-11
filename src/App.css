@@ -3954,6 +3954,33 @@ button.danger,
   z-index: 1;
 }
 
+/* Keep service hero copy within the darker, quieter area of the shared metallic image. */
+.sp .sp-header .sp-inner {
+  width: min(100%, 1200px);
+  margin-left: max(0px, calc((100% - 1200px) / 2 + 40px));
+  margin-right: auto;
+}
+.sp .sp-header .sp-hero-layout {
+  width: 100%;
+}
+.sp .sp-header .sp-hero-copy {
+  width: min(100%, 660px);
+}
+.sp .sp-header .sp-eyebrow,
+.sp .sp-header .sp-title,
+.sp .sp-header .sp-desc {
+  max-width: 100%;
+}
+@media (max-width: 768px) {
+  .sp .sp-header .sp-inner {
+    width: 100%;
+    margin-left: 0;
+  }
+  .sp .sp-header .sp-hero-copy {
+    width: min(100%, 620px);
+  }
+}
+
 /* ===== Web Development section polish ===== */
 .sp--web-development {
   --web-orange: #e8651a;
