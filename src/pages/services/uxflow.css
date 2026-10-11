@@ -81,9 +81,9 @@
   visibility: hidden;
   transform: translateY(10px);
   transition:
-    opacity 0.3s ease-out,
-    transform 0.35s ease-out,
-    visibility 0s linear 0.35s;
+    opacity 0.4s ease-out,
+    transform 0.4s ease-out,
+    visibility 0s linear 0.4s;
 }
 
 .uxp-stage.is-leaving {
@@ -91,12 +91,13 @@
 }
 
 .uxp-stage.is-active {
+  z-index: 1;
   opacity: 1;
   visibility: visible;
   transform: none;
   transition:
-    opacity 0.45s ease-out 0.28s,
-    transform 0.5s ease-out 0.28s,
+    opacity 0.4s ease-out,
+    transform 0.4s ease-out,
     visibility 0s;
 }
 
@@ -194,9 +195,9 @@
   visibility: hidden;
   transform: translateY(10px);
   transition:
-    opacity 0.3s ease-out,
-    transform 0.35s ease-out,
-    visibility 0s linear 0.35s;
+    opacity 0.4s ease-out,
+    transform 0.4s ease-out,
+    visibility 0s linear 0.4s;
 }
 
 .uxp-layer.is-leaving {
@@ -209,8 +210,8 @@
   visibility: visible;
   transform: none;
   transition:
-    opacity 0.45s ease-out 0.28s,
-    transform 0.5s ease-out 0.28s,
+    opacity 0.4s ease-out,
+    transform 0.4s ease-out,
     visibility 0s;
 }
 

@@ -66,6 +66,7 @@ const STAGES = [
 
 const TOTAL = STAGES.length;
 const STAGE_MS = 4500;
+const STAGE_IMAGES = Object.freeze(STAGES.map(({ image }) => image));
 
 function stageClass(index, activeIndex, previousIndex) {
   if (index === activeIndex) return ' is-active';
@@ -103,6 +104,14 @@ export default function UXDesignFlow() {
   const tabsRef = useRef(null);
   const reduced = usePrefersReducedMotion();
   const inView = useInView(sectionRef);
+
+  useEffect(() => {
+    STAGE_IMAGES.forEach((src) => {
+      const image = new Image();
+      image.src = src;
+      if (image.decode) image.decode().catch(() => {});
+    });
+  }, []);
 
   const goTo = (index) => {
     if (index === activeIndex) return;
@@ -175,7 +184,8 @@ export default function UXDesignFlow() {
                   src={s.image}
                   alt={s.alt}
                   className="uxp-img"
-                  loading="lazy"
+                  loading="eager"
+                  decoding="async"
                   draggable="false"
                 />
               </div>

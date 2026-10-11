@@ -99,20 +99,21 @@
   visibility: hidden;
   transform: translateY(10px);
   transition:
-    opacity 0.3s ease-out,
-    transform 0.35s ease-out,
-    visibility 0s linear 0.35s;
+    opacity 0.4s ease-out,
+    transform 0.4s ease-out,
+    visibility 0s linear 0.4s;
 }
 
 .sx-flow-stage.is-leaving { transform: translateY(-10px); }
 
 .sx-flow-stage.is-active {
+  z-index: 1;
   opacity: 1;
   visibility: visible;
   transform: none;
   transition:
-    opacity 0.45s ease-out 0.28s,
-    transform 0.5s ease-out 0.28s,
+    opacity 0.4s ease-out,
+    transform 0.4s ease-out,
     visibility 0s;
 }
 
@@ -393,7 +394,7 @@
   opacity: 0;
   transition: opacity 0.4s ease;
 }
-.sx-ov-layer.is-on { opacity: 1; transition-delay: 0.28s; }
+.sx-ov-layer.is-on { opacity: 1; transition-delay: 0s; }
 .sx-ov-layer.is-leaving { opacity: 0; transition-delay: 0s; }
 
 /* 02 Crawl: path lines + node discovery */
@@ -586,13 +587,13 @@
 
 /* 05 Rank: rising animation */
 .sx-ov-layer.is-on .sx-rank-client {
-  animation: sx-rank-up 2.4s cubic-bezier(0.22, 1, 0.36, 1) 0.85s both;
+  animation: sx-rank-up 1.8s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
 }
 .sx-ov-layer.is-on .sx-rank-rival-a {
-  animation: sx-rank-down-a 2.4s cubic-bezier(0.22, 1, 0.36, 1) 0.85s both;
+  animation: sx-rank-down-a 1.8s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
 }
 .sx-ov-layer.is-on .sx-rank-rival-b {
-  animation: sx-rank-down-b 2.4s cubic-bezier(0.22, 1, 0.36, 1) 0.85s both;
+  animation: sx-rank-down-b 1.8s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
 }
 @keyframes sx-rank-up {
   0%   { transform: translateY(0); }

@@ -327,7 +327,7 @@ function SearchFlowPreview({ stage, prevStage }) {
 function SearchFlow() {
   const sectionRef = useRef(null);
   const tabsRef = useRef(null);
-  const { active: stage, select, hold, release } = useCycle(sectionRef, FLOW.length, FLOW_STEP_MS);
+  const { active: stage, select } = useCycle(sectionRef, FLOW.length, FLOW_STEP_MS);
   const [prevStage, setPrevStage] = useState(-1);
   const prevRef = useRef(-1);
 
@@ -350,8 +350,6 @@ function SearchFlow() {
       className="sx-flow"
       id="sx-how"
       ref={sectionRef}
-      onMouseEnter={() => hold(stage)}
-      onMouseLeave={release}
     >
       <div className="sx-wrap">
         <header className="sx-flow-head">
@@ -387,7 +385,6 @@ function SearchFlow() {
                 <button
                   type="button"
                   onClick={() => select(i)}
-                  onMouseEnter={() => hold(i)}
                   aria-current={i === stage ? 'step' : undefined}
                 >
                   <span className="sx-flow-tab-num">{s.num}</span>
@@ -476,7 +473,7 @@ function SearchIntent() {
 
 /* ---------- technical foundation ---------- */
 
-// Autoplay through `count` steps, looping forever. Pauses while off screen, in a hidden tab, or held by the pointer.
+// Autoplay through `count` steps, looping forever. Pauses while off screen, in a hidden tab, or when reduced motion is preferred.
 function useCycle(ref, count, stepMs) {
   const reduced = usePrefersReducedMotion();
   const [active, setActive] = useState(0);

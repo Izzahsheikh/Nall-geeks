@@ -3,7 +3,14 @@ import { useEffect, useRef, useState } from 'react';
 const IMAGE_BASE = '/images/services/web-development';
 const LAUNCH_VIDEO = '/uploads/projects/ngpartitions.mp4';
 const PROJECT_DOMAIN = 'ngpartitions.co.uk';
-const LAYER_FADE_MS = 500;
+const LAYER_FADE_MS = 400;
+const BUILD_IMAGES = [
+  `${IMAGE_BASE}/image1.jpeg`,
+  `${IMAGE_BASE}/image2.jpeg`,
+  `${IMAGE_BASE}/image3.1.png`,
+  `${IMAGE_BASE}/image3.2.png`,
+  `${IMAGE_BASE}/image4.jpeg`,
+];
 
 /*
  * One project (N&G Partitions), five moments. The copy, the preview layer and the active tab are all driven by the same
@@ -78,6 +85,17 @@ function useInView(ref) {
   }, [ref]);
 
   return inView;
+}
+
+function usePreloadImages(paths) {
+  useEffect(() => {
+    const images = paths.map((path) => {
+      const image = new Image();
+      image.src = path;
+      if (image.decode) image.decode().catch(() => {});
+      return image;
+    });
+  }, [paths]);
 }
 
 // Outgoing content drifts up, incoming content rises in from below.
@@ -190,6 +208,8 @@ export default function WebsiteBuildProcess() {
   const reducedMotion = useReducedMotion();
   const inView = useInView(sectionRef);
   const activeStage = STAGES[activeIndex];
+
+  usePreloadImages(BUILD_IMAGES);
 
   const goTo = (index) => {
     if (index === activeIndex) return;

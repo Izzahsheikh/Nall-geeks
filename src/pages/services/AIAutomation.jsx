@@ -1,21 +1,41 @@
 import { useEffect, useRef, useState } from 'react';
+import {
+  Settings, Users, BarChart2, FileText, UserPlus, Globe, Mail, Megaphone,
+  MessageSquare, Inbox, Headset, Phone, FileUp, FolderOpen, ScanText,
+  ClipboardCheck, Database, Send, Bell, FileSpreadsheet, Server,
+  ChartNoAxesCombined, Search, Brain, Play, Workflow, CircleCheck,
+  ClipboardList, Bot, UserRound, FileOutput, ListChecks, ArrowUpRight,
+} from 'lucide-react';
 import ServicePage from './ServicePage';
 
 const AREAS = [
   {
     number: '01',
     title: 'Operations Automation',
-    description: 'Internal processes, repetitive admin, notifications, updates and follow-ups.',
+    description: 'Internal processes, repetitive administration, approvals, notifications and follow-ups.',
+    Icon: Settings,
+    cta: 'Reduce manual work',
   },
   {
     number: '02',
     title: 'Customer & Lead Workflows',
-    description: 'Lead qualification, customer requests, CRM updates, routing and responses.',
+    description: 'Lead capture, customer inquiries, CRM updates, routing and automated responses.',
+    Icon: Users,
+    cta: 'Improve response time',
   },
   {
     number: '03',
     title: 'Data & Reporting',
-    description: 'Extracting information, organising data, generating reports and syncing records.',
+    description: 'Collecting, transforming, organising and reporting data across business systems.',
+    Icon: BarChart2,
+    cta: 'Turn data into insights',
+  },
+  {
+    number: '04',
+    title: 'Content & Document Processing',
+    description: 'Extracting information, summarising documents, organising content and generating drafts.',
+    Icon: FileText,
+    cta: 'Save time on documents',
   },
 ];
 
@@ -23,79 +43,123 @@ const AREAS = [
 const WORKFLOWS = [
   {
     label: 'Lead Management',
-    steps: [
-      { label: 'Website Form' },
-      { label: 'AI Qualification', tag: 'AI' },
-      { label: 'CRM' },
-      { label: 'Assign Team' },
-      { label: 'Follow-up' },
+    inputs: [
+      { title: 'New Lead', detail: 'Form submission or enquiry', Icon: UserPlus, tone: 'teal' },
+      { title: 'Website Visit', detail: 'High intent activity', Icon: Globe, tone: 'blue' },
+      { title: 'Email Enquiry', detail: 'Inbound sales request', Icon: Mail, tone: 'orange' },
+      { title: 'Campaign Reply', detail: 'Response or referral', Icon: Megaphone, tone: 'purple' },
+    ],
+    outputs: [
+      { title: 'Create or Update Record', detail: 'CRM, database or sheet', Icon: Database, tone: 'teal' },
+      { title: 'Assign to Sales', detail: 'Route to the right person', Icon: UserRound, tone: 'orange' },
+      { title: 'Send a Follow-up', detail: 'Email or message', Icon: Send, tone: 'purple' },
+      { title: 'Notify the Team', detail: 'Keep everyone in sync', Icon: Bell, tone: 'blue' },
     ],
   },
   {
     label: 'Customer Support',
-    steps: [
-      { label: 'Customer Message' },
-      { label: 'AI Understands Request', tag: 'AI' },
-      { label: 'Categorise' },
-      { label: 'AI Reply / Human Team', tag: 'AI + Human' },
-      { label: 'Update Record' },
+    inputs: [
+      { title: 'Support Ticket', detail: 'New customer issue', Icon: Headset, tone: 'teal' },
+      { title: 'Email Request', detail: 'Message to the team', Icon: Inbox, tone: 'blue' },
+      { title: 'Chat Message', detail: 'Live customer question', Icon: MessageSquare, tone: 'purple' },
+      { title: 'Call Notes', detail: 'Conversation summary', Icon: Phone, tone: 'orange' },
+    ],
+    outputs: [
+      { title: 'Categorise Request', detail: 'Topic and priority', Icon: ListChecks, tone: 'purple' },
+      { title: 'Send a Response', detail: 'Helpful, timely reply', Icon: Send, tone: 'teal' },
+      { title: 'Escalate to a Person', detail: 'When human judgement helps', Icon: UserRound, tone: 'orange' },
+      { title: 'Update Support Record', detail: 'Keep the history complete', Icon: ClipboardCheck, tone: 'blue' },
     ],
   },
   {
     label: 'Document Processing',
-    steps: [
-      { label: 'Document Upload' },
-      { label: 'AI Extracts Data', tag: 'AI' },
-      { label: 'Validate' },
-      { label: 'Human Review if Needed', tag: 'Human' },
-      { label: 'Business System' },
+    inputs: [
+      { title: 'Document Upload', detail: 'PDF, scan or image', Icon: FileUp, tone: 'blue' },
+      { title: 'Invoice Email', detail: 'Attachment in the inbox', Icon: Mail, tone: 'orange' },
+      { title: 'Shared Folder', detail: 'New file in a workspace', Icon: FolderOpen, tone: 'teal' },
+      { title: 'Form Attachment', detail: 'Customer-submitted file', Icon: FileText, tone: 'purple' },
+    ],
+    outputs: [
+      { title: 'Extract Key Details', detail: 'Names, dates and values', Icon: ScanText, tone: 'blue' },
+      { title: 'Validate Information', detail: 'Check rules and accuracy', Icon: CircleCheck, tone: 'teal' },
+      { title: 'Review Exceptions', detail: 'Bring a person in as needed', Icon: ClipboardCheck, tone: 'orange' },
+      { title: 'Update Business System', detail: 'Save structured records', Icon: Database, tone: 'purple' },
     ],
   },
   {
     label: 'Communication',
-    steps: [
-      { label: 'Trigger' },
-      { label: 'Customer / Lead Data' },
-      { label: 'Generate Message', tag: 'AI' },
-      { label: 'Send' },
-      { label: 'Response' },
-      { label: 'Update Record' },
+    inputs: [
+      { title: 'Trigger Event', detail: 'A change or key moment', Icon: Workflow, tone: 'orange' },
+      { title: 'New Enquiry', detail: 'Someone needs a response', Icon: MessageSquare, tone: 'teal' },
+      { title: 'Customer Details', detail: 'Context from your CRM', Icon: Users, tone: 'blue' },
+      { title: 'Booking Update', detail: 'Appointment or schedule', Icon: ClipboardList, tone: 'purple' },
+    ],
+    outputs: [
+      { title: 'Prepare a Message', detail: 'Personalised to the context', Icon: FileText, tone: 'purple' },
+      { title: 'Send Email or SMS', detail: 'Reach the right person', Icon: Send, tone: 'teal' },
+      { title: 'Notify the Team', detail: 'Share important updates', Icon: Bell, tone: 'orange' },
+      { title: 'Log Conversation', detail: 'Keep a complete record', Icon: ClipboardCheck, tone: 'blue' },
     ],
   },
   {
     label: 'Reporting',
-    steps: [
-      { label: 'Business Data' },
-      { label: 'Collect' },
-      { label: 'Organise' },
-      { label: 'Analyse', tag: 'AI' },
-      { label: 'Prepare Report' },
-      { label: 'Deliver to Team' },
+    inputs: [
+      { title: 'CRM Records', detail: 'Customers and opportunities', Icon: Database, tone: 'teal' },
+      { title: 'Sales Data', detail: 'Orders and performance', Icon: ChartNoAxesCombined, tone: 'blue' },
+      { title: 'Operations Metrics', detail: 'Work in progress', Icon: Settings, tone: 'orange' },
+      { title: 'Finance Records', detail: 'Costs and revenue', Icon: FileSpreadsheet, tone: 'purple' },
+    ],
+    outputs: [
+      { title: 'Combine and Clean', detail: 'Reliable, ready-to-use data', Icon: ListChecks, tone: 'teal' },
+      { title: 'Generate a Report', detail: 'Clear summaries and trends', Icon: FileOutput, tone: 'blue' },
+      { title: 'Share with the Team', detail: 'Deliver insights on schedule', Icon: Send, tone: 'purple' },
+      { title: 'Flag Key Changes', detail: 'Surface important movement', Icon: Bell, tone: 'orange' },
     ],
   },
 ];
 
+const PROCESS_STEPS = [
+  { label: 'Understand', Icon: Search },
+  { label: 'Process', Icon: Brain },
+  { label: 'Take Action', Icon: Play },
+  { label: 'Update Systems', Icon: Database },
+];
+
 const TOOLS = [
-  { label: 'Forms', detail: 'Website & intake forms' },
-  { label: 'CRM', detail: 'Contacts, deals, pipelines' },
-  { label: 'Email', detail: 'Inbox & outbound mail' },
-  { label: 'Documents', detail: 'PDFs, invoices, contracts' },
-  { label: 'Internal Systems', detail: 'Databases, sheets, ERP' },
-  { label: 'Notifications', detail: 'Chat, SMS & alerts' },
+  { label: 'Forms', detail: 'Website & intake forms', side: 'input', Icon: FileText, tone: 'blue' },
+  { label: 'Email', detail: 'Inbox & outbound mail', side: 'input', Icon: Mail, tone: 'teal' },
+  { label: 'Documents', detail: 'PDFs, invoices, contracts', side: 'input', Icon: FileUp, tone: 'orange' },
+  { label: 'Notifications', detail: 'Chat, SMS & alerts', side: 'input', Icon: Bell, tone: 'orange' },
+  { label: 'CRM', detail: 'Contacts, deals, pipelines', side: 'output', Icon: Users, tone: 'blue' },
+  { label: 'Sheets & Databases', detail: 'Structured business data', side: 'output', Icon: FileSpreadsheet, tone: 'teal' },
+  { label: 'Internal Systems', detail: 'Your tools & platforms', side: 'output', Icon: ChartNoAxesCombined, tone: 'blue' },
+  { label: 'Other Applications', detail: 'Your connected tools', side: 'output', Icon: Workflow, tone: 'purple' },
+];
+
+const QUALITIES = [
+  ['01', 'Business-first approach', 'Solutions designed around your actual goals and problems.', Search, 'orange'],
+  ['02', 'Custom workflows', 'Automation tailored to your processes, tools and team.', Workflow, 'teal'],
+  ['03', 'Secure & reliable', 'Thoughtful security, privacy, human oversight and dependable operation.', Settings, 'blue'],
+  ['04', 'End-to-end support', 'Planning, implementation, testing, monitoring and improvement.', Headset, 'teal'],
+];
+
+const LOGIC_STEPS = [
+  ['Understand', 'Receive and interpret information.', Search],
+  ['Decide', 'Apply business rules or AI reasoning.', Brain],
+  ['Act', 'Trigger the right action across connected systems.', ArrowUpRight],
 ];
 
 const APPROACH = [
-  ['01', 'Identify', 'Find the repetitive or disconnected work.'],
-  ['02', 'Map', 'Understand triggers, decisions, data and outcomes.'],
-  ['03', 'Automate', 'Build and connect the workflow.'],
-  ['04', 'Test', 'Check normal cases, exceptions and handoffs.'],
-  ['05', 'Refine', 'Improve the workflow based on real use.'],
+  ['01', 'Identify', 'Find the repetitive work.'],
+  ['02', 'Map', 'Clarify steps and decisions.'],
+  ['03', 'Automate', 'Connect tools and actions.'],
+  ['04', 'Test', 'Check edge cases and handoffs.'],
+  ['05', 'Refine', 'Improve with real use.'],
 ];
 
-const FLOW_DWELL_MS = 900;
-const FLOW_TRAVEL_MS = 1150;
-const FLOW_END_PAUSE_MS = 1400;
-const FLOW_SWAP_MS = 280;
+const FLOW_DWELL_MS = 400;
+const FLOW_TRAVEL_MS = 620;
+const FLOW_END_PAUSE_MS = 380;
 const HUB_TRAVEL_MS = 1500;
 const HUB_HOLD_MS = 450;
 const HUB_REST_MS = 1300;
@@ -187,114 +251,148 @@ const pct = (value, of) => `${(value / of) * 100}%`;
 
 /* ----- Workflow diagram ----- */
 
-// Three columns that snake left→right, then right→left, so every connector is horizontal or vertical.
-function flowLayout(count, narrow) {
-  if (narrow) {
-    const width = 320;
-    const gap = 112;
-    return {
-      width,
-      height: 64 * 2 + gap * (count - 1),
-      nodeWidth: 240,
-      points: Array.from({ length: count }, (_, i) => ({ x: width / 2, y: 64 + i * gap })),
-    };
-  }
+const FLOW_WIDTH = 1000;
+const FLOW_HEIGHT = 520;
+const FLOW_INPUT_ROWS = [62, 194, 326, 458];
+const FLOW_PROCESS_ROWS = [194, 240, 286, 332];
 
-  const columns = [150, 450, 750];
-  const rows = Math.ceil(count / 3);
-  return {
-    width: 900,
-    height: 84 * 2 + (rows - 1) * 176,
-    nodeWidth: 222,
-    points: Array.from({ length: count }, (_, i) => {
-      const row = Math.floor(i / 3);
-      const column = row % 2 ? 2 - (i % 3) : i % 3;
-      return { x: columns[column], y: 84 + row * 176 };
-    }),
-  };
-}
+const incomingPath = (index) => {
+  const y = FLOW_INPUT_ROWS[index];
+  const processY = FLOW_PROCESS_ROWS[index];
+  return `M 270 ${y} H 310 L 346 ${processY} H 390`;
+};
+
+const outgoingPath = (index) => {
+  const y = FLOW_INPUT_ROWS[index];
+  const processY = FLOW_PROCESS_ROWS[index];
+  return `M 610 ${processY} H 654 L 690 ${y} H 730`;
+};
+
+const flowRoute = (index) => [
+  [{ x: 270, y: FLOW_INPUT_ROWS[index] }, { x: 310, y: FLOW_INPUT_ROWS[index] }, { x: 346, y: FLOW_PROCESS_ROWS[index] }, { x: 390, y: FLOW_PROCESS_ROWS[index] }],
+  [{ x: 610, y: FLOW_PROCESS_ROWS[index] }, { x: 654, y: FLOW_PROCESS_ROWS[index] }, { x: 690, y: FLOW_INPUT_ROWS[index] }, { x: 730, y: FLOW_INPUT_ROWS[index] }],
+];
 
 function WorkflowDiagram({ workflow, animate }) {
-  const canvasRef = useRef(null);
   const dotRef = useRef(null);
   const [activeStep, setActiveStep] = useState(-1);
-  const narrow = useNarrow(canvasRef, 620);
-  const { width, height, nodeWidth, points } = flowLayout(workflow.steps.length, narrow);
+  const [processingStep, setProcessingStep] = useState(-1);
 
-  // One pulse travels the connector: it rests inside a step (lighting it), then eases on to the next.
+  // One pulse travels from an input through the processing module and out to its paired action.
   useEffect(() => {
     const dot = dotRef.current;
     if (!animate || !dot) {
       setActiveStep(-1);
+      setProcessingStep(-1);
       return undefined;
     }
 
-    const path = flowLayout(workflow.steps.length, narrow).points;
-    const lengths = measure(path);
-    const count = path.length;
-    const cycle = count * FLOW_DWELL_MS + (count - 1) * FLOW_TRAVEL_MS + FLOW_END_PAUSE_MS;
+    const routes = workflow.inputs.map((_, index) => flowRoute(index).map((route) => ({ route, lengths: measure(route) })));
+    const stageDuration = FLOW_DWELL_MS * 2 + FLOW_TRAVEL_MS * 2 + FLOW_END_PAUSE_MS;
+    const cycle = workflow.inputs.length * stageDuration;
     let frame = 0;
     let start = 0;
     let current = -2;
+    let processing = -2;
 
     const tick = (now) => {
       if (!start) start = now;
       let t = (now - start) % cycle;
-      let step = -1;
-      let distance = 0;
-      let travelling = false;
+      const step = Math.floor(t / stageDuration);
+      const stageTime = t % stageDuration;
+      const [incoming, outgoing] = routes[step];
+      const centerX = 500;
+      const centerY = FLOW_PROCESS_ROWS[step];
+      let point = { x: 270, y: FLOW_INPUT_ROWS[step] };
+      let visible = false;
+      let inProcessor = false;
 
-      for (let i = 0; i < count; i += 1) {
-        if (t < FLOW_DWELL_MS) {
-          step = i;
-          distance = lengths[i];
-          break;
-        }
-        t -= FLOW_DWELL_MS;
-        if (i === count - 1) break;
-        if (t < FLOW_TRAVEL_MS) {
-          travelling = true;
-          distance = lengths[i] + (lengths[i + 1] - lengths[i]) * easeInOut(t / FLOW_TRAVEL_MS);
-          break;
-        }
-        t -= FLOW_TRAVEL_MS;
+      if (stageTime < FLOW_DWELL_MS) {
+        point = { x: 270, y: FLOW_INPUT_ROWS[step] };
+      } else if (stageTime < FLOW_DWELL_MS + FLOW_TRAVEL_MS) {
+        const progress = easeInOut((stageTime - FLOW_DWELL_MS) / FLOW_TRAVEL_MS);
+        point = pointAt(incoming.route, incoming.lengths, incoming.lengths[incoming.lengths.length - 1] * progress);
+        visible = true;
+      } else if (stageTime < FLOW_DWELL_MS * 2 + FLOW_TRAVEL_MS) {
+        point = { x: centerX, y: centerY };
+        inProcessor = true;
+      } else if (stageTime < FLOW_DWELL_MS * 2 + FLOW_TRAVEL_MS * 2) {
+        const progress = easeInOut((stageTime - FLOW_DWELL_MS * 2 - FLOW_TRAVEL_MS) / FLOW_TRAVEL_MS);
+        point = pointAt(outgoing.route, outgoing.lengths, outgoing.lengths[outgoing.lengths.length - 1] * progress);
+        visible = true;
+      } else {
+        point = { x: 730, y: FLOW_INPUT_ROWS[step] };
       }
 
-      const point = pointAt(path, lengths, distance);
       dot.setAttribute('cx', point.x);
       dot.setAttribute('cy', point.y);
-      dot.style.opacity = travelling ? '1' : '0';
+      dot.style.opacity = visible ? '1' : '0';
       if (step !== current) {
         current = step;
         setActiveStep(step);
+      }
+      const processorIndex = inProcessor ? step : -1;
+      if (processorIndex !== processing) {
+        processing = processorIndex;
+        setProcessingStep(processorIndex);
       }
       frame = requestAnimationFrame(tick);
     };
 
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [animate, workflow, narrow]);
+  }, [animate, workflow]);
+
+  const accessibilityText = workflow.inputs
+    .map((input, index) => `${input.title}, then ${PROCESS_STEPS.map(({ label }) => label).join(', then ')}, then ${workflow.outputs[index].title}`)
+    .join('. ');
 
   return (
-    <div className="aia-flow-canvas" ref={canvasRef}>
-      <div className="aia-flow-diagram" style={{ aspectRatio: `${width} / ${height}` }}>
-        <svg viewBox={`0 0 ${width} ${height}`} aria-hidden="true">
-          <path className="aia-line" d={toPath(points)} />
-          <circle className="aia-pulse" ref={dotRef} r="4.5" cx={points[0].x} cy={points[0].y} />
+    <div className="aia-flow-canvas">
+      <p className="aia-sr">{accessibilityText}</p>
+      <div className="aia-flow-map">
+        <svg viewBox={`0 0 ${FLOW_WIDTH} ${FLOW_HEIGHT}`} preserveAspectRatio="none" aria-hidden="true">
+          {workflow.inputs.map((_, index) => (
+            <g key={index}>
+              <path className={`aia-map-link aia-map-link--input${activeStep === index ? ' is-active' : ''}`} d={incomingPath(index)} />
+              <path className={`aia-map-link aia-map-link--output${activeStep === index ? ' is-active' : ''}`} d={outgoingPath(index)} />
+            </g>
+          ))}
+          <circle className="aia-map-pulse" ref={dotRef} r="5" cx="270" cy={FLOW_INPUT_ROWS[0]} />
         </svg>
+        <ol className="aia-flow-cards aia-flow-cards--inputs" aria-label="Workflow inputs">
+          {workflow.inputs.map(({ title, detail, Icon, tone }, index) => (
+            <li className={`aia-flow-card tone-${tone}${activeStep === index ? ' is-active' : ''}`} key={title} style={{ '--flow-y': `${(FLOW_INPUT_ROWS[index] / FLOW_HEIGHT) * 100}%` }}>
+              <span className="aia-flow-card-icon"><Icon size={18} strokeWidth={1.8} /></span>
+              <span className="aia-flow-card-copy"><strong>{title}</strong><small>{detail}</small></span>
+              <span className="aia-flow-card-port" aria-hidden="true" />
+            </li>
+          ))}
+        </ol>
 
-        <ol className="aia-flow-steps">
-          {workflow.steps.map((step, index) => (
-            <li
-              className={`aia-node${index === activeStep ? ' is-active' : ''}`}
-              key={step.label}
-              style={{ left: pct(points[index].x, width), top: pct(points[index].y, height), width: pct(nodeWidth, width) }}
-            >
-              <span className="aia-node-meta">
-                <span>{pad(index + 1)}</span>
-                {step.tag && <em>{step.tag}</em>}
-              </span>
-              <strong>{step.label}</strong>
+        <div className={`aia-flow-core${processingStep >= 0 ? ' is-processing' : ''}`}>
+          <div className="aia-flow-core-head">
+            <span className="aia-flow-core-mark" aria-hidden="true"><Bot size={19} strokeWidth={1.8} /></span>
+            <strong>AI & Automation</strong>
+            <span className="aia-flow-core-status"><i /> ACTIVE</span>
+          </div>
+          <ol className="aia-flow-core-steps">
+            {PROCESS_STEPS.map(({ label, Icon }, index) => (
+              <li className={index === processingStep ? 'is-active' : undefined} key={label}>
+                <Icon size={15} strokeWidth={1.8} aria-hidden="true" />
+                <span>{label}</span>
+                <CircleCheck size={13} className="aia-flow-core-check" aria-hidden="true" />
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <ol className="aia-flow-cards aia-flow-cards--outputs" aria-label="Workflow actions">
+          {workflow.outputs.map(({ title, detail, Icon, tone }, index) => (
+            <li className={`aia-flow-card tone-${tone}${activeStep === index ? ' is-active' : ''}`} key={title} style={{ '--flow-y': `${(FLOW_INPUT_ROWS[index] / FLOW_HEIGHT) * 100}%` }}>
+              <span className="aia-flow-card-port" aria-hidden="true" />
+              <span className="aia-flow-card-icon"><Icon size={18} strokeWidth={1.8} /></span>
+              <span className="aia-flow-card-copy"><strong>{title}</strong><small>{detail}</small></span>
             </li>
           ))}
         </ol>
@@ -305,38 +403,32 @@ function WorkflowDiagram({ workflow, animate }) {
 
 function Workflows({ reducedMotion }) {
   const sectionRef = useRef(null);
+  const navRef = useRef(null);
   const [selected, setSelected] = useState(0);
-  const [shown, setShown] = useState(0);
-  const [leaving, setLeaving] = useState(false);
   const inView = useInView(sectionRef);
 
-  // Fade the current diagram out, swap it, and let the new one fade in from the side.
-  useEffect(() => {
-    if (selected === shown) return undefined;
-    if (reducedMotion) {
-      setShown(selected);
-      return undefined;
-    }
-
-    setLeaving(true);
-    const timer = window.setTimeout(() => {
-      setShown(selected);
-      setLeaving(false);
-    }, FLOW_SWAP_MS);
-
-    return () => window.clearTimeout(timer);
-  }, [selected, shown, reducedMotion]);
+  const handleWorkflowKeys = (event, index) => {
+    const targets = { ArrowDown: index + 1, ArrowRight: index + 1, ArrowUp: index - 1, ArrowLeft: index - 1, Home: 0, End: WORKFLOWS.length - 1 };
+    if (!(event.key in targets)) return;
+    event.preventDefault();
+    const target = (targets[event.key] + WORKFLOWS.length) % WORKFLOWS.length;
+    setSelected(target);
+    navRef.current?.querySelectorAll('button')[target]?.focus();
+  };
 
   return (
     <section className="aia-section aia-flows" ref={sectionRef} aria-labelledby="aia-flows-title">
       <div className="sp-inner">
-        <header className="aia-head">
-          <span className="aia-eyebrow">Workflows</span>
-          <h2 className="aia-h2" id="aia-flows-title">Different processes. Different automations.</h2>
+        <header className="aia-head aia-head--split">
+          <div>
+            <span className="aia-eyebrow">Workflows</span>
+            <h2 className="aia-h2" id="aia-flows-title">Different processes. Different automations.</h2>
+          </div>
+          <p>From simple tasks to end-to-end workflows, we design automations for the processes that matter to your business.</p>
         </header>
 
         <div className="aia-flows-layout">
-          <ol className="aia-flow-nav" aria-label="Example workflows">
+          <ol className="aia-flow-nav" aria-label="Example workflows" ref={navRef}>
             {WORKFLOWS.map((workflow, index) => (
               <li key={workflow.label}>
                 <button
@@ -344,6 +436,7 @@ function Workflows({ reducedMotion }) {
                   className={index === selected ? 'is-active' : undefined}
                   aria-pressed={index === selected}
                   onClick={() => setSelected(index)}
+                  onKeyDown={(event) => handleWorkflowKeys(event, index)}
                 >
                   <span>{pad(index + 1)}</span>
                   {workflow.label}
@@ -352,12 +445,12 @@ function Workflows({ reducedMotion }) {
             ))}
           </ol>
 
-          <div className={`aia-flow-stage${leaving ? ' is-leaving' : ''}`} aria-live="polite">
-            <p className="aia-sr">{WORKFLOWS[shown].label}: {WORKFLOWS[shown].steps.map((step) => step.label).join(', then ')}.</p>
+          <div className="aia-flow-stage" aria-live="polite">
+            <p className="aia-sr">{WORKFLOWS[selected].label}: {WORKFLOWS[selected].inputs.map((step) => step.title).join(', ')} feed the automated workflow and produce {WORKFLOWS[selected].outputs.map((step) => step.title).join(', ')}.</p>
             <WorkflowDiagram
-              key={shown}
-              workflow={WORKFLOWS[shown]}
-              animate={inView && !reducedMotion && !leaving}
+              key={selected}
+              workflow={WORKFLOWS[selected]}
+              animate={inView && !reducedMotion}
             />
           </div>
         </div>
@@ -370,43 +463,50 @@ function Workflows({ reducedMotion }) {
 
 function hubLayout(narrow) {
   if (narrow) {
-    const width = 360;
-    const height = 600;
-    const hub = { x: 180, y: 300 };
-    const tools = [60, 180, 300].flatMap((x) => [{ x, y: 64 }, { x, y: 536 }]);
-    // Order to match TOOLS: top row first, then bottom row.
-    const ordered = [tools[0], tools[2], tools[4], tools[1], tools[3], tools[5]];
+    const width = 720;
+    const height = 740;
+    const hub = { x: 360, y: 370 };
+    const xs = [175, 545];
+    const tools = [
+      ...xs.map((x, i) => ({ x, y: 72 + i * 72 })),
+      ...xs.map((x, i) => ({ x, y: 596 + i * 72 })),
+    ];
     return {
       width,
       height,
       hub,
-      hubWidth: 200,
-      toolWidth: 108,
-      tools: ordered,
-      routes: ordered.map((t) => {
-        const bend = t.y < hub.y ? 170 : 430;
-        return [t, { x: t.x, y: bend }, { x: hub.x, y: bend }, hub];
+      hubWidth: 400,
+      toolWidth: 290,
+      tools,
+      routes: tools.map((t, index) => {
+        const bend = t.y < hub.y ? 236 : 504;
+        const sideHub = { x: index % 2 === 0 ? 180 : 540, y: hub.y };
+        return [t, { x: t.x, y: bend }, { x: sideHub.x, y: bend }, sideHub, hub];
       }),
     };
   }
 
   const width = 1000;
-  const height = 420;
-  const hub = { x: 500, y: 210 };
+  const height = 460;
+  const hub = { x: 500, y: 230 };
+  const inputXs = [125, 375, 625, 875];
+  const outputXs = [125, 375, 625, 875];
   const tools = [
-    { x: 140, y: 70 }, { x: 140, y: 210 }, { x: 140, y: 350 },
-    { x: 860, y: 70 }, { x: 860, y: 210 }, { x: 860, y: 350 },
+    ...inputXs.map((x) => ({ x, y: 70 })),
+    ...outputXs.map((x) => ({ x, y: 390 })),
   ];
   return {
     width,
     height,
     hub,
-    hubWidth: 248,
-    toolWidth: 210,
+    hubWidth: 280,
+    toolWidth: 190,
     tools,
-    routes: tools.map((t) => {
-      const bend = t.x < hub.x ? 320 : 680;
-      return [t, { x: bend, y: t.y }, { x: bend, y: hub.y }, hub];
+    routes: tools.map((t, index) => {
+      const top = index < 4;
+      const anchor = { x: hub.x, y: top ? hub.y - 50 : hub.y + 50 };
+      const bend = top ? hub.y - 100 : hub.y + 100;
+      return [t, { x: t.x, y: bend }, { x: anchor.x, y: bend }, anchor, hub];
     }),
   };
 }
@@ -489,6 +589,8 @@ function ToolsDiagram({ reducedMotion }) {
 
   return (
     <div className="aia-hub-wrap" ref={wrapRef}>
+      <span className="aia-hub-label aia-hub-label--in">Inputs</span>
+      <span className="aia-hub-label aia-hub-label--out">Connected systems</span>
       <div className={`aia-hub${narrow ? ' is-narrow' : ''}`} style={{ aspectRatio: `${width} / ${height}` }}>
         <svg viewBox={`0 0 ${width} ${height}`} aria-hidden="true">
           {routes.map((route, index) => <path className="aia-line" d={toPath(route)} key={TOOLS[index].label} />)}
@@ -499,7 +601,8 @@ function ToolsDiagram({ reducedMotion }) {
           className={`aia-hub-core${active.hub ? ' is-active' : ''}`}
           style={{ left: pct(hub.x, width), top: pct(hub.y, height), width: pct(layout.hubWidth, width) }}
         >
-          <strong>Automation Layer</strong>
+          <span className="aia-hub-mark" aria-hidden="true"><Workflow size={18} strokeWidth={1.8} /></span>
+          <strong>Your Automated Workflow</strong>
           <span>Rules · AI · Integrations</span>
         </div>
 
@@ -514,13 +617,37 @@ function ToolsDiagram({ reducedMotion }) {
                 width: pct(layout.toolWidth, width),
               }}
             >
-              <strong>{tool.label}</strong>
+              <strong><i className={`tone-${tool.tone}`} aria-hidden="true"><tool.Icon size={17} strokeWidth={1.8} /></i>{tool.label}</strong>
               <span>{tool.detail}</span>
             </li>
           ))}
         </ul>
       </div>
     </div>
+  );
+}
+
+function Practical() {
+  return (
+    <section className="aia-section aia-practical" aria-labelledby="aia-practical-title">
+      <div className="sp-inner">
+        <header className="aia-head aia-head--split">
+          <div>
+            <span className="aia-eyebrow">Practical AI & automation</span>
+            <h2 className="aia-h2" id="aia-practical-title">Practical AI & automation. Built for real businesses.</h2>
+          </div>
+          <p>We focus on solutions that deliver measurable business value, not technology for its own sake.</p>
+        </header>
+        <ol className="aia-qualities">
+          {QUALITIES.map(([number, title, description, Icon, tone], index) => (
+            <li key={number} style={{ '--quality-index': index }}>
+              <span className="aia-quality-icon"><b>{number}</b><i className={`tone-${tone}`}><Icon size={18} strokeWidth={1.8} /></i></span>
+              <div><h3>{title}</h3><p>{description}</p></div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
   );
 }
 
@@ -536,7 +663,7 @@ function Approach() {
         <header className="aia-head aia-head--split">
           <div>
             <span className="aia-eyebrow">Our approach</span>
-            <h2 className="aia-h2" id="aia-approach-title">From repetitive task to working automation</h2>
+            <h2 className="aia-h2" id="aia-approach-title">From repetitive tasks to working automation.</h2>
           </div>
           <p>
             We start with the process, not the tool — mapping your rules and systems, and keeping people involved
@@ -564,6 +691,7 @@ export default function AIAutomation() {
 
   return (
     <ServicePage
+      eyebrow="AI & Automation"
       title="AI Automation"
       description="We automate repetitive business processes by connecting AI, data and the tools your team already uses — so everyday operations keep moving without the manual work."
       pageClassName="sp--ai-automation"
@@ -572,41 +700,46 @@ export default function AIAutomation() {
       hideCta
     >
       <div className="aia-page">
-        <section className="aia-section aia-areas" aria-labelledby="aia-areas-title">
-          <div className="sp-inner">
-            <header className="aia-head aia-head--split">
-              <div>
-                <span className="aia-eyebrow">What we automate</span>
-                <h2 className="aia-h2" id="aia-areas-title">Automate the work that slows your team down</h2>
-              </div>
-              <p>
-                Every team repeats different tasks. We design focused automations that remove the manual steps,
-                so people can spend their time on the work that needs them.
-              </p>
-            </header>
-
-            <div className="aia-area-grid">
-              {AREAS.map((area) => (
-                <article className="aia-area" key={area.number}>
-                  <span>{area.number}</span>
-                  <h3>{area.title}</h3>
-                  <p>{area.description}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
         <Workflows reducedMotion={reducedMotion} />
 
         <section className="aia-section aia-tools" aria-labelledby="aia-tools-title">
           <div className="sp-inner">
             <header className="aia-head aia-head--center">
               <span className="aia-eyebrow">Integrations</span>
-              <h2 className="aia-h2" id="aia-tools-title">Connect the tools around the workflow</h2>
-              <p>Automation sits between the systems you already use, moving information to where it is needed.</p>
+              <h2 className="aia-h2" id="aia-tools-title">Connect the tools around the workflow.</h2>
+              <p>We connect the systems you already use, allowing information to move between tools without repeated manual work.</p>
             </header>
             <ToolsDiagram reducedMotion={reducedMotion} />
+          </div>
+        </section>
+
+        <section className="aia-section aia-areas" aria-labelledby="aia-areas-title">
+          <div className="sp-inner">
+            <header className="aia-head aia-head--split">
+              <div>
+                <span className="aia-eyebrow">What we automate</span>
+                <h2 className="aia-h2" id="aia-areas-title">Automate the work that slows your team down.</h2>
+              </div>
+              <p>We design focused automations that reduce manual work, improve accuracy, and give your team more time for meaningful tasks.</p>
+            </header>
+
+            <div className="aia-area-grid">
+              {AREAS.map((area) => {
+                const Icon = area.Icon;
+                return (
+                  <article className="aia-area" key={area.number}>
+                    <div className="aia-area-icon" aria-hidden="true">
+                      <Icon size={19} strokeWidth={1.6} />
+                    </div>
+                    <h3>{area.title}</h3>
+                    <p>{area.description}</p>
+                    <a href="/contact" className="aia-area-link">
+                      {area.cta} <span aria-hidden="true">→</span>
+                    </a>
+                  </article>
+                );
+              })}
+            </div>
           </div>
         </section>
 
@@ -614,9 +747,8 @@ export default function AIAutomation() {
           <div className="sp-inner">
             <header className="aia-head">
               <span className="aia-eyebrow">AI + Automation</span>
-              <h2 className="aia-h2" id="aia-judgement-title">
-                AI where judgement is useful.<br />Automation where rules are enough.
-              </h2>
+              <h2 className="aia-h2" id="aia-judgement-title">Each solves a different problem.</h2>
+              <p>We use automation for predictable processes and AI where information needs interpretation.</p>
             </header>
 
             <div className="aia-compare">
@@ -644,23 +776,28 @@ export default function AIAutomation() {
               </div>
             </div>
 
-            <p className="aia-uda" aria-label="Understand, decide, act">
-              <span>Understand</span>
-              <i aria-hidden="true" />
-              <span>Decide</span>
-              <i aria-hidden="true" />
-              <span>Act</span>
-            </p>
+            <ol className="aia-logic" aria-label="How an intelligent workflow operates">
+              {LOGIC_STEPS.map(([title, description, Icon], index) => (
+                <li key={title}>
+                  <span className="aia-logic-icon" aria-hidden="true"><Icon size={24} strokeWidth={1.6} /></span>
+                  <span className="aia-logic-step">0{index + 1}</span>
+                  <h3>{title}</h3>
+                  <p>{description}</p>
+                </li>
+              ))}
+            </ol>
           </div>
         </section>
+
+        <Practical />
 
         <Approach />
 
         <section className="aia-cta" aria-labelledby="aia-cta-title">
           <div className="sp-inner">
-            <h2 id="aia-cta-title">Have a repetitive process in your business?</h2>
-            <p>We’ll help you identify what should be automated, where AI adds value, and what should stay human.</p>
-            <a className="aia-btn" href="/contact">Discuss your workflow <span aria-hidden="true">→</span></a>
+            <h2 id="aia-cta-title">Have a repetitive process <em>in your business?</em></h2>
+            <p>Tell us how your team works. We’ll help identify what should be automated, where AI adds value, and what should stay human.</p>
+            <a className="aia-btn" href="/contact">Discuss Your Workflow <span aria-hidden="true">→</span></a>
           </div>
         </section>
       </div>
