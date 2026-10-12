@@ -45,7 +45,10 @@ function PlatformShowcase() {
         </header>
         <div className="ma-platforms">
           <aside className="ma-platform-notes">
-            <span className="ma-platform-mark"><b>iOS</b></span>
+            <span className="ma-platform-mark">
+              <img src="/Black%20Apple%20Logo%20on%20Transparent%20Background.png" alt="" aria-hidden="true" />
+              <b>iOS</b>
+            </span>
             <ul><li>Native navigation</li><li>Smooth gestures</li><li>Apple interface conventions</li></ul>
           </aside>
           <div className="ma-phone ma-phone--ios" role="img" aria-label="N&G Partitions app shown on an iPhone">
@@ -62,7 +65,10 @@ function PlatformShowcase() {
             <span className="ma-phone-camera" />
           </div>
           <aside className="ma-platform-notes">
-            <span className="ma-platform-mark ma-platform-mark--android"><b>Android</b></span>
+            <span className="ma-platform-mark ma-platform-mark--android">
+              <img src="/androidLogo.png" alt="" aria-hidden="true" />
+              <b>Android</b>
+            </span>
             <ul><li>Material design</li><li>Back navigation behavior</li><li>Android features</li></ul>
           </aside>
           <svg className="ma-platform-connectors" viewBox="0 0 1000 360" preserveAspectRatio="none" aria-hidden="true">
