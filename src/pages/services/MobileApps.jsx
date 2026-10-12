@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { Smartphone, Code2, LayoutGrid, Gauge, Cpu, LockKeyhole, CreditCard, Bell, RefreshCw, Database, ArrowRight } from 'lucide-react';
 import ServicePage from './ServicePage';
 import './mobile-apps.css';
@@ -35,6 +35,89 @@ const FEATURES = [
 ];
 
 function PlatformShowcase() {
+  const platformRowRef = useRef(null);
+  const iosPhoneRef = useRef(null);
+  const codeCardRef = useRef(null);
+  const androidPhoneRef = useRef(null);
+  const connectorSvgRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const row = platformRowRef.current;
+    const svg = connectorSvgRef.current;
+    const iosPhone = iosPhoneRef.current?.querySelector('img');
+    const card = codeCardRef.current;
+    const androidPhone = androidPhoneRef.current?.querySelector('img');
+    if (!row || !svg || !iosPhone || !card || !androidPhone) return undefined;
+
+    const pathEls = [...svg.querySelectorAll('[data-connector]')];
+    const updatePaths = () => {
+      const rowBox = row.getBoundingClientRect();
+      const iosBox = iosPhone.getBoundingClientRect();
+      const cardBox = card.getBoundingClientRect();
+      const androidBox = androidPhone.getBoundingClientRect();
+      const width = rowBox.width;
+      const height = rowBox.height;
+      if (!width || !height) return;
+      svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+
+      const smoothPath = (startX, startY, endX, endY) => {
+        const dx = endX - startX;
+        const dy = endY - startY;
+        const directionX = Math.sign(dx) || 1;
+        const directionY = Math.sign(dy) || 1;
+        const radius = Math.min(12, Math.abs(dx) / 7, Math.abs(dy) / 2);
+        const bendX = startX + dx * 0.46;
+        const firstTurnX = bendX + directionX * radius;
+        const secondTurnX = bendX + directionX * radius * 2;
+        const firstTurnY = startY + directionY * radius;
+        const secondTurnY = endY - directionY * radius;
+        return [
+          `M ${startX} ${startY}`,
+          `H ${bendX}`,
+          `Q ${firstTurnX} ${startY} ${firstTurnX} ${firstTurnY}`,
+          `V ${secondTurnY}`,
+          `Q ${firstTurnX} ${endY} ${secondTurnX} ${endY}`,
+          `H ${endX}`,
+        ].join(' ');
+      };
+
+      const relativeX = (x) => x - rowBox.left;
+      const relativeY = (y) => y - rowBox.top;
+      const upperCardY = relativeY(cardBox.top + cardBox.height * 0.34);
+      const lowerCardY = relativeY(cardBox.top + cardBox.height * 0.66);
+      const phoneUpperY = relativeY(iosBox.top + iosBox.height * 0.39);
+      const phoneLowerY = relativeY(iosBox.top + iosBox.height * 0.61);
+      const androidUpperY = relativeY(androidBox.top + androidBox.height * 0.39);
+      const androidLowerY = relativeY(androidBox.top + androidBox.height * 0.61);
+      const iosX = relativeX(iosBox.right - 1);
+      const cardLeftX = relativeX(cardBox.left + 1);
+      const cardRightX = relativeX(cardBox.right - 1);
+      const androidX = relativeX(androidBox.left + 1);
+
+      const paths = [
+        smoothPath(cardLeftX, upperCardY, iosX, phoneUpperY),
+        smoothPath(cardLeftX, lowerCardY, iosX, phoneLowerY),
+        smoothPath(cardRightX, upperCardY, androidX, androidUpperY),
+        smoothPath(cardRightX, lowerCardY, androidX, androidLowerY),
+      ];
+      pathEls.forEach((path, index) => path.setAttribute('d', paths[index]));
+    };
+
+    const observer = new ResizeObserver(updatePaths);
+    [row, iosPhone, card, androidPhone].forEach((element) => observer.observe(element));
+    iosPhone.addEventListener('load', updatePaths);
+    androidPhone.addEventListener('load', updatePaths);
+    window.addEventListener('resize', updatePaths);
+    updatePaths();
+
+    return () => {
+      observer.disconnect();
+      iosPhone.removeEventListener('load', updatePaths);
+      androidPhone.removeEventListener('load', updatePaths);
+      window.removeEventListener('resize', updatePaths);
+    };
+  }, []);
+
   return (
     <section className="ma-showcase" aria-labelledby="ma-showcase-title">
       <div className="ma-wrap">
@@ -43,7 +126,18 @@ function PlatformShowcase() {
           <h2 id="ma-showcase-title">Built once. Great on both iOS and Android.</h2>
           <p>We develop with a single shared codebase using React Native or Flutter, so your app ships faster while giving users a native-feeling experience on each platform.</p>
         </header>
-        <div className="ma-platforms">
+        <div className="ma-platforms" ref={platformRowRef}>
+          <svg className="ma-platform-connectors" ref={connectorSvgRef} aria-hidden="true">
+            <defs>
+              <marker id="ma-platform-arrow" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 6 3 L 0 6 z" />
+              </marker>
+            </defs>
+            <path data-connector markerEnd="url(#ma-platform-arrow)" />
+            <path data-connector markerEnd="url(#ma-platform-arrow)" />
+            <path data-connector markerEnd="url(#ma-platform-arrow)" />
+            <path data-connector markerEnd="url(#ma-platform-arrow)" />
+          </svg>
           <aside className="ma-platform-notes">
             <span className="ma-platform-mark">
               <img src="/Black%20Apple%20Logo%20on%20Transparent%20Background.png" alt="" aria-hidden="true" />
@@ -51,15 +145,15 @@ function PlatformShowcase() {
             </span>
             <ul><li>Native navigation</li><li>Smooth gestures</li><li>Apple interface conventions</li></ul>
           </aside>
-          <div className="ma-phone ma-phone--ios">
+          <div className="ma-phone ma-phone--ios" ref={iosPhoneRef}>
             <img src="/images/services/iphone-trip2airport.png" alt="Trip2Airport app displayed on an iPhone" />
           </div>
-          <div className="ma-code-module">
+          <div className="ma-code-module" ref={codeCardRef}>
             <span className="ma-code-icon"><Code2 size={25} /></span>
             <strong>React Native / Flutter</strong>
             <span>Shared Codebase</span>
           </div>
-          <div className="ma-phone ma-phone--android">
+          <div className="ma-phone ma-phone--android" ref={androidPhoneRef}>
             <img src="/images/services/android-trip2airport.png" alt="Trip2Airport app displayed on an Android phone" />
           </div>
           <aside className="ma-platform-notes">
