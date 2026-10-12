@@ -51,18 +51,16 @@ function PlatformShowcase() {
             </span>
             <ul><li>Native navigation</li><li>Smooth gestures</li><li>Apple interface conventions</li></ul>
           </aside>
-          <div className="ma-phone ma-phone--ios" role="img" aria-label="N&G Partitions app shown on an iPhone">
-            <div className="ma-phone-screen" />
-            <span className="ma-phone-island" />
+          <div className="ma-phone ma-phone--ios">
+            <img src="/images/services/iphone-trip2airport.png" alt="Trip2Airport app displayed on an iPhone" />
           </div>
           <div className="ma-code-module">
             <span className="ma-code-icon"><Code2 size={25} /></span>
             <strong>React Native / Flutter</strong>
             <span>Shared Codebase</span>
           </div>
-          <div className="ma-phone ma-phone--android" role="img" aria-label="N&G Partitions app shown on an Android phone">
-            <div className="ma-phone-screen" />
-            <span className="ma-phone-camera" />
+          <div className="ma-phone ma-phone--android">
+            <img src="/images/services/android-trip2airport.png" alt="Trip2Airport app displayed on an Android phone" />
           </div>
           <aside className="ma-platform-notes">
             <span className="ma-platform-mark ma-platform-mark--android">
@@ -71,12 +69,6 @@ function PlatformShowcase() {
             </span>
             <ul><li>Material design</li><li>Back navigation behavior</li><li>Android features</li></ul>
           </aside>
-          <svg className="ma-platform-connectors" viewBox="0 0 1000 360" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M388 144 H400" />
-            <path d="M388 216 H400" />
-            <path d="M626 144 H639" />
-            <path d="M626 216 H639" />
-          </svg>
         </div>
       </div>
     </section>
@@ -92,7 +84,7 @@ function PlatformExperience() {
           <p>We follow platform guidelines and best practices to make sure your app feels natural, responsive and reliable on both iOS and Android.</p>
         </header>
         <ul className="ma-capabilities">
-          {CAPABILITIES.map(([Icon, title, text]) => <li key={title}><Icon size={30} strokeWidth={1.8} /><div><h3>{title}</h3><p>{text}</p></div></li>)}
+          {CAPABILITIES.map(([Icon, title, text]) => <li key={title}><Icon size={34} strokeWidth={1.8} /><div><h3>{title}</h3><p>{text}</p></div></li>)}
         </ul>
       </div>
     </section>
@@ -102,22 +94,40 @@ function PlatformExperience() {
 function CompleteSolutions() {
   return (
     <section className="ma-solutions" aria-labelledby="ma-solutions-title">
-      <div className="ma-wrap ma-solution-layout">
-        <header className="ma-section-head ma-solution-copy">
-          <div><span className="ma-eyebrow">Complete solutions</span><h2 id="ma-solutions-title">More than just<br />an interface.</h2></div>
+      <div className="ma-wrap">
+        <header className="ma-solutions-head">
+          <span className="ma-eyebrow">Complete solutions</span>
+          <h2 id="ma-solutions-title">More than just an interface.</h2>
           <p>We build complete mobile applications with secure backends, seamless integrations and all the features your app needs.</p>
         </header>
-        <div className="ma-architecture" aria-label="Mobile app connected to secure APIs, backend and database, and app features">
+        <div className="ma-architecture" role="group" aria-label="Mobile application workflow and platform features">
+          <svg className="ma-architecture-connectors" viewBox="0 0 1000 353" preserveAspectRatio="none" aria-hidden="true">
+            <g className="ma-connectors-wide">
+              <path d="M860 172 V222 H125 M375 222 V253 M625 222 V253 M875 222 V253" />
+            </g>
+            <g className="ma-connectors-compact">
+              <path d="M860 172 V222 H250 M250 222 H750 M250 222 V253 M750 222 V253" />
+            </g>
+          </svg>
           <div className="ma-architecture-main">
-            <article className="ma-system-card"><Smartphone /><h3>Mobile App</h3><p>iOS & Android</p></article>
-            <span className="ma-flow-arrow"><ArrowRight /></span>
-            <article className="ma-system-card"><Cpu /><h3>Secure APIs</h3><p>Connects your app<br />to backend services</p></article>
-            <span className="ma-flow-arrow"><ArrowRight /></span>
-            <article className="ma-system-card"><Database /><h3>Backend & Database</h3><p>Stores and manages<br />your data</p></article>
+            <article className="ma-system-card">
+              <Smartphone aria-hidden="true" />
+              <h3>Mobile App</h3>
+              <p>iOS &amp; Android</p>
+            </article>
+            <span className="ma-flow-arrow" aria-hidden="true"><ArrowRight /></span>
+            <article className="ma-system-card">
+              <Cpu aria-hidden="true" />
+              <h3>Secure APIs</h3>
+              <p>Connects your app to backend services</p>
+            </article>
+            <span className="ma-flow-arrow" aria-hidden="true"><ArrowRight /></span>
+            <article className="ma-system-card">
+              <Database aria-hidden="true" />
+              <h3>Backend &amp; Database</h3>
+              <p>Stores and manages your data</p>
+            </article>
           </div>
-          <span className="ma-branch-line" aria-hidden="true">
-            <svg viewBox="0 0 40 216" preserveAspectRatio="none"><path d="M0 108 H20 M20 24 V192 M20 24 H40 M20 80 H40 M20 136 H40 M20 192 H40" /></svg>
-          </span>
           <ul className="ma-feature-list">
             {FEATURES.map(([Icon, title, text]) => <li key={title}><Icon size={22} /><div><h3>{title}</h3><p>{text}</p></div></li>)}
           </ul>
