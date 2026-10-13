@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef } from 'react';
-import { Smartphone, Code2, LayoutGrid, Gauge, Cpu, LockKeyhole, CreditCard, Bell, RefreshCw, Database, ArrowRight } from 'lucide-react';
+import { Smartphone, Code2, LayoutGrid, Gauge, Cpu, LockKeyhole, CreditCard, Bell, RefreshCw, Database, ArrowRight, Settings, ShieldCheck } from 'lucide-react';
 import ServicePage from './ServicePage';
 import './mobile-apps.css';
 
@@ -21,10 +21,10 @@ const PROJECTS = [
 ];
 
 const CAPABILITIES = [
-  [Smartphone, 'Native interactions', 'Platform-specific navigation and gestures'],
-  [LayoutGrid, 'Adaptive layouts', 'Works seamlessly across different screen sizes.'],
-  [Gauge, 'High performance', 'Smooth, responsive experience'],
-  [Cpu, 'Device integration', 'Camera, location, notifications and more'],
+  [Smartphone, 'Native interactions', 'Natural navigation and gestures'],
+  [LayoutGrid, 'Adaptive layouts', 'Designed for every screen'],
+  [Gauge, 'High performance', 'Fast, fluid interactions'],
+  [Settings, 'Device integration', 'Camera, location and notifications'],
 ];
 
 const FEATURES = [
@@ -123,7 +123,7 @@ function PlatformShowcase() {
       <div className="ma-wrap">
         <header className="ma-centered-head">
           <span className="ma-eyebrow">One application. Two platforms.</span>
-          <h2 id="ma-showcase-title">Built once. Great on both iOS and Android.</h2>
+          <h2 id="ma-showcase-title">One app Built for iOS and Android</h2>
           <p>We develop with a single shared codebase using React Native or Flutter, so your app ships faster while giving users a native-feeling experience on each platform.</p>
         </header>
         <div className="ma-platforms" ref={platformRowRef}>
@@ -176,10 +176,11 @@ function PlatformExperience() {
         <div className="ma-experience-layout">
           <header className="ma-section-head">
             <span className="ma-eyebrow">Native experience</span>
-            <h2 id="ma-experience-title">Native experience<br />on every platform.</h2>
+            <h2 id="ma-experience-title">Native experience<br />on every platform</h2>
           </header>
+          <p className="ma-experience-intro">We follow platform guidelines and best practices to make sure your app feels natural, responsive and reliable on both iOS and Android.</p>
           <ul className="ma-capabilities">
-            {CAPABILITIES.map(([Icon, title, text]) => <li key={title}><span className="ma-capability-icon"><Icon size={29} strokeWidth={1.8} /></span><div><h3>{title}</h3><p>{text}</p></div></li>)}
+            {CAPABILITIES.map(([Icon, title, text], index) => <li key={title} style={{ '--ma-reveal-index': index }}><span className="ma-capability-icon"><Icon size={34} strokeWidth={1.8} /></span><div><h3>{title}</h3><p>{text}</p></div></li>)}
           </ul>
         </div>
       </div>
@@ -194,42 +195,64 @@ function useArchitectureConnectors() {
     const root = architectureRef.current;
     if (!root) return undefined;
     const svg = root.querySelector('.ma-architecture-connectors');
-    const trunk = svg?.querySelector('[data-architecture-connector="trunk"]');
-    const branch = svg?.querySelector('[data-architecture-connector="branch"]');
+    const route = svg?.querySelector('[data-architecture-connector="route"]');
+    const dots = [...(svg?.querySelectorAll('[data-architecture-dot]') || [])];
     const cards = [...root.querySelectorAll('[data-architecture-card]')];
     const features = root.querySelector('[data-architecture-features]');
-    if (!svg || !trunk || !branch || cards.length !== 3 || !features) return undefined;
+    if (!svg || !route || cards.length !== 3 || !features) return undefined;
 
     const update = () => {
-      if (window.matchMedia('(max-width: 720px)').matches) {
-        svg.setAttribute('viewBox', `0 0 ${root.clientWidth} ${root.clientHeight}`);
-        trunk.setAttribute('d', '');
-        branch.setAttribute('d', '');
-        return;
-      }
       const rootBox = root.getBoundingClientRect();
       const boxes = cards.map(card => card.getBoundingClientRect());
-      const featureBox = features.getBoundingClientRect();
       const width = rootBox.width;
       const height = rootBox.height;
       svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
       const x = box => box.left + box.width / 2 - rootBox.left;
-      const top = box => box.top - rootBox.top;
       const bottom = box => box.bottom - rootBox.top;
-      const rowTop = featureBox.top - rootBox.top;
-      const trunkX = x(boxes[1]);
-      const branchY = bottom(boxes[1]) + Math.max(24, (rowTop - bottom(boxes[1])) * .52);
-      trunk.setAttribute('d', `M ${trunkX} ${bottom(boxes[1])} V ${branchY} H ${x(boxes[0])} M ${x(boxes[2])} ${branchY} H ${x(boxes[0])}`);
+      const apiX = x(boxes[1]);
+      const apiBottom = bottom(boxes[1]);
       const featureItems = [...features.children];
       const points = featureItems.map(item => {
         const box = item.getBoundingClientRect();
-        return { x: box.left + box.width / 2 - rootBox.left, y: box.top - rootBox.top };
+        return { x: box.left + box.width / 2 - rootBox.left, y: box.top - rootBox.top, left: box.left - rootBox.left };
       });
       if (points.length) {
-        const minX = Math.min(...points.map(point => point.x));
-        const maxX = Math.max(...points.map(point => point.x));
-        branch.setAttribute('d', `M ${trunkX} ${branchY} V ${rowTop - 10} H ${maxX} M ${points.map(point => `M ${point.x} ${rowTop - 10} V ${point.y}`).join(' ')}`);
-      } else branch.setAttribute('d', '');
+        const mobile = window.matchMedia('(max-width: 720px)').matches;
+        const rows = [];
+        points.forEach((point, index) => {
+          let row = rows.find(candidate => Math.abs(candidate.y - point.y) < 12);
+          if (!row) { row = { y: point.y, points: [] }; rows.push(row); }
+          row.points.push({ ...point, index });
+        });
+        rows.sort((a, b) => a.y - b.y);
+        if (mobile && rows.length > 1 && window.matchMedia('(max-width: 420px)').matches) {
+          const railX = Math.max(8, Math.min(...points.map(point => point.left)) - 12);
+          const firstY = rows[0].y - 10;
+          const lastY = rows.at(-1).y - 10;
+          const parts = [`M ${apiX} ${apiBottom} V ${firstY} H ${railX} V ${lastY}`];
+          rows.forEach(row => row.points.forEach(point => parts.push(`M ${railX} ${point.y} H ${point.left}`)));
+          route.setAttribute('d', parts.join(' '));
+          dots.forEach((dot, index) => {
+            const point = points[index - 1];
+            dot.setAttribute('cx', index === 0 ? apiX : point.left);
+            dot.setAttribute('cy', index === 0 ? apiBottom : point.y);
+          });
+        } else {
+          const parts = [`M ${apiX} ${apiBottom} V ${rows.at(-1).y - 10}`];
+          rows.forEach(row => {
+            const busY = row.y - 10;
+            const centers = row.points.map(point => point.x);
+            if (centers.length > 1) parts.push(`M ${Math.min(...centers)} ${busY} H ${Math.max(...centers)}`);
+            row.points.forEach(point => parts.push(`M ${point.x} ${busY} V ${point.y}`));
+          });
+          route.setAttribute('d', parts.join(' '));
+          dots.forEach((dot, index) => {
+            const point = points[index - 1];
+            dot.setAttribute('cx', index === 0 ? apiX : point.x);
+            dot.setAttribute('cy', index === 0 ? apiBottom : point.y);
+          });
+        }
+      } else route.setAttribute('d', '');
     };
 
     const observer = new ResizeObserver(update);
@@ -252,19 +275,19 @@ function CompleteSolutions() {
       <div className="ma-wrap">
         <header className="ma-solutions-head">
           <span className="ma-eyebrow">Complete solutions</span>
-          <h2 id="ma-solutions-title">More than just<br />an interface.</h2>
+          <h2 id="ma-solutions-title">More than just an interface</h2>
+          <p>We build complete mobile applications with secure backends, seamless integrations and all the features your app needs.</p>
         </header>
         <div className="ma-architecture" ref={architectureRef} role="group" aria-label="Mobile application workflow and platform features">
-          <svg className="ma-architecture-connectors" aria-hidden="true"><path data-architecture-connector="trunk" /><path data-architecture-connector="branch" /></svg>
+          <svg className="ma-architecture-connectors" aria-hidden="true"><path data-architecture-connector="route" /><circle data-architecture-dot r="3.2" /><circle data-architecture-dot r="3.2" /><circle data-architecture-dot r="3.2" /><circle data-architecture-dot r="3.2" /><circle data-architecture-dot r="3.2" /></svg>
           <div className="ma-architecture-main">
-            <article className="ma-system-card" data-architecture-card>
-              <Smartphone aria-hidden="true" />
-              <h3>Mobile App</h3>
-              <p>iOS &amp; Android</p>
+            <article className="ma-system-card ma-system-card--app" data-architecture-card>
+              <span className="ma-system-icon"><Smartphone aria-hidden="true" /></span>
+              <div className="ma-system-copy"><h3>Mobile App</h3><p>iOS &amp; Android</p><span className="ma-platform-logos"><img src="/Black%20Apple%20Logo%20on%20Transparent%20Background.png" alt="Apple" /><i /><img src="/androidLogo.png" alt="Android" /></span></div>
             </article>
             <span className="ma-flow-arrow" aria-hidden="true" />
             <article className="ma-system-card" data-architecture-card>
-              <LockKeyhole aria-hidden="true" />
+              <ShieldCheck aria-hidden="true" />
               <h3>Secure APIs</h3>
               <p>Connected services</p>
             </article>
