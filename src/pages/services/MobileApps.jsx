@@ -21,10 +21,10 @@ const PROJECTS = [
 ];
 
 const CAPABILITIES = [
-  [Smartphone, 'Native-feeling interactions', 'Platform-specific navigation, gestures and transitions.'],
+  [Smartphone, 'Native interactions', 'Platform-specific navigation and gestures'],
   [LayoutGrid, 'Adaptive layouts', 'Works seamlessly across different screen sizes.'],
-  [Gauge, 'High performance', 'Responsive interactions and smooth scrolling.'],
-  [Cpu, 'Device integration', 'Camera, location, notifications and more.'],
+  [Gauge, 'High performance', 'Smooth, responsive experience'],
+  [Cpu, 'Device integration', 'Camera, location, notifications and more'],
 ];
 
 const FEATURES = [
@@ -173,56 +173,109 @@ function PlatformExperience() {
   return (
     <section className="ma-experience" aria-labelledby="ma-experience-title">
       <div className="ma-wrap">
-        <header className="ma-section-head">
-          <div><span className="ma-eyebrow">Platform experience</span><h2 id="ma-experience-title">Built to feel right<br />on every platform.</h2></div>
-          <p>We follow platform guidelines and best practices to make sure your app feels natural, responsive and reliable on both iOS and Android.</p>
-        </header>
-        <ul className="ma-capabilities">
-          {CAPABILITIES.map(([Icon, title, text]) => <li key={title}><Icon size={34} strokeWidth={1.8} /><div><h3>{title}</h3><p>{text}</p></div></li>)}
-        </ul>
+        <div className="ma-experience-layout">
+          <header className="ma-section-head">
+            <span className="ma-eyebrow">Native experience</span>
+            <h2 id="ma-experience-title">Native experience<br />on every platform.</h2>
+          </header>
+          <ul className="ma-capabilities">
+            {CAPABILITIES.map(([Icon, title, text]) => <li key={title}><span className="ma-capability-icon"><Icon size={29} strokeWidth={1.8} /></span><div><h3>{title}</h3><p>{text}</p></div></li>)}
+          </ul>
+        </div>
       </div>
     </section>
   );
 }
 
+function useArchitectureConnectors() {
+  const architectureRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const root = architectureRef.current;
+    if (!root) return undefined;
+    const svg = root.querySelector('.ma-architecture-connectors');
+    const trunk = svg?.querySelector('[data-architecture-connector="trunk"]');
+    const branch = svg?.querySelector('[data-architecture-connector="branch"]');
+    const cards = [...root.querySelectorAll('[data-architecture-card]')];
+    const features = root.querySelector('[data-architecture-features]');
+    if (!svg || !trunk || !branch || cards.length !== 3 || !features) return undefined;
+
+    const update = () => {
+      if (window.matchMedia('(max-width: 720px)').matches) {
+        svg.setAttribute('viewBox', `0 0 ${root.clientWidth} ${root.clientHeight}`);
+        trunk.setAttribute('d', '');
+        branch.setAttribute('d', '');
+        return;
+      }
+      const rootBox = root.getBoundingClientRect();
+      const boxes = cards.map(card => card.getBoundingClientRect());
+      const featureBox = features.getBoundingClientRect();
+      const width = rootBox.width;
+      const height = rootBox.height;
+      svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+      const x = box => box.left + box.width / 2 - rootBox.left;
+      const top = box => box.top - rootBox.top;
+      const bottom = box => box.bottom - rootBox.top;
+      const rowTop = featureBox.top - rootBox.top;
+      const trunkX = x(boxes[1]);
+      const branchY = bottom(boxes[1]) + Math.max(24, (rowTop - bottom(boxes[1])) * .52);
+      trunk.setAttribute('d', `M ${trunkX} ${bottom(boxes[1])} V ${branchY} H ${x(boxes[0])} M ${x(boxes[2])} ${branchY} H ${x(boxes[0])}`);
+      const featureItems = [...features.children];
+      const points = featureItems.map(item => {
+        const box = item.getBoundingClientRect();
+        return { x: box.left + box.width / 2 - rootBox.left, y: box.top - rootBox.top };
+      });
+      if (points.length) {
+        const minX = Math.min(...points.map(point => point.x));
+        const maxX = Math.max(...points.map(point => point.x));
+        branch.setAttribute('d', `M ${trunkX} ${branchY} V ${rowTop - 10} H ${maxX} M ${points.map(point => `M ${point.x} ${rowTop - 10} V ${point.y}`).join(' ')}`);
+      } else branch.setAttribute('d', '');
+    };
+
+    const observer = new ResizeObserver(update);
+    [root, ...cards, features].forEach(element => observer.observe(element));
+    window.addEventListener('resize', update);
+    update();
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', update);
+    };
+  }, []);
+
+  return architectureRef;
+}
+
 function CompleteSolutions() {
+  const architectureRef = useArchitectureConnectors();
   return (
     <section className="ma-solutions" aria-labelledby="ma-solutions-title">
       <div className="ma-wrap">
         <header className="ma-solutions-head">
           <span className="ma-eyebrow">Complete solutions</span>
-          <h2 id="ma-solutions-title">More than just an interface.</h2>
-          <p>We build complete mobile applications with secure backends, seamless integrations and all the features your app needs.</p>
+          <h2 id="ma-solutions-title">More than just<br />an interface.</h2>
         </header>
-        <div className="ma-architecture" role="group" aria-label="Mobile application workflow and platform features">
-          <svg className="ma-architecture-connectors" viewBox="0 0 1000 353" preserveAspectRatio="none" aria-hidden="true">
-            <g className="ma-connectors-wide">
-              <path d="M860 172 V222 H125 M375 222 V253 M625 222 V253 M875 222 V253" />
-            </g>
-            <g className="ma-connectors-compact">
-              <path d="M860 172 V222 H250 M250 222 H750 M250 222 V253 M750 222 V253" />
-            </g>
-          </svg>
+        <div className="ma-architecture" ref={architectureRef} role="group" aria-label="Mobile application workflow and platform features">
+          <svg className="ma-architecture-connectors" aria-hidden="true"><path data-architecture-connector="trunk" /><path data-architecture-connector="branch" /></svg>
           <div className="ma-architecture-main">
-            <article className="ma-system-card">
+            <article className="ma-system-card" data-architecture-card>
               <Smartphone aria-hidden="true" />
               <h3>Mobile App</h3>
               <p>iOS &amp; Android</p>
             </article>
-            <span className="ma-flow-arrow" aria-hidden="true"><ArrowRight /></span>
-            <article className="ma-system-card">
-              <Cpu aria-hidden="true" />
+            <span className="ma-flow-arrow" aria-hidden="true" />
+            <article className="ma-system-card" data-architecture-card>
+              <LockKeyhole aria-hidden="true" />
               <h3>Secure APIs</h3>
-              <p>Connects your app to backend services</p>
+              <p>Connected services</p>
             </article>
-            <span className="ma-flow-arrow" aria-hidden="true"><ArrowRight /></span>
-            <article className="ma-system-card">
+            <span className="ma-flow-arrow" aria-hidden="true" />
+            <article className="ma-system-card" data-architecture-card>
               <Database aria-hidden="true" />
               <h3>Backend &amp; Database</h3>
-              <p>Stores and manages your data</p>
+              <p>Data and infrastructure</p>
             </article>
           </div>
-          <ul className="ma-feature-list">
+          <ul className="ma-feature-list" data-architecture-features>
             {FEATURES.map(([Icon, title, text]) => <li key={title}><Icon size={22} /><div><h3>{title}</h3><p>{text}</p></div></li>)}
           </ul>
         </div>
@@ -235,7 +288,7 @@ function OurWork() {
   return (
     <section className="ma-work" aria-labelledby="ma-work-title">
       <div className="ma-wrap">
-        <header className="ma-work-head"><div><span className="ma-eyebrow">Our work</span><h2 id="ma-work-title">A few things we’ve built.</h2></div></header>
+        <header className="ma-work-head"><div><span className="ma-eyebrow">Our work</span><h2 id="ma-work-title">A few things we’ve built.</h2></div><a href="/projects" className="ma-work-link">View all projects <ArrowRight size={16} /></a></header>
         <div className="ma-projects">
           {PROJECTS.map((project) => <article className="ma-project" key={project.title}>
             <div className="ma-project-image"><img src={project.image} alt={project.alt} loading="lazy" decoding="async" /></div>
