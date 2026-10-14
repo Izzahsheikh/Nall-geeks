@@ -7,6 +7,8 @@ dist-ssr
 .DS_Store
 .vercel
 .env*
+!.env.example
 data/db.json
+data/admin-users.json
 public/uploads/projects/*
 data/applications/

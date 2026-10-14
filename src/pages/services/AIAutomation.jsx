@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
   Settings, Users, BarChart2, FileText, UserPlus, Globe, Mail, Megaphone,
   MessageSquare, Inbox, Headset, Phone, FileUp, FolderOpen, ScanText,
   ClipboardCheck, Database, Send, Bell, FileSpreadsheet, Server,
-  ChartNoAxesCombined, Search, Brain, Play, Workflow, CircleCheck,
+  ChartNoAxesCombined, Search, Brain, Play, Workflow, CircleCheck, Zap,
   ClipboardList, Bot, UserRound, FileOutput, ListChecks, ArrowUpRight,
 } from 'lucide-react';
 import ServicePage from './ServicePage';
@@ -401,59 +401,173 @@ function WorkflowDiagram({ workflow, animate }) {
   );
 }
 
+const UNIVERSAL_INPUTS = [
+  { title: 'Form submitted', detail: 'New form submission on your website', Icon: FileText, tone: 'teal' },
+  { title: 'New email', detail: 'Incoming email in your inbox', Icon: Mail, tone: 'blue' },
+  { title: 'Uploaded document', detail: 'File added to your folder', Icon: FileUp, tone: 'orange' },
+  { title: 'New lead', detail: 'New contact in your CRM', Icon: UserRound, tone: 'purple' },
+];
+const UNIVERSAL_OUTPUTS = [
+  { title: 'CRM updated', detail: 'Contact or deal added automatically', Icon: Database, tone: 'teal' },
+  { title: 'Task created', detail: 'New task assigned to your team', Icon: ClipboardCheck, tone: 'blue' },
+  { title: 'Follow-up sent', detail: 'Personalized email sent automatically', Icon: Send, tone: 'orange' },
+  { title: 'Team notified', detail: 'Instant notification in your communication tools', Icon: Users, tone: 'purple' },
+];
+const UNIVERSAL_STEPS = [
+  { label: 'Capture', detail: 'Collect data from your tools', Icon: Database },
+  { label: 'Route', detail: 'Send to the right process', Icon: Workflow },
+  { label: 'Decide', detail: 'Apply rules and logic', Icon: FileText },
+  { label: 'Act', detail: 'Take action across your tools', Icon: Zap },
+];
+const USE_CASES = [
+  { title: 'Lead management', detail: 'Capture and nurture leads', Icon: UserRound },
+  { title: 'Customer support', detail: 'Automate responses and tasks', Icon: Headset },
+  { title: 'Document workflows', detail: 'Process and organize files', Icon: FileText },
+  { title: 'Reporting', detail: 'Turn data into insights', Icon: BarChart2 },
+];
+
+function UniversalWorkflowDiagram({ animate }) {
+  const mapRef = useRef(null);
+  const svgRef = useRef(null);
+  const [routes, setRoutes] = useState([]);
+  const [activeFlow, setActiveFlow] = useState({ phase: 'idle', index: -1 });
+
+  useLayoutEffect(() => {
+    const map = mapRef.current;
+    const svg = svgRef.current;
+    if (!map || !svg) return undefined;
+    const update = () => {
+      const bounds = map.getBoundingClientRect();
+      if (!bounds.width || !bounds.height) return;
+      svg.setAttribute('viewBox', `0 0 ${bounds.width} ${bounds.height}`);
+      const core = map.querySelector('.aia-flow-core');
+      const inputs = [...map.querySelectorAll('.aia-flow-cards--inputs .aia-flow-card')];
+      const outputs = [...map.querySelectorAll('.aia-flow-cards--outputs .aia-flow-card')];
+      if (!core || inputs.length !== 4 || outputs.length !== 4) return;
+      const narrow = window.matchMedia('(max-width: 760px)').matches;
+      const mapBox = map.getBoundingClientRect();
+      const coreBox = core.getBoundingClientRect();
+      const edge = (rect, side) => ({ x: (side === 'left' ? rect.left : side === 'right' ? rect.right : rect.left + rect.width / 2) - mapBox.left, y: (side === 'top' ? rect.top : side === 'bottom' ? rect.bottom : rect.top + rect.height / 2) - mapBox.top });
+      const inputPaths = inputs.map((card, index) => {
+        const rect = card.getBoundingClientRect();
+        const from = edge(rect, narrow ? 'bottom' : 'right');
+        const to = narrow ? { x: coreBox.left + coreBox.width / 2 - mapBox.left, y: coreBox.top - mapBox.top } : { x: coreBox.left - mapBox.left, y: coreBox.top + coreBox.height * ((index + 1) / 5) - mapBox.top };
+        return {
+          d: narrow
+            ? `M ${from.x} ${from.y} C ${from.x} ${from.y + 24}, ${to.x} ${to.y - 24}, ${to.x} ${to.y}`
+            : `M ${from.x} ${from.y} C ${from.x + 45} ${from.y}, ${to.x - 45} ${to.y}, ${to.x} ${to.y}`,
+          start: from,
+          end: to,
+        };
+      });
+      const outputPaths = outputs.map((card, index) => {
+        const rect = card.getBoundingClientRect();
+        const to = edge(rect, narrow ? 'top' : 'left');
+        const from = narrow ? { x: coreBox.left + coreBox.width / 2 - mapBox.left, y: coreBox.bottom - mapBox.top } : { x: coreBox.right - mapBox.left, y: coreBox.top + coreBox.height * ((index + 1) / 5) - mapBox.top };
+        return {
+          d: narrow
+            ? `M ${from.x} ${from.y} C ${from.x} ${from.y + 24}, ${to.x} ${to.y - 24}, ${to.x} ${to.y}`
+            : `M ${from.x} ${from.y} C ${from.x + 45} ${from.y}, ${to.x - 45} ${to.y}, ${to.x} ${to.y}`,
+          start: from,
+          end: to,
+        };
+      });
+      setRoutes([...inputPaths, ...outputPaths]);
+    };
+    const observer = new ResizeObserver(update);
+    observer.observe(map);
+    map.querySelectorAll('.aia-flow-card, .aia-flow-core').forEach(element => observer.observe(element));
+    window.addEventListener('resize', update);
+    update();
+    return () => { observer.disconnect(); window.removeEventListener('resize', update); };
+  }, []);
+
+  useEffect(() => {
+    if (!animate) {
+      setActiveFlow({ phase: 'idle', index: -1 });
+      return undefined;
+    }
+
+    const inputLeadIn = 1000;
+    const stageClassSpan = 3000;
+    const outputTransition = 1000;
+    const outputHold = 2000;
+    const resetDuration = 1000;
+    const stageStart = inputLeadIn;
+    const outputStart = stageStart + stageClassSpan * UNIVERSAL_STEPS.length;
+    const outputEnd = outputStart + outputTransition + outputHold;
+    const cycleDuration = outputEnd + resetDuration;
+    let frame;
+    let lastKey = '';
+    let start;
+    const tick = now => {
+      if (start === undefined) start = now;
+      const overallElapsed = now - start;
+      const elapsed = overallElapsed % cycleDuration;
+      const workflowIndex = Math.floor(overallElapsed / cycleDuration) % UNIVERSAL_INPUTS.length;
+      let next;
+      if (elapsed < stageStart) {
+        next = { phase: 'input', index: workflowIndex };
+      } else if (elapsed < outputStart) {
+        const stageElapsed = elapsed - stageStart;
+        const stageIndex = Math.floor(stageElapsed / stageClassSpan);
+        next = { phase: 'stage', index: stageIndex };
+      } else if (elapsed < outputEnd) {
+        next = { phase: 'output', index: workflowIndex };
+      } else {
+        next = { phase: 'idle', index: -1 };
+      }
+      const key = `${next.phase}-${next.index}`;
+      if (key !== lastKey) {
+        lastKey = key;
+        setActiveFlow(next);
+      }
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [animate]);
+
+  return (
+    <div className={`aia-flow-map${animate ? ' is-visible' : ''}`} ref={mapRef}>
+      <p className="aia-sr">Four example business triggers connect to an automation engine that captures, routes, decides and acts. Example outcomes include CRM updates, task creation, follow-ups and team notifications. These are examples of capabilities, not fixed one-to-one paths.</p>
+      <svg className="aia-flow-connectors" ref={svgRef} aria-hidden="true">
+        {routes.map(({ d, start, end }, index) => {
+          const isInput = index < 4;
+          const inputIsActive = isInput && activeFlow.index === index % 4 && ['input', 'stage'].includes(activeFlow.phase);
+          const outputIsActive = !isInput && activeFlow.index === index % 4 && activeFlow.phase === 'output';
+          const isActive = inputIsActive || outputIsActive;
+          return <g className={`aia-flow-route${isInput ? ' is-input' : ' is-output'} tone-${index % 4}${isActive ? ' is-active' : ''}`} key={`${index}-${d}`}><path d={d} pathLength="100" /><path className="aia-flow-route-highlight" d={d} pathLength="100" /><circle className="aia-flow-connection-node" cx={start.x} cy={start.y} r="3.5" /><circle className="aia-flow-connection-node" cx={end.x} cy={end.y} r="3.5" /></g>;
+        })}
+      </svg>
+      <ol className="aia-flow-cards aia-flow-cards--inputs" aria-label="Business triggers">{UNIVERSAL_INPUTS.map(({ title, detail, Icon, tone }, index) => <li className={`aia-flow-card tone-${tone}${activeFlow.index === index && ['input', 'stage'].includes(activeFlow.phase) ? ' is-active' : ''}`} key={title} style={{ '--flow-index': index }}><span className="aia-flow-card-icon"><Icon size={19} strokeWidth={1.8} /></span><span className="aia-flow-card-copy"><strong>{title}</strong><small>{detail}</small></span><span className="aia-flow-card-port" /></li>)}</ol>
+      <section className="aia-flow-core" aria-label="Automation Engine">
+        <header className="aia-flow-core-head"><span className="aia-flow-core-mark"><Zap size={20} strokeWidth={1.7} /></span><div><strong>Automation Engine</strong><small>CONNECT · PROCESS · DELIVER</small></div></header>
+        <ol className="aia-flow-core-steps">{UNIVERSAL_STEPS.map(({ label, detail, Icon }, index) => <li className={activeFlow.phase === 'stage' && activeFlow.index === index ? 'is-active' : undefined} key={label}><Icon size={18} strokeWidth={1.7} /><span><strong>{label}</strong><small>{detail}</small></span></li>)}</ol>
+      </section>
+      <ol className="aia-flow-cards aia-flow-cards--outputs" aria-label="Automated outcomes">{UNIVERSAL_OUTPUTS.map(({ title, detail, Icon, tone }, index) => <li className={`aia-flow-card tone-${tone}${activeFlow.index === index && ['output', 'idle'].includes(activeFlow.phase) ? ' is-active' : ''}`} key={title} style={{ '--flow-index': index }}><span className="aia-flow-card-port" /><span className="aia-flow-card-icon"><Icon size={19} strokeWidth={1.8} /></span><span className="aia-flow-card-copy"><strong>{title}</strong><small>{detail}</small></span></li>)}</ol>
+    </div>
+  );
+}
+
 function Workflows({ reducedMotion }) {
   const sectionRef = useRef(null);
-  const navRef = useRef(null);
-  const [selected, setSelected] = useState(0);
   const inView = useInView(sectionRef);
-
-  const handleWorkflowKeys = (event, index) => {
-    const targets = { ArrowDown: index + 1, ArrowRight: index + 1, ArrowUp: index - 1, ArrowLeft: index - 1, Home: 0, End: WORKFLOWS.length - 1 };
-    if (!(event.key in targets)) return;
-    event.preventDefault();
-    const target = (targets[event.key] + WORKFLOWS.length) % WORKFLOWS.length;
-    setSelected(target);
-    navRef.current?.querySelectorAll('button')[target]?.focus();
-  };
 
   return (
     <section className="aia-section aia-flows" ref={sectionRef} aria-labelledby="aia-flows-title">
       <div className="sp-inner">
         <header className="aia-head aia-head--split">
           <div>
-            <span className="aia-eyebrow">Workflows</span>
-            <h2 className="aia-h2" id="aia-flows-title">Different processes. Different automations.</h2>
+            <span className="aia-eyebrow">Workflow</span>
+            <h2 className="aia-h2" id="aia-flows-title">From manual work to automated workflows</h2>
           </div>
-          <p>From simple tasks to end-to-end workflows, we design automations for the processes that matter to your business.</p>
+          <p>A universal automation flow that connects your tools, data, and actions so work moves automatically from trigger to outcome.</p>
         </header>
-
-        <div className="aia-flows-layout">
-          <ol className="aia-flow-nav" aria-label="Example workflows" ref={navRef}>
-            {WORKFLOWS.map((workflow, index) => (
-              <li key={workflow.label}>
-                <button
-                  type="button"
-                  className={index === selected ? 'is-active' : undefined}
-                  aria-pressed={index === selected}
-                  onClick={() => setSelected(index)}
-                  onKeyDown={(event) => handleWorkflowKeys(event, index)}
-                >
-                  <span>{pad(index + 1)}</span>
-                  {workflow.label}
-                </button>
-              </li>
-            ))}
-          </ol>
-
-          <div className="aia-flow-stage" aria-live="polite">
-            <p className="aia-sr">{WORKFLOWS[selected].label}: {WORKFLOWS[selected].inputs.map((step) => step.title).join(', ')} feed the automated workflow and produce {WORKFLOWS[selected].outputs.map((step) => step.title).join(', ')}.</p>
-            <WorkflowDiagram
-              key={selected}
-              workflow={WORKFLOWS[selected]}
-              animate={inView && !reducedMotion}
-            />
-          </div>
-        </div>
+        <UniversalWorkflowDiagram animate={inView && !reducedMotion} />
+        <ul className="aia-flow-usecases" aria-label="Example automation use cases">
+          {USE_CASES.map(({ title, detail, Icon }, index) => <li key={title} style={{ '--flow-index': index }}><span><Icon size={21} strokeWidth={1.7} /></span><div><strong>{title}</strong><small>{detail}</small></div></li>)}
+        </ul>
       </div>
     </section>
   );

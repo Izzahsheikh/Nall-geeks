@@ -26,7 +26,9 @@ const pageFromPath = (path) => {
 };
 
 export default function AdminLayout() {
-  const [activePage, setActivePage] = useState(() => pageFromPath(window.location.pathname));
+  const currentPath = window.location.pathname;
+  const isLoginRoute = currentPath === '/admin/login' || currentPath === '/admin/login/';
+  const [activePage, setActivePage] = useState(() => pageFromPath(currentPath));
   const [admin, setAdmin] = useState(null);
   const [authStatus, setAuthStatus] = useState('checking');
   const [loadError, setLoadError] = useState('');
@@ -61,19 +63,52 @@ export default function AdminLayout() {
   };
 
   useEffect(() => {
+    if (isLoginRoute) {
+      setAuthStatus('checking');
+    }
     const checkSession = async () => {
       try {
         const data = await apiRequest('/api/admin/me');
         setAdmin(data.admin);
         setAuthStatus('authenticated');
-        await loadAdminData();
+        if (!isLoginRoute) await loadAdminData();
       } catch {
         setAuthStatus('login');
       }
     };
 
     checkSession();
-  }, []);
+  }, [isLoginRoute]);
+
+  useEffect(() => {
+    if (isLoginRoute && authStatus === 'authenticated') {
+      window.location.replace('/admin');
+    }
+  }, [isLoginRoute, authStatus]);
+
+  useEffect(() => {
+    if (authStatus !== 'authenticated' || isLoginRoute) return undefined;
+    let checkingSession = false;
+    const verifySession = async () => {
+      if (checkingSession) return;
+      checkingSession = true;
+      try {
+        await apiRequest('/api/admin/me');
+      } catch {
+        setAdmin(null);
+        setAuthStatus('login');
+        window.history.replaceState(null, '', '/admin/login');
+      } finally {
+        checkingSession = false;
+      }
+    };
+    const interval = window.setInterval(verifySession, 60_000);
+    window.addEventListener('focus', verifySession);
+    return () => {
+      window.clearInterval(interval);
+      window.removeEventListener('focus', verifySession);
+    };
+  }, [authStatus, isLoginRoute]);
 
   useEffect(() => {
     const handlePopState = () => setActivePage(pageFromPath(window.location.pathname));
@@ -83,6 +118,8 @@ export default function AdminLayout() {
 
   const handleLogin = async (nextAdmin) => {
     setAdmin(nextAdmin);
+    window.history.replaceState(null, '', '/admin');
+    setActivePage('dashboard');
     setAuthStatus('authenticated');
     await loadAdminData();
   };
@@ -91,8 +128,11 @@ export default function AdminLayout() {
     event.preventDefault();
 
     if (page === 'logout') {
-      await apiRequest('/api/admin/logout', { method: 'POST' });
-      window.location.assign('/');
+      try {
+        await apiRequest('/api/admin/logout', { method: 'POST' });
+      } finally {
+        window.location.assign('/admin/login');
+      }
       return;
     }
 
@@ -132,7 +172,21 @@ export default function AdminLayout() {
     );
   }
 
+  if (isLoginRoute && authStatus === 'authenticated') {
+    return (
+      <section className="admin-login-screen">
+        <div className="admin-login-card">
+          <span className="admin-eyebrow">NallGeeks Admin</span>
+          <h1>Opening admin dashboard...</h1>
+        </div>
+      </section>
+    );
+  }
+
   if (authStatus === 'login') {
+    if (!isLoginRoute) {
+      window.history.replaceState(null, '', '/admin/login');
+    }
     return <AdminLogin onLogin={handleLogin} />;
   }
 

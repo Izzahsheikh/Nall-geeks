@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import dotenv from 'dotenv';
 import express from 'express';
+import bcrypt from 'bcryptjs';
 import { Resend } from 'resend';
 
 dotenv.config({ path: '.env.local' });
@@ -13,6 +14,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5000;
 const DB_PATH = path.join(__dirname, 'data', 'db.json');
+const ADMIN_ACCOUNTS_PATH = path.resolve(process.env.ADMIN_ACCOUNTS_FILE || path.join(__dirname, 'data', 'admin-users.json'));
 const PROJECT_UPLOAD_DIR = path.join(__dirname, 'public', 'uploads', 'projects');
 // Application attachments are private (résumés): they live under data/, which is never served statically.
 const APPLICATION_FILE_DIR = path.join(__dirname, 'data', 'applications');
@@ -32,7 +34,13 @@ const FILE_SIGNATURES = {
 };
 const SESSION_COOKIE = 'ng_admin';
 const SESSION_MAX_AGE_SECONDS = 60 * 60 * 8;
-const sessionSecret = process.env.ADMIN_SESSION_SECRET || crypto.randomBytes(32).toString('hex');
+const sessionSecret = process.env.ADMIN_SESSION_SECRET || (process.env.NODE_ENV === 'production' ? '' : crypto.randomBytes(32).toString('hex'));
+if (!sessionSecret) throw new Error('ADMIN_SESSION_SECRET must be configured in production');
+if (process.env.ADMIN_SESSION_SECRET && process.env.ADMIN_SESSION_SECRET.length < 32) throw new Error('ADMIN_SESSION_SECRET must contain at least 32 characters');
+const LOGIN_WINDOW_MS = 15 * 60 * 1000;
+const LOGIN_MAX_ATTEMPTS = 8;
+const loginAttempts = new Map();
+const DUMMY_PASSWORD_HASH = bcrypt.hashSync(crypto.randomBytes(32).toString('base64url'), 12);
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 const initialDb = {
@@ -260,9 +268,23 @@ const parseCookies = (cookieHeader = '') => Object.fromEntries(
 
 const sign = (value) => crypto.createHmac('sha256', sessionSecret).update(value).digest('base64url');
 
-const createToken = (email) => {
+const normalizeAdminEmail = (email) => String(email || '').trim().toLowerCase();
+
+const readAdminAccounts = async () => {
+  try {
+    const store = JSON.parse(await fs.readFile(ADMIN_ACCOUNTS_PATH, 'utf8'));
+    return Array.isArray(store.admins) ? store.admins : [];
+  } catch (error) {
+    if (error.code === 'ENOENT') return [];
+    throw error;
+  }
+};
+
+const createToken = (admin) => {
   const payload = Buffer.from(JSON.stringify({
-    email,
+    sub: admin.id,
+    email: admin.email,
+    role: 'admin',
     exp: Date.now() + SESSION_MAX_AGE_SECONDS * 1000,
   })).toString('base64url');
   return `${payload}.${sign(payload)}`;
@@ -285,29 +307,35 @@ const readToken = (token) => {
   }
 };
 
-const requireAdmin = (req, res, next) => {
+const requireAdmin = async (req, res, next) => {
   const session = readToken(parseCookies(req.headers.cookie)[SESSION_COOKIE]);
-
-  if (!session) {
+  if (!session || session.role !== 'admin' || !session.sub) {
     return res.status(401).json({ error: 'Admin login required' });
   }
-
-  req.admin = session;
-  return next();
-};
-
-const comparePassword = (password) => {
-  const expectedPassword = process.env.ADMIN_PASSWORD;
-  const expectedHash = process.env.ADMIN_PASSWORD_HASH;
-
-  if (!expectedPassword && !expectedHash) return false;
-
-  if (expectedHash) {
-    return crypto.createHash('sha256').update(password).digest('hex') === expectedHash;
+  try {
+    const accounts = await readAdminAccounts();
+    const admin = accounts.find((account) => account.id === session.sub
+      && account.role === 'admin'
+      && normalizeAdminEmail(account.email) === normalizeAdminEmail(session.email));
+    if (!admin) return res.status(401).json({ error: 'Admin login required' });
+    req.admin = { id: admin.id, email: admin.email, name: admin.name, role: 'admin' };
+    return next();
+  } catch {
+    return res.status(500).json({ error: 'Unable to verify admin session' });
   }
-
-  return password === expectedPassword;
 };
+
+const loginKeyState = (key, now = Date.now()) => {
+  const current = loginAttempts.get(key);
+  if (!current || now - current.startedAt >= LOGIN_WINDOW_MS) {
+    const fresh = { startedAt: now, attempts: 0 };
+    loginAttempts.set(key, fresh);
+    return fresh;
+  }
+  return current;
+};
+
+const clearLoginAttempts = (keys) => keys.forEach((key) => loginAttempts.delete(key));
 
 const validateProject = (project) => {
   const errors = [];
@@ -375,24 +403,41 @@ const formatDate = (dateString) => new Intl.DateTimeFormat('en', {
   year: 'numeric',
 }).format(new Date(dateString));
 
-app.post('/api/admin/login', (req, res) => {
-  const { email, password } = req.body || {};
-  const adminEmail = process.env.ADMIN_EMAIL;
+app.post('/api/admin/login', async (req, res) => {
+  const email = normalizeAdminEmail(req.body?.email);
+  const password = typeof req.body?.password === 'string' ? req.body.password : '';
+  const ip = req.ip || req.socket.remoteAddress || 'unknown';
+  const attemptKeys = [`ip:${ip}`, `account:${ip}:${email}`];
+  const now = Date.now();
 
-  if (!adminEmail || (!process.env.ADMIN_PASSWORD && !process.env.ADMIN_PASSWORD_HASH)) {
-    return res.status(500).json({ error: 'Admin credentials are not configured on the server' });
+  // Expired buckets are discarded so this small in-memory limiter stays bounded.
+  for (const [key, bucket] of loginAttempts) {
+    if (now - bucket.startedAt >= LOGIN_WINDOW_MS) loginAttempts.delete(key);
+  }
+  if (attemptKeys.some((key) => loginKeyState(key, now).attempts >= LOGIN_MAX_ATTEMPTS)) {
+    return res.status(429).json({ error: 'Too many sign-in attempts. Try again later.' });
   }
 
-  if (email !== adminEmail || !comparePassword(String(password || ''))) {
-    return res.status(401).json({ error: 'Invalid admin credentials' });
-  }
+  try {
+    const accounts = await readAdminAccounts();
+    const admin = accounts.find((account) => normalizeAdminEmail(account.email) === email && account.role === 'admin');
+    const passwordHash = admin?.passwordHash || DUMMY_PASSWORD_HASH;
+    const validPassword = await bcrypt.compare(password.slice(0, 1024), passwordHash);
+    if (!email || email.length > 254 || password.length > 1024 || !admin || !validPassword) {
+      attemptKeys.forEach((key) => { loginKeyState(key, now).attempts += 1; });
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
 
-  const secure = process.env.NODE_ENV === 'production' ? '; Secure' : '';
-  res.setHeader(
-    'Set-Cookie',
-    `${SESSION_COOKIE}=${encodeURIComponent(createToken(email))}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${SESSION_MAX_AGE_SECONDS}${secure}`
-  );
-  return res.json({ admin: { email } });
+    clearLoginAttempts(attemptKeys);
+    const secure = process.env.NODE_ENV === 'production' ? '; Secure' : '';
+    res.setHeader(
+      'Set-Cookie',
+      `${SESSION_COOKIE}=${encodeURIComponent(createToken(admin))}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${SESSION_MAX_AGE_SECONDS}${secure}`
+    );
+    return res.json({ admin: { id: admin.id, name: admin.name, email: admin.email, role: 'admin' } });
+  } catch {
+    return res.status(500).json({ error: 'Unable to sign in right now' });
+  }
 });
 
 app.post('/api/admin/logout', (_req, res) => {
@@ -401,7 +446,7 @@ app.post('/api/admin/logout', (_req, res) => {
 });
 
 app.get('/api/admin/me', requireAdmin, (req, res) => {
-  return res.json({ admin: { email: req.admin.email } });
+  return res.json({ admin: { name: req.admin.name, email: req.admin.email, role: req.admin.role } });
 });
 
 app.get('/api/projects', async (_req, res) => {

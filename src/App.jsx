@@ -42,7 +42,7 @@ export default function App() {
   const careerRoute = currentPath.match(/^\/careers\/([^/]+)(\/apply)?\/?$/);
 
   if (isAdminPage) {
-    return <AdminLayout />;
+    return <AdminLayout key={currentPath} />;
   }
 
   return (

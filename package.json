@@ -6,11 +6,13 @@
   "scripts": {
     "dev": "vite",
     "server": "node server.js",
+    "provision:admins": "node scripts/provision-admins.js",
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "lucide-react": "^1.49.0",
