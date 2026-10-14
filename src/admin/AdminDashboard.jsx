@@ -30,9 +30,9 @@ export default function AdminDashboard({ stats, messages, applications, onNaviga
             <button type="button" onClick={(event) => onNavigate(event, 'messages', '/admin/messages')}>View all</button>
           </div>
           <div className="admin-list compact">
-            {messages.slice(0, 2).map((message) => (
+            {messages.length ? messages.slice(0, 2).map((message) => (
               <MessageRow key={message.id} message={message} onView={onViewMessage} />
-            ))}
+            )) : <p className="admin-empty-state">No messages yet</p>}
           </div>
         </div>
 
@@ -42,9 +42,14 @@ export default function AdminDashboard({ stats, messages, applications, onNaviga
             <button type="button" onClick={(event) => onNavigate(event, 'careers', '/admin/careers')}>View all</button>
           </div>
           <div className="admin-list compact">
-            {applications.slice(0, 2).map((application) => (
+            {applications.length ? applications.slice(0, 2).map((application) => (
               <ApplicationRow key={application.id} application={application} onView={onViewApplication} />
-            ))}
+            )) : (
+              <div className="admin-empty-state">
+                <strong>No applications yet</strong>
+                <span>New career applications will appear here when candidates apply.</span>
+              </div>
+            )}
           </div>
         </div>
       </section>

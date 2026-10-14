@@ -710,6 +710,8 @@
 .admin-list.compact .admin-list-row { grid-template-columns: 1fr; align-items: flex-start; gap: 0.55rem; padding: 1rem 0; }
 .admin-list.compact .admin-list-row:first-child { padding-top: 0; }
 .admin-list.compact .admin-list-row:last-child { padding-bottom: 0; }
+.admin-empty-state { display: grid; gap: 0.3rem; margin: 0; padding: 0.85rem 0; color: var(--muted); font-family: var(--font-body); font-size: 0.88rem; line-height: 1.5; }
+.admin-empty-state strong { color: var(--primary); font-weight: 650; }
 .admin-list-main strong,
 .admin-project-main strong { display: block; color: var(--primary); font-family: var(--font-display); font-size: 1rem; }
 .admin-list-main span,

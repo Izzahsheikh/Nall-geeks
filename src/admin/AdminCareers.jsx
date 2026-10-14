@@ -203,9 +203,14 @@ export default function AdminCareers({ jobs, applications, onProjectsChange, onV
           <span>Action</span>
         </div>
         <div className="admin-list">
-          {applications.map((application) => (
+          {applications.length ? applications.map((application) => (
             <ApplicationRow key={application.id} application={application} onView={onViewApplication} />
-          ))}
+          )) : (
+            <div className="admin-empty-state">
+              <strong>No applications yet</strong>
+              <span>New career applications will appear here when candidates apply.</span>
+            </div>
+          )}
         </div>
       </div>
     </div>

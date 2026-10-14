@@ -49,168 +49,9 @@ const loginAttempts = new Map();
 const DUMMY_PASSWORD_HASH = bcrypt.hashSync(crypto.randomBytes(32).toString('base64url'), 12);
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
-const initialDb = {
-  projects: [
-    {
-      id: 'organicfields',
-      name: 'OrganicFields.pk',
-      category: 'E-Commerce App',
-      shortDescription: 'Fresh produce ordering experience for a growing local brand.',
-      fullDescription: 'A compact e-commerce experience focused on fast ordering, seasonal promotions, and a simple mobile-first buying flow.',
-      imageUrl: '',
-      projectUrl: 'https://organicfields.pk',
-      status: 'Live',
-      featured: true,
-      order: 1,
-      createdAt: '2026-09-01T00:00:00.000Z',
-      updatedAt: '2026-09-01T00:00:00.000Z',
-    },
-    {
-      id: 'zylo',
-      name: 'Zylo',
-      category: 'Productivity App',
-      shortDescription: 'AI-assisted task planning and weekly focus management.',
-      fullDescription: 'A polished productivity app concept with AI task creation, focus planning, and clean daily workflow management.',
-      imageUrl: '',
-      projectUrl: 'https://zylo.app',
-      status: 'Active',
-      featured: true,
-      order: 2,
-      createdAt: '2026-09-01T00:00:00.000Z',
-      updatedAt: '2026-09-01T00:00:00.000Z',
-    },
-    {
-      id: 'rankgrad',
-      name: 'RankGrad',
-      category: 'Hiring Platform',
-      shortDescription: 'Merit-based graduate hiring platform with screened opportunities.',
-      fullDescription: 'A hiring platform interface built around screened jobs, graduate profiles, and faster candidate discovery.',
-      imageUrl: '',
-      projectUrl: 'https://rankgrad.com',
-      status: 'Live',
-      featured: true,
-      order: 3,
-      createdAt: '2026-09-01T00:00:00.000Z',
-      updatedAt: '2026-09-01T00:00:00.000Z',
-    },
-    {
-      id: 'nallgeeks-website',
-      name: 'NallGeeks Website',
-      category: 'Brand Website',
-      shortDescription: 'Premium company website for services, portfolio, and client inquiries.',
-      fullDescription: 'The public NallGeeks website, designed around a graphite and orange identity with clear service storytelling.',
-      imageUrl: '',
-      projectUrl: 'https://nallgeeks.com',
-      status: 'In Review',
-      featured: false,
-      order: 4,
-      createdAt: '2026-09-01T00:00:00.000Z',
-      updatedAt: '2026-09-01T00:00:00.000Z',
-    },
-  ],
-  jobs: [
-    {
-      id: 'frontend-developer',
-      title: 'Frontend Developer',
-      type: 'Full-time',
-      location: 'Remote / Hybrid',
-      summary: 'Build clean, responsive React interfaces for websites, dashboards, and digital products.',
-      description: 'You will work on premium public websites, private dashboards, and product interfaces with a focus on clean execution and responsive polish.',
-      department: 'Engineering',
-      responsibilities: [
-        'Build responsive, accessible React interfaces for websites, dashboards and product screens',
-        'Turn design files into polished, pixel-accurate components',
-        'Work with backend developers to connect interfaces to APIs',
-        'Review code and keep the codebase clean and maintainable',
-      ],
-      qualifications: [
-        'Strong experience with React, JavaScript and modern CSS',
-        'Eye for detail and responsive design',
-        'Comfortable working with REST APIs and Git',
-        'A portfolio or public projects we can look at',
-      ],
-      status: 'Open',
-      order: 1,
-      createdAt: '2026-09-07T00:00:00.000Z',
-      updatedAt: '2026-09-07T00:00:00.000Z',
-    },
-    {
-      id: 'ui-ux-designer',
-      title: 'UI/UX Designer',
-      type: 'Project-based',
-      location: 'Remote',
-      summary: 'Shape premium product flows, website screens, wireframes, and brand-led digital experiences.',
-      description: 'You will turn business goals into clear layouts, usable flows, and polished interfaces for NallGeeks and client projects.',
-      department: 'Design',
-      responsibilities: [
-        'Turn business goals into clear user flows, wireframes and high-fidelity screens',
-        'Design polished interfaces for websites and digital products',
-        'Build and maintain reusable design components in Figma',
-        'Hand off designs to developers and review the built result',
-      ],
-      qualifications: [
-        'A portfolio showing end-to-end product or website design work',
-        'Strong Figma skills and a solid grasp of layout and typography',
-        'Ability to explain design decisions to clients and teammates',
-        'Experience with design systems is a plus',
-      ],
-      status: 'Open',
-      order: 2,
-      createdAt: '2026-09-07T00:00:00.000Z',
-      updatedAt: '2026-09-07T00:00:00.000Z',
-    },
-    {
-      id: 'marketing-intern',
-      title: 'Marketing Intern',
-      type: 'Internship',
-      location: 'Remote',
-      summary: 'Support content, research, campaigns, and growth experiments for NallGeeks and client work.',
-      description: 'You will help with research, social content, campaign support, and simple growth tasks across the NallGeeks brand.',
-      department: 'Growth',
-      responsibilities: [
-        'Research audiences, competitors and content ideas',
-        'Draft and schedule social content across NallGeeks channels',
-        'Support campaign setup and report on results',
-        'Help run simple growth experiments',
-      ],
-      qualifications: [
-        'Interest in marketing, content or growth',
-        'Clear written communication',
-        'Willingness to learn tools and analytics quickly',
-        'Currently studying or recently graduated is welcome',
-      ],
-      status: 'Open',
-      order: 3,
-      createdAt: '2026-09-07T00:00:00.000Z',
-      updatedAt: '2026-09-07T00:00:00.000Z',
-    },
-  ],
-  messages: [],
-  applications: [
-    {
-      id: 'app-hassan',
-      name: 'Hassan Ali',
-      position: 'Frontend Developer',
-      email: 'hassan.dev@example.com',
-      phone: '',
-      portfolio: '',
-      date: '2026-09-07T00:00:00.000Z',
-      status: 'New',
-      details: 'React developer with experience building dashboards, landing pages, and responsive web apps.',
-    },
-    {
-      id: 'app-zara',
-      name: 'Zara Sheikh',
-      position: 'UI/UX Designer',
-      email: 'zara.design@example.com',
-      phone: '',
-      portfolio: '',
-      date: '2026-09-06T00:00:00.000Z',
-      status: 'Reviewing',
-      details: 'Product designer focused on clean interfaces, user flows, and brand-led digital experiences.',
-    },
-  ],
-};
+// A missing local database starts empty. Real business data belongs in the
+// ignored data/db.json file and is never recreated from source code.
+const emptyDb = { projects: [], jobs: [], messages: [], applications: [] };
 
 app.use((_req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -229,7 +70,7 @@ const ensureDb = async () => {
   try {
     await fs.access(DB_PATH);
   } catch {
-    await fs.writeFile(DB_PATH, JSON.stringify(initialDb, null, 2));
+    await fs.writeFile(DB_PATH, JSON.stringify(emptyDb, null, 2));
   }
 };
 
@@ -238,9 +79,11 @@ const readDb = async () => {
   const db = JSON.parse(await fs.readFile(DB_PATH, 'utf8'));
   let changed = false;
 
-  if (!Array.isArray(db.jobs)) {
-    db.jobs = initialDb.jobs;
-    changed = true;
+  for (const collection of Object.keys(emptyDb)) {
+    if (!Array.isArray(db[collection])) {
+      db[collection] = [];
+      changed = true;
+    }
   }
 
   if (changed) await writeDb(db);
@@ -254,6 +97,11 @@ const writeDb = async (db) => {
 
 const sortProjects = (projects) => [...projects].sort((a, b) => Number(a.order || 0) - Number(b.order || 0));
 const sortJobs = (jobs) => [...jobs].sort((a, b) => Number(a.order || 0) - Number(b.order || 0));
+const sortNewestFirst = (records) => [...records].sort((a, b) => {
+  const dateA = Date.parse(a.date || a.createdAt || '') || 0;
+  const dateB = Date.parse(b.date || b.createdAt || '') || 0;
+  return dateB - dateA;
+});
 
 const publicProject = (project) => ({
   id: project.id,
@@ -386,7 +234,7 @@ const sanitizeProject = (project) => ({
   shortDescription: String(project.shortDescription || '').trim(),
   fullDescription: String(project.fullDescription || '').trim(),
   projectUrl: String(project.projectUrl || '').trim(),
-  status: String(project.status || 'Active').trim(),
+  status: String(project.status || '').trim(),
   featured: Boolean(project.featured),
   order: Number(project.order || 0),
 });
@@ -746,7 +594,7 @@ app.post('/api/contact', async (req, res) => {
 app.get('/api/admin/messages', requireAdmin, async (_req, res) => {
   const db = await readDb();
   return res.json({
-    messages: db.messages.map((message) => ({ ...message, displayDate: formatDate(message.date) })),
+    messages: sortNewestFirst(db.messages).map((message) => ({ ...message, displayDate: formatDate(message.date) })),
   });
 });
 
@@ -774,7 +622,7 @@ app.delete('/api/admin/messages/:id', requireAdmin, async (req, res) => {
 app.get('/api/admin/applications', requireAdmin, async (_req, res) => {
   const db = await readDb();
   return res.json({
-    applications: db.applications.map((application) => ({ ...application, displayDate: formatDate(application.date) })),
+    applications: sortNewestFirst(db.applications).map((application) => ({ ...application, displayDate: formatDate(application.date) })),
   });
 });
 
@@ -880,7 +728,7 @@ app.get('/api/admin/stats', requireAdmin, async (_req, res) => {
       totalProjects: db.projects.length,
       newMessages: db.messages.filter((message) => message.status === 'Unread').length,
       applications: db.applications.length,
-      activeProjects: db.projects.filter((project) => ['Active', 'Live'].includes(project.status)).length,
+      activeProjects: db.projects.filter((project) => project.status === 'Active').length,
       openJobs: db.jobs.filter((job) => job.status === 'Open').length,
     },
   });

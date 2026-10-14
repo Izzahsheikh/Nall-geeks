@@ -15,9 +15,9 @@ export default function AdminMessages({ messages, onViewMessage }) {
           <span>Action</span>
         </div>
         <div className="admin-list">
-          {messages.map((message) => (
+          {messages.length ? messages.map((message) => (
             <MessageRow key={message.id} message={message} onView={onViewMessage} />
-          ))}
+          )) : <p className="admin-empty-state">No messages yet. New contact form submissions will appear here.</p>}
         </div>
       </div>
     </div>

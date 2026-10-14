@@ -8,7 +8,7 @@ export default function ProjectRow({ project, onEdit, onDelete }) {
         <strong>{project.name}</strong>
         <span>{project.category}</span>
       </div>
-      <span className={`admin-status ${project.status.toLowerCase().replace(/\s+/g, '-')}`}>{project.status}</span>
+      <span className={`admin-status ${(project.status || 'not-set').toLowerCase().replace(/\s+/g, '-')}`}>{project.status || 'Not set'}</span>
       <a className="admin-url" href={project.projectUrl}>{project.projectUrl || 'No URL yet'}</a>
       <div className="admin-row-actions">
         <button type="button" onClick={() => onEdit(project)}>Edit</button>

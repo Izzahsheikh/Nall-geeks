@@ -42,7 +42,7 @@ export default function AdminProjects({ projects, onProjectsChange }) {
       shortDescription: project.shortDescription || '',
       fullDescription: project.fullDescription || '',
       projectUrl: project.projectUrl || '',
-      status: project.status || 'Active',
+      status: project.status || '',
       featured: Boolean(project.featured),
       order: project.order || 1,
     });
@@ -133,6 +133,7 @@ export default function AdminProjects({ projects, onProjectsChange }) {
             <label>
               Status
               <select name="status" value={form.status} onChange={handleChange}>
+                <option value="">Not set</option>
                 <option>Active</option>
                 <option>Live</option>
                 <option>In Review</option>
