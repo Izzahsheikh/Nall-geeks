@@ -488,11 +488,13 @@ function UniversalWorkflowDiagram({ animate }) {
       return undefined;
     }
 
-    const inputLeadIn = 1000;
-    const stageClassSpan = 3000;
-    const outputTransition = 1000;
-    const outputHold = 2000;
-    const resetDuration = 1000;
+    const inputLeadIn = 500;
+    const stageActiveHold = 1000;
+    const stageTransition = 500;
+    const stageClassSpan = stageActiveHold + stageTransition;
+    const outputTransition = 500;
+    const outputHold = 1000;
+    const resetDuration = 500;
     const stageStart = inputLeadIn;
     const outputStart = stageStart + stageClassSpan * UNIVERSAL_STEPS.length;
     const outputEnd = outputStart + outputTransition + outputHold;

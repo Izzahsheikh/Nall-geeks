@@ -8,10 +8,24 @@ import bcrypt from 'bcryptjs';
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 dotenv.config({ path: path.join(projectRoot, '.env.local') });
 const accountsPath = path.resolve(process.env.ADMIN_ACCOUNTS_FILE || path.join(projectRoot, 'data', 'admin-users.json'));
-const administrators = [
+const allAdministrators = [
   { name: 'Izzah', email: 'Izzahsheikh667@gmail.com' },
   { name: 'Fawaz', email: 'mfawaz182@gmail.com' },
 ];
+const provisionArgs = process.argv.slice(2);
+const accountChoice = provisionArgs.length === 0
+  ? 'both'
+  : provisionArgs.length === 2 && provisionArgs[0] === '--account'
+    ? provisionArgs[1]
+    : '';
+const accountNames = { izzah: 'Izzah', fawaz: 'Fawaz', both: 'both' };
+if (!Object.hasOwn(accountNames, accountChoice)) {
+  process.stderr.write('Usage: npm run provision:admins [-- --account izzah|fawaz|both]\n');
+  process.exit(1);
+}
+const administrators = accountChoice === 'both'
+  ? allAdministrators
+  : allAdministrators.filter(({ name }) => name === accountNames[accountChoice]);
 
 function promptSecret(label) {
   if (!process.stdin.isTTY || !process.stdout.isTTY) {

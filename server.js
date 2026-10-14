@@ -12,6 +12,12 @@ dotenv.config({ path: '.env.local' });
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
+// In production, Hostinger's nginx is exactly one trusted reverse proxy.
+// Setting trust proxy = 1 makes req.ip reflect the real client IP from
+// X-Forwarded-For rather than the nginx loopback address, so per-IP rate
+// limiting works correctly.  In development (no proxy), this is left off
+// so a direct client cannot spoof their IP by forging the header.
+if (process.env.NODE_ENV === 'production') app.set('trust proxy', 1);
 const PORT = process.env.PORT || 5000;
 const DB_PATH = path.join(__dirname, 'data', 'db.json');
 const ADMIN_ACCOUNTS_PATH = path.resolve(process.env.ADMIN_ACCOUNTS_FILE || path.join(__dirname, 'data', 'admin-users.json'));
@@ -206,8 +212,15 @@ const initialDb = {
   ],
 };
 
+app.use((_req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  next();
+});
 app.use(express.json({ limit: '12mb' }));
 app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 const ensureDb = async () => {
   await fs.mkdir(path.dirname(DB_PATH), { recursive: true });
@@ -336,6 +349,28 @@ const loginKeyState = (key, now = Date.now()) => {
 };
 
 const clearLoginAttempts = (keys) => keys.forEach((key) => loginAttempts.delete(key));
+
+// Generic sliding-window counter shared by the contact and careers endpoints.
+// Returns true when the caller should be rate-limited, false otherwise.
+const makeRateLimiter = (windowMs, max) => {
+  const store = new Map();
+  return (key) => {
+    const now = Date.now();
+    for (const [k, bucket] of store) {
+      if (now - bucket.startedAt >= windowMs) store.delete(k);
+    }
+    const current = store.get(key);
+    if (!current || now - current.startedAt >= windowMs) {
+      store.set(key, { startedAt: now, attempts: 1 });
+      return false;
+    }
+    if (current.attempts >= max) return true;
+    current.attempts += 1;
+    return false;
+  };
+};
+const checkContactLimit = makeRateLimiter(60 * 60 * 1000, 5);     // 5 per hour per IP
+const checkApplicationLimit = makeRateLimiter(60 * 60 * 1000, 3); // 3 per hour per IP
 
 const validateProject = (project) => {
   const errors = [];
@@ -572,6 +607,11 @@ app.delete('/api/admin/jobs/:id', requireAdmin, async (req, res) => {
 });
 
 app.post('/api/contact', async (req, res) => {
+  const ip = req.ip || req.socket.remoteAddress || 'unknown';
+  if (checkContactLimit(ip)) {
+    return res.status(429).json({ error: 'Too many submissions. Please wait a while before trying again.' });
+  }
+
   const t = (v) => String(v || '').trim();
 
   const cleanFirst   = t(req.body?.firstName).slice(0, 100);
@@ -770,6 +810,11 @@ const readApplicationFile = (kind, file) => {
 };
 
 app.post('/api/careers/applications', async (req, res) => {
+  const ip = req.ip || req.socket.remoteAddress || 'unknown';
+  if (checkApplicationLimit(ip)) {
+    return res.status(429).json({ error: 'Too many submissions. Please wait a while before trying again.' });
+  }
+
   const { name, position, email, phone, portfolio, linkedin, details } = req.body || {};
   if (!name || !position || !email) {
     return res.status(400).json({ error: 'Name, position, and email are required' });
@@ -841,6 +886,29 @@ app.get('/api/admin/stats', requireAdmin, async (_req, res) => {
   });
 });
 
+// Unmatched /api/* routes return JSON, not the SPA HTML
+app.use('/api', (_req, res) => {
+  res.status(404).json({ error: 'Not found' });
+});
+
+// SPA fallback: serve index.html for all remaining routes so React Router works on refresh
+app.use((_req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'), (err) => {
+    if (err && !res.headersSent) res.status(404).json({ error: 'Not found' });
+  });
+});
+
+// Production error handler: never expose stack traces
+app.use((err, _req, res, _next) => {
+  console.error(err);
+  if (res.headersSent) return;
+  const status = typeof err.status === 'number' ? err.status
+    : typeof err.statusCode === 'number' ? err.statusCode : 500;
+  res.status(status).json({
+    error: process.env.NODE_ENV === 'production' ? 'Internal server error' : (err.message || 'Internal server error'),
+  });
+});
+
 app.listen(PORT, () => {
-  console.log(`API server running on http://localhost:${PORT}`);
+  console.log(`NallGeeks server running on http://localhost:${PORT}`);
 });

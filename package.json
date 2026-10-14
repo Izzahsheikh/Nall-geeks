@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "start": "node server.js",
     "server": "node server.js",
     "provision:admins": "node scripts/provision-admins.js",
     "build": "vite build",
@@ -29,7 +30,6 @@
     "oxlint": "^1.75.0",
     "postcss": "^8.5.26",
     "tailwindcss": "^4.3.3",
-    "vite": "^8.2.0",
-    "vite-plugin-imagemin": "^0.6.1"
+    "vite": "^8.2.0"
   }
 }

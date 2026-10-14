@@ -8,7 +8,14 @@ export async function apiRequest(path, options = {}) {
     },
   });
 
-  const payload = await response.json().catch(() => ({}));
+  const contentType = response.headers.get('content-type') || '';
+  if (!contentType.toLowerCase().includes('application/json')) {
+    throw new Error('The admin server returned an unexpected response. Check the server connection and try again.');
+  }
+
+  const payload = await response.json().catch(() => {
+    throw new Error('The admin server returned an invalid response. Try again.');
+  });
 
   if (!response.ok) {
     throw new Error(payload.error || 'Request failed');

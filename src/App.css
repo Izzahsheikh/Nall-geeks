@@ -6933,12 +6933,12 @@ button.danger,
 .aia-flow-route.tone-1 { --route-base-color: #557ca5; --route-active-color: #345f98; }
 .aia-flow-route.tone-2 { --route-base-color: #e66a25; --route-active-color: #c85a25; }
 .aia-flow-route.tone-3 { --route-base-color: #7862aa; --route-active-color: #6746a0; }
-.aia-flow-route > path:first-child { stroke: var(--route-base-color); transition: stroke 1s ease-in-out, stroke-width 1s ease-in-out, opacity 1s ease-in-out; }
-.aia-flow-route > .aia-flow-route-highlight { fill: none; stroke: var(--route-active-color); stroke-width: 1.9; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; opacity: 0; transition: stroke-dashoffset 1s ease-in-out, opacity 1s ease-in-out; }
+.aia-flow-route > path:first-child { stroke: var(--route-base-color); transition: stroke 500ms ease-in-out, stroke-width 500ms ease-in-out, opacity 500ms ease-in-out; }
+.aia-flow-route > .aia-flow-route-highlight { fill: none; stroke: var(--route-active-color); stroke-width: 1.9; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; opacity: 0; transition: stroke-dashoffset 500ms ease-in-out, opacity 500ms ease-in-out; }
 .aia-flow-route.is-active > path:first-child { stroke: var(--route-active-color); stroke-width: 1.9; opacity: 1; }
 .aia-flow-route.is-active > .aia-flow-route-highlight { stroke-dashoffset: 0; opacity: .95; }
 .aia-flow-route.is-active .aia-flow-connection-node { fill: var(--route-active-color); }
-.aia-flow-connection-node { fill: var(--route-base-color); stroke: var(--aia-warm); stroke-width: 1.2; vector-effect: non-scaling-stroke; transition: fill 1s ease-in-out; }
+.aia-flow-connection-node { fill: var(--route-base-color); stroke: var(--aia-warm); stroke-width: 1.2; vector-effect: non-scaling-stroke; transition: fill 500ms ease-in-out; }
 .aia-flow-cards {
   position: relative;
   inset: auto;
@@ -6968,7 +6968,7 @@ button.danger,
   background: rgba(255,255,255,.92);
   box-shadow: 0 4px 13px rgba(28,29,31,.035);
   transform: none;
-  transition: border-color 1s ease-in-out, box-shadow 1s ease-in-out, background-color 1s ease-in-out;
+  transition: border-color 500ms ease-in-out, box-shadow 500ms ease-in-out, background-color 500ms ease-in-out;
 }
 .aia-flow-card.is-active { border-color: var(--flow-active-color); background: var(--flow-active-bg); box-shadow: 0 4px 13px rgba(28,29,31,.035); }
 .aia-flow-card.tone-teal { --flow-active-color: #56897e; --flow-active-bg: #f2f7f4; }
@@ -7007,7 +7007,7 @@ button.danger,
 .aia-flow-core-head > div > strong { color: #f6f5f1; font-size: 1.02rem; font-weight: 600; }
 .aia-flow-core-head > div > small { color: #aebbb6; font-family: var(--font-mono); font-size: .54rem; letter-spacing: .12em; }
 .aia-flow-core-steps { gap: 9px; }
-.aia-flow-core-steps li { grid-template-columns: 24px minmax(0,1fr); gap: 10px; min-height: 58px; padding: 8px 11px; border-radius: 8px; transition: color 1s ease-in-out, border-color 1s ease-in-out, background-color 1s ease-in-out; }
+.aia-flow-core-steps li { grid-template-columns: 24px minmax(0,1fr); gap: 10px; min-height: 58px; padding: 8px 11px; border-radius: 8px; transition: color 500ms ease-in-out, border-color 500ms ease-in-out, background-color 500ms ease-in-out; }
 .aia-flow-core-steps li > span { display: grid; gap: 3px; }
 .aia-flow-core-steps li strong { color: #f3f4f1; font-size: .88rem; font-weight: 600; }
 .aia-flow-core-steps li small { color: #b7c0bd; font-size: .72rem; }
